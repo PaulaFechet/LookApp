@@ -1,0 +1,28 @@
+.container{
+  padding-top: 10%;
+
+}
+
+select {
+    width: 80%;
+    padding: 18px 22px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #8842d5;
+}
+
+.add-button{
+  height: 80px;
+}
+
+
+@media only screen and (max-width: 640px){
+  .my-class .mat-dialog-container{
+    width: '80vw';
+    height: '100vh';
+    border-radius: 10px;
+    background: lightcyan;
+    color: #039be5;
+  }
+}

@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+}
+
+@media only screen and (max-width: 640px)
+{
+  mat-drawer{
+    width: 50%;
+
+  }
+}
+
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding-left: 15%;
+  padding-right: 15%;
+  display: inline-block !important;
+}
+
