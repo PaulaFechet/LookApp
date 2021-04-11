@@ -1,15 +1,12 @@
 ﻿using System;
 
-namespace LookApp.Database.Models
+namespace LookApp.API.Dtos
 {
-    public class Record
+    public class CreateRecordRequest
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public int Value { get; set; }
         public int CategoryId { get; set; }
-
-        public Category Category { get; set; }
     }
 }
