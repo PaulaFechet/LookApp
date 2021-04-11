@@ -1,4 +1,7 @@
 //using LookApp.Business;
+
+using System.Text;
+using LookApp.API.Extensions;
 using LookApp.API.Mappers;
 using LookApp.Business;
 using LookApp.Business.Identity;
@@ -11,10 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using LookApp.API.Extensions;
 
-namespace LookApp
+namespace LookApp.API
 {
     public class Startup
     {
@@ -28,6 +29,7 @@ namespace LookApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddDbContext<LookAppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

@@ -5,7 +5,7 @@ namespace LookApp.API.Mappers
 {
     public class CategoryMapper : ICategoryMapper
     {
-        public Category mapToCategory(CreateCategoryRequest createCategoryRequest)
+        public Category MapToCategory(CreateCategoryRequest createCategoryRequest, int creatorId)
         {
             return new Category
             {
@@ -13,11 +13,12 @@ namespace LookApp.API.Mappers
                 Title = createCategoryRequest.Title,
                 Description = createCategoryRequest.Description,
                 Type = createCategoryRequest.Type,
+                CreatorId = creatorId,
                 Records = null
             };
         }
 
-        public GetCategoryResponse mapToGetCategoryResponse(Category category)
+        public GetCategoryResponse MapToGetCategoryResponse(Category category)
         {
             return new GetCategoryResponse
             {

@@ -8,8 +8,8 @@ namespace LookApp.Database.Models
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public int Value { get; set; }
-        public int CategoryId { get; set; }
 
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
     }
 }

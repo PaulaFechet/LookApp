@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using LookApp.API.Mappers;
 using System.Linq;
+using System.Net;
 using LookApp.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace LookApp.API.Controllers
 {
@@ -18,42 +20,51 @@ namespace LookApp.API.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ICategoryMapper _categoryMapper;
 
+        private readonly int _currentUserId;
+
         public CategoriesController(
             ICategoryService categoryService,
-            ICategoryMapper categoryMapper)
+            ICategoryMapper categoryMapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             this._categoryService = categoryService;
             this._categoryMapper = categoryMapper;
+
+            this._currentUserId = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("Id").Value);
         }
 
         [HttpGet]
         public ActionResult<List<Category>> GetCategories()
         {
-            var categories = _categoryService.GetCategories();
-            var categoriesResponseList = categories.Select(c => _categoryMapper.mapToGetCategoryResponse(c));
-
+            var categories = _categoryService.GetCategories(this._currentUserId);
+            var categoriesResponseList = categories.Select(c => _categoryMapper.MapToGetCategoryResponse(c));
+            
             return Ok(categoriesResponseList);
         }
 
         [HttpGet("allCategoryDetails")]
         public ActionResult<List<Category>> GetAllInformationCategories()
         {
-            var categories = _categoryService.GetCategories();
-
+            var categories = _categoryService.GetCategories(this._currentUserId);
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var result = await _categoryService.GetCategoryByIdAsync(id);
+            var result = await _categoryService.GetCategoryByIdAsync(id, this._currentUserId);
+            if (result == null)
+            {
+                return NotFound("There's no category with the provided id.");
+            }
+
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateAsync(CreateCategoryRequest createCategoryRequest)
         {
-            var newCategory = _categoryMapper.mapToCategory(createCategoryRequest);
+            var newCategory = _categoryMapper.MapToCategory(createCategoryRequest, this._currentUserId);
             await _categoryService.CreateAsync(newCategory);
 
             return Created(newCategory.Id.ToString(), null);
@@ -62,7 +73,12 @@ namespace LookApp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
-            var result = await _categoryService.GetCategoryByIdAsync(id);
+            var result = await _categoryService.GetCategoryByIdAsync(id, this._currentUserId);
+            if (result == null)
+            {
+                return NotFound("There's no category with the provided id.");
+            }
+
             await _categoryService.DeleteAsync(result);
             return NoContent();
         }

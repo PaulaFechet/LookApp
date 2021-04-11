@@ -10,5 +10,8 @@ namespace LookApp.Database.Models
         public string Type { get; set; }
 
         public ICollection<Record> Records { get; set; }
+
+        public int CreatorId { get; set; }
+        public User Creator { get; set; }
     }
 }

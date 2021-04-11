@@ -15,15 +15,17 @@ namespace LookApp.Business
             this._context = dbContext;
         }
 
-        public List<Category> GetCategories()
+        public List<Category> GetCategories(int userId)
         {
-            return _context.Categories.Include(c => c.Records).ToList();
+            return _context.Categories
+                .Where(c => c.CreatorId == userId)
+                .Include(c => c.Records)
+                .ToList();
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id, int userId)
         {
-            //return this.context.Categories.Where(x => x.Id == id).firstOneDefault();
-            return await this._context.Categories.FindAsync(id);
+            return await this._context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.CreatorId == userId);
         }
 
         public async Task CreateAsync(Category newCategory)
@@ -34,11 +36,12 @@ namespace LookApp.Business
 
         public async Task DeleteAsync(Category categoryToDelete)
         {
-            if (categoryToDelete != null)
+            if (categoryToDelete == null)
             {
-                this._context.Categories.Remove(categoryToDelete);
+                return;
             }
 
+            this._context.Categories.Remove(categoryToDelete);
             await this._context.SaveChangesAsync();
         }
     }

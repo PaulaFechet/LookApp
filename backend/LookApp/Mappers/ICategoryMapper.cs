@@ -5,7 +5,7 @@ namespace LookApp.API.Mappers
 {
     public interface ICategoryMapper
     {
-        GetCategoryResponse mapToGetCategoryResponse(Category category);
-        Category mapToCategory(CreateCategoryRequest createCategoryRequest);
+        GetCategoryResponse MapToGetCategoryResponse(Category category);
+        Category MapToCategory(CreateCategoryRequest createCategoryRequest, int creatorId);
     }
 }
