@@ -3,11 +3,12 @@
       <button mat-icon-button class="menuButton" (click)="toggleSideBar()">
           <mat-icon>menu</mat-icon>
       </button>
-
       <span> Look </span>
-
       <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
           <ul fxLayout="row" fxLayoutGap="20px">
+            <section *ngIf="userService.username | async as username" >
+              <p>Welcome, {{username}}</p>
+            </section>
               <li>
                   <button mat-icon-button class="menuButton">
                       <mat-icon>settings</mat-icon>
@@ -23,7 +24,7 @@
                   <mat-icon>person_outline</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu" class="menuButton">
-                  <button mat-menu-item>
+                  <button mat-menu-item (click)="logout()">
                       <mat-icon>exit_to_app</mat-icon>
                       Sign out
                   </button>

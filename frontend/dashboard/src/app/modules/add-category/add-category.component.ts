@@ -1,7 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { FormBuilder } from '@angular/forms';
+import { CategoryService } from 'src/app/shared/services/category.service';
+import { CategoryModel } from 'src/app/shared/models/category';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-category',
@@ -9,41 +13,47 @@ import {MatCardModule} from '@angular/material/card';
   styleUrls: ['./add-category.component.scss']
 })
 export class AddCategoryComponent implements OnInit {
+  categoryForm: FormGroup;
+  public categoryModel: CategoryModel;
 
-  data = [
-    {
-      "title": "Water",
-      "description": "I want to be more aware of how much water I drink",
-      "type": "numerical"
-    },
-    {
-      "title": "Coffee",
-      "description": "I want to be more aware of how much coffee I drink",
-      "type": "numerical"
-    }
-  ]
-  constructor(public dialogRef: MatDialogRef<AddCategoryComponent>) { }
 
-  form: FormGroup = new FormGroup({
-    $key: new FormControl(null),
-    title: new FormControl('', Validators.required),
-    description: new FormControl(''),
-    type: new FormControl(''),
-  });
+  constructor(public dialogRef: MatDialogRef<AddCategoryComponent>,
+              public formBuilder: FormBuilder,
+              public categoryService: CategoryService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.categoryForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      type: ['', Validators.required],
+      description: ['', Validators.required]
+    })
+  }
 
-  onClear() {}
+  get f() {
+    return this.categoryForm.controls;
+  }
+
+  onClear() {
+
+  }
 
   onSubmit() {
+    const data: CategoryModel = this.categoryForm.getRawValue();
+    console.log(this.f.title.value, this.f.type.value, this.f.description.value);
+
+    this.categoryService.addCategory(data).subscribe(res =>{
+        console.log("data:", data);
+        console.log("s-a facut adaugarea");
+    }, (error=>{
+      console.log(error);
+    }))
+
     this.onClose();
   }
 
   onClose() {
-    console.log(this.form.value);
+    console.log(this.categoryForm.value);
     this.dialogRef.close();
   }
-
-
 
 }

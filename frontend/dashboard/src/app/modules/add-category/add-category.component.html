@@ -1,11 +1,10 @@
 <mat-toolbar>
   <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1"><mat-icon>clear</mat-icon></button>
 </mat-toolbar>
-<form [formGroup]="form" class="normal-form" (submit)="onSubmit()">
+<form [formGroup]="categoryForm" class="normal-form" (submit)="onSubmit()">
   <mat-grid-list cols="1" rowHeight="400px" >
     <mat-grid-tile>
       <div  fxFlex fxLayoutAlign="center">
-        <input type="hidden" formControlName="$key">
         <mat-form-field>
           <input formControlName="title" matInput placeholder="Title">
           <mat-error>This field is mandatory.</mat-error>
@@ -19,9 +18,9 @@
         <mat-form-field>
           <mat-label>Data Type?</mat-label>
           <mat-select formControlName="type">
-            <mat-option value="option1">Numerical</mat-option>
-            <mat-option value="option1">Time duration</mat-option>
-            <mat-option value="option1">Multiple choice</mat-option>
+            <mat-option value="Numerical">Numerical</mat-option>
+            <mat-option value="Time duration">Time duration</mat-option>
+            <mat-option value="Multiple choice">Multiple choice</mat-option>
           </mat-select >
           <mat-error >This field is mandatory.</mat-error>
         </mat-form-field>

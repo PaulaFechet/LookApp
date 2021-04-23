@@ -1,90 +1,47 @@
 <div class="container">
-  <button mat-raised-button  class="add-button" (click)="onCreate()">
+  <button mat-raised-button class="add-button" (click)="onCreate()">
     <mat-icon>add</mat-icon>Create
   </button>
 
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-<mat-divider></mat-divider>
-<div class="row">
-  <div class="col-sm-4">
-    <mat-card class="example-card">
+  <div class="row">
+    <br>
+    <div *ngFor="let category of categoryList" class="col-sm-4">
+      <mat-card class="example-card">
+
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>Shiba Inu</mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+          <mat-card-title>{{category.title}}</mat-card-title>
+          <mat-card-subtitle>{{category.type}}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
-          <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
-          </p>
+          <p>{{category.description}}</p>
         </mat-card-content>
+
         <mat-card-actions>
-          <button mat-button (click)="onCreateAddRecord()"><mat-icon>add</mat-icon></button>
-          <button mat-button ><mat-icon>delete</mat-icon></button>
-          <button mat-button ><mat-icon>edit</mat-icon></button>
+          <button mat-button (click)="onCreateAddRecord()">
+            <mat-icon>add</mat-icon>
+          </button>
+
+          <button mat-button (click)="onDelete(category.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+
+          <button mat-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+
         </mat-card-actions>
-    </mat-card>
-  </div>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <br>
 
-  <div class="col-sm-4">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-      <!-- <img mat-card-image class="main-image" src="../../assets/images/3297225.jpg"> -->
-
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="onCreateAddRecord()"><mat-icon>add</mat-icon></button>
-        <button mat-button ><mat-icon>delete</mat-icon></button>
-        <button mat-button ><mat-icon>edit</mat-icon></button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <br>
-  <div class="col-sm-4">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="onCreateAddRecord()"><mat-icon>add</mat-icon></button>
-        <button mat-button ><mat-icon>delete</mat-icon></button>
-        <button mat-button ><mat-icon>edit</mat-icon></button>
-      </mat-card-actions>
-    </mat-card>
+      </mat-card>
+      <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
+    </div>
   </div>
 </div>
-
