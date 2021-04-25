@@ -1,4 +1,5 @@
-﻿using LookApp.Database.Models;
+﻿using System;
+using LookApp.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,11 @@ namespace LookApp.Business
 
         public List<Category> GetCategories(int userId)
         {
+            var startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
+
             return _context.Categories
                 .Where(c => c.CreatorId == userId)
-                .Include(c => c.Records)
+                .Include(c => c.Records.Where(r => r.Date > startDate))
                 .ToList();
         }
 

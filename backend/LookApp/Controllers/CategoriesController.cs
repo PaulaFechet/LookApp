@@ -34,7 +34,7 @@ namespace LookApp.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Category>> GetCategories()
+        public ActionResult<List<GetCategoryResponse>> GetCategories()
         {
             var categories = _categoryService.GetCategories(this._currentUserId);
             var categoriesResponseList = categories.Select(c => _categoryMapper.MapToGetCategoryResponse(c));
