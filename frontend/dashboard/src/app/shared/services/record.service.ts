@@ -1,17 +1,27 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {RecordModel} from '../models/record';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { RecordModel } from '../models/record';
+import { RecordRepositoryService } from '../repositories/record-repository.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecordService {
-  private endpoint: string = 'https://localhost:44387/api/records';
-  constructor(private http: HttpClient) { }
+  public records: BehaviorSubject<RecordModel[]>;
 
+  constructor(private recordRepositoryService: RecordRepositoryService) {
+    this.records = new BehaviorSubject<RecordModel[]>([]);
+  }
 
-  addRecord(recordModel: RecordModel){
-    return this.http.post<any>(`${this.endpoint}`, recordModel)
-
+  addRecord(recordModel: RecordModel): Observable<void> {
+    return this.recordRepositoryService.addRecord(recordModel)
+      .pipe(
+        map(addedRecord => {
+          this.records.next([...this.records.value, addedRecord]);
+        })
+      );
   }
 }
+

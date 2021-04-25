@@ -1,5 +1,5 @@
 <div class="container">
-  <button mat-raised-button class="add-button" (click)="onCreate()">
+  <button mat-raised-button class="add-button" (click)="onCreateCategory()">
     <mat-icon>add</mat-icon>Create
   </button>
 
@@ -23,11 +23,11 @@
         </mat-card-content>
 
         <mat-card-actions>
-          <button mat-button (click)="onCreateAddRecord()">
+          <button mat-button (click)="onAddRecord(category.id)">
             <mat-icon>add</mat-icon>
           </button>
 
-          <button mat-button (click)="onDelete(category.id)">
+          <button mat-button (click)="onDeleteCategory(category.id)">
             <mat-icon>delete</mat-icon>
           </button>
 

@@ -35,7 +35,7 @@ export class CategoriesComponent implements OnInit {
     console.log(this.productForm.value);
   }
 
-  onCreate() {
+  onCreateCategory() {
     const dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '70vw',
       maxHeight: '100vh',
@@ -54,21 +54,21 @@ export class CategoriesComponent implements OnInit {
     this.dialog.open(AddCategoryComponent, dialogConfig);
   }
 
-  onDelete(id: number) {
+  onDeleteCategory(id: number) {
     if (confirm('Are you sure to delete this record ?')) {
       this.categoryService.deleteCategory(id).subscribe();
     }
   }
 
-  onCreateAddRecord() {
-    console.log("am intrat in oncreateaddRecord")
+  onAddRecord(categoryId: number) {
+    console.log(categoryId);
     const dialogReff = this.dialog.open(AddRecordComponent, {
       width: '70vw',
       maxHeight: '100vh',
+      data: categoryId
     });
     dialogReff.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
   }
-
 }

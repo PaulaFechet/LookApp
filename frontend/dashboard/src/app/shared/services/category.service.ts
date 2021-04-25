@@ -12,7 +12,7 @@ export class CategoryService {
   public categories: BehaviorSubject<CategoryModel[]>;
 
   constructor(private categoryRepositoryService: CategoryRepositoryService) {
-    this.categories = new BehaviorSubject<CategoryModel[]>(null);
+    this.categories = new BehaviorSubject<CategoryModel[]>([]);
   }
 
   populateCategories(): Observable<void> {
@@ -21,7 +21,7 @@ export class CategoryService {
         map(categories => {
           this.categories.next(categories);
         })
-      )
+      );
   }
 
   addCategory(categoryModel: CategoryModel): Observable<void> {
@@ -30,7 +30,7 @@ export class CategoryService {
         map(addedCategory => {
           this.categories.next([...this.categories.value, addedCategory]);
         })
-      )
+      );
   }
 
   deleteCategory(id: number): Observable<void> {
@@ -45,6 +45,6 @@ export class CategoryService {
           }
           this.categories.next(updatedCategories);
         })
-      )
+      );
   }
 }
