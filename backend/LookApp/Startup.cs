@@ -29,6 +29,7 @@ namespace LookApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddHttpContextAccessor();
             services.AddDbContext<LookAppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -69,7 +70,7 @@ namespace LookApp.API
             app.UseRouting();
 
             app.UseAuthentication();
-
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
