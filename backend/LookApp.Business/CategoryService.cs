@@ -31,10 +31,12 @@ namespace LookApp.Business
             return await this._context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.CreatorId == userId);
         }
 
-        public async Task CreateAsync(Category newCategory)
+        public async Task<Category> CreateAsync(Category newCategory)
         {
             await this._context.Categories.AddAsync(newCategory);
             await this._context.SaveChangesAsync();
+
+            return newCategory;
         }
 
         public async Task DeleteAsync(Category categoryToDelete)

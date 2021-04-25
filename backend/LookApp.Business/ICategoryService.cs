@@ -8,7 +8,7 @@ namespace LookApp.Business
     {
         List<Category> GetCategories(int userId);
         Task<Category> GetCategoryByIdAsync(int id, int userId);
-        Task CreateAsync(Category newCategory);
+        Task<Category> CreateAsync(Category newCategory);
         Task DeleteAsync(Category categoryToDelete);
     }
 }

@@ -62,12 +62,12 @@ namespace LookApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync(CreateCategoryRequest createCategoryRequest)
+        public async Task<ActionResult<Category>> CreateAsync(CreateCategoryRequest createCategoryRequest)
         {
-            var newCategory = _categoryMapper.MapToCategory(createCategoryRequest, this._currentUserId);
-            await _categoryService.CreateAsync(newCategory);
+            var categoryToAdd = _categoryMapper.MapToCategory(createCategoryRequest, this._currentUserId);
+            var addedCategory = await _categoryService.CreateAsync(categoryToAdd);
 
-            return Created(newCategory.Id.ToString(), null);
+            return Created(addedCategory.Id.ToString(), addedCategory);
         }
 
         [HttpDelete("{id}")]
