@@ -4,17 +4,17 @@ import { Router } from '@angular/router'
 import { AddCategoryComponent } from '../add-category/add-category.component'
 import { MatDialog, MatDialogConfig, MatDialogRef, } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
-import { AddEntryComponent } from '../add-entry/add-entry.component'
+import { AddRecordComponent } from '../add-record/add-record.component'
 
 import { CategoryService } from '../../shared/services/category.service'
 
 
 @Component({
-  selector: 'app-add-form',
-  templateUrl: './add-form.component.html',
-  styleUrls: ['./add-form.component.scss']
+  selector: 'app-categories',
+  templateUrl: './categories.component.html',
+  styleUrls: ['./categories.component.scss']
 })
-export class AddFormComponent implements OnInit {
+export class CategoriesComponent implements OnInit {
 
   public data: any;
   public categoryList: any[] = [];
@@ -84,7 +84,7 @@ export class AddFormComponent implements OnInit {
 
   onCreateAddRecord() {
     console.log("am intrat in oncreateaddRecord")
-    const dialogReff = this.dialog.open(AddEntryComponent, {
+    const dialogReff = this.dialog.open(AddRecordComponent, {
       width: '70vw',
       maxHeight: '100vh',
     });

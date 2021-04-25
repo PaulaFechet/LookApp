@@ -27,16 +27,16 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 
 import { AddCategoryComponent } from './modules/add-category/add-category.component';
 import { AppComponent } from './app.component';
-import { AddFormComponent } from './modules/add-form/add-form.component';
-import { AddEntryComponent } from './modules/add-entry/add-entry.component';
+import { CategoriesComponent } from './modules/categories/categories.component';
+import { AddRecordComponent } from './modules/add-record/add-record.component';
 
 import {JwtInterceptor} from '../app/shared/helpers/jwt.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddFormComponent,
-    AddEntryComponent,
+    CategoriesComponent,
+    AddRecordComponent,
     AddCategoryComponent,
   ],
   imports: [

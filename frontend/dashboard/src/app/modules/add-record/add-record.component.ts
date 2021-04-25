@@ -5,11 +5,11 @@ import {Validators } from "@angular/forms";
 import {MatCardModule} from '@angular/material/card';
 
 @Component({
-  selector: 'app-add-entry',
-  templateUrl: './add-entry.component.html',
-  styleUrls: ['./add-entry.component.scss']
+  selector: 'app-add-record',
+  templateUrl: './add-record.component.html',
+  styleUrls: ['./add-record.component.scss']
 })
-export class AddEntryComponent implements OnInit {
+export class AddRecordComponent implements OnInit {
 
   ngOnInit(): void {
   }
@@ -27,7 +27,7 @@ export class AddEntryComponent implements OnInit {
       "type": "numerical"
     }
   ]
-  constructor(public dialogRef: MatDialogRef<AddEntryComponent>) {}
+  constructor(public dialogRef: MatDialogRef<AddRecordComponent>) {}
 
   form: FormGroup = new FormGroup({
     $key: new FormControl(null),

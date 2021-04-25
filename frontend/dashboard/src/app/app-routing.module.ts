@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DefaultComponent } from './layouts/default/default.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { LoginComponent } from './modules/authentication/login/login.component';
-import { AddFormComponent } from './modules/add-form/add-form.component';
-import { AddEntryComponent } from './modules/add-entry/add-entry.component';
+import { CategoriesComponent } from './modules/categories/categories.component';
 import { AddCategoryComponent } from './modules/add-category/add-category.component';
 import { SignupComponent } from './modules/authentication/signup/signup.component';
 import { AuthGuard } from '../app/shared/helpers/auth.guard';
@@ -19,32 +18,29 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent
   },
-
   {
     path: '',
     component: DefaultComponent,
     canActivate: [AuthGuard],
-    children: [{
-      path: 'dashboard',
-      component: DashboardComponent,
-
-    }, {
-      path: 'add_category',
-      component: AddFormComponent,
-    }, {
-      path: 'add-entry',
-      component: AddEntryComponent,
-    }, {
-      path: 'add_categoryy',
-      component: AddCategoryComponent,
-    }]
-
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'categories',
+        component: CategoriesComponent,
+      },
+      {
+        path: 'add_category',
+        component: AddCategoryComponent,
+      }
+    ]
   },
   {
     path : '**',
     component: LoginComponent
   },
-
 ];
 
 @NgModule({

@@ -16,7 +16,6 @@ export class AddCategoryComponent implements OnInit {
   categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
-
   constructor(public dialogRef: MatDialogRef<AddCategoryComponent>,
               public formBuilder: FormBuilder,
               public categoryService: CategoryService) { }
@@ -41,12 +40,7 @@ export class AddCategoryComponent implements OnInit {
     const data: CategoryModel = this.categoryForm.getRawValue();
     console.log(this.f.title.value, this.f.type.value, this.f.description.value);
 
-    this.categoryService.addCategory(data).subscribe(res =>{
-        console.log("data:", data);
-        console.log("s-a facut adaugarea");
-    }, (error=>{
-      console.log(error);
-    }))
+    this.categoryService.addCategory(data).subscribe();
 
     this.onClose();
   }
