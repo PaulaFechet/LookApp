@@ -1,11 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MatCardModule } from '@angular/material/card';
-import { FormBuilder } from '@angular/forms';
-import { CategoryService } from 'src/app/shared/services/category.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialogRef } from '@angular/material/dialog';
 import { CategoryModel } from 'src/app/shared/models/category';
-import { first } from 'rxjs/operators';
+import { CategoryService } from 'src/app/shared/services/category.service';
 
 @Component({
   selector: 'app-add-category',
@@ -13,12 +10,14 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./add-category.component.scss']
 })
 export class AddCategoryComponent implements OnInit {
-  categoryForm: FormGroup;
+
+  public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
-  constructor(public dialogRef: MatDialogRef<AddCategoryComponent>,
-              public formBuilder: FormBuilder,
-              public categoryService: CategoryService) { }
+  constructor(
+    public dialogRef: MatDialogRef<AddCategoryComponent>,
+    public formBuilder: FormBuilder,
+    public categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.categoryForm = this.formBuilder.group({
@@ -49,5 +48,4 @@ export class AddCategoryComponent implements OnInit {
     console.log(this.categoryForm.value);
     this.dialogRef.close();
   }
-
 }

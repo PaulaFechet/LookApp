@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core'
-import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms'
-import { Router } from '@angular/router'
-import { AddCategoryComponent } from '../add-category/add-category.component'
-import { MatDialog, MatDialogConfig, MatDialogRef, } from '@angular/material/dialog'
+import { FormGroup } from '@angular/forms'
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
-import { AddRecordComponent } from '../add-record/add-record.component'
-
+import { CategoryModel } from 'src/app/shared/models/category'
 import { CategoryService } from '../../shared/services/category.service'
-
+import { AddCategoryComponent } from '../add-category/add-category.component'
+import { AddRecordComponent } from '../add-record/add-record.component'
 
 @Component({
   selector: 'app-categories',
@@ -16,35 +14,25 @@ import { CategoryService } from '../../shared/services/category.service'
 })
 export class CategoriesComponent implements OnInit {
 
-  public data: any;
-  public categoryList: any[] = [];
+  public categoryList: CategoryModel[] = [];
+  public listData: MatTableDataSource<any>;
+  public displayedColumns: string[] = ['title', 'description', 'type'];
+  public productForm: FormGroup;
 
+  constructor(
+    private dialog: MatDialog,
+    private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.fetchCategories();
+    this.categoryService.populateCategories().subscribe();
+    this.categoryService.categories.subscribe(categories => {
+      this.categoryList = categories;
+    });
   }
 
-  listData: MatTableDataSource<any>;
-  displayedColumns: string[] = ['title', 'description', 'type'];
-  productForm: FormGroup;
 
-  constructor(private fb: FormBuilder,
-    private _router: Router,
-    public dialog: MatDialog,
-    public categoryService: CategoryService) { }
-
-  onSubmit() {
+  onSubmit(): void {
     console.log(this.productForm.value);
-  }
-
-  fetchCategories(){
-    this.categoryService.getAllCategories().subscribe((data) => {
-      data.forEach(element => {
-        this.categoryList.push(element);
-        console.log(element);
-      });
-    })
-    console.log(this.categoryList);
   }
 
   onCreate() {
@@ -52,10 +40,9 @@ export class CategoriesComponent implements OnInit {
       width: '70vw',
       maxHeight: '100vh',
     });
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.categoryList = [];
-      this.fetchCategories();
     });
   }
 
@@ -67,20 +54,11 @@ export class CategoriesComponent implements OnInit {
     this.dialog.open(AddCategoryComponent, dialogConfig);
   }
 
-  onDelete(id) {
+  onDelete(id: number) {
     if (confirm('Are you sure to delete this record ?')) {
-      this.categoryService.deleteCategory(id).subscribe(res=>{
-        this.categoryList = [];
-        this.fetchCategories();
-        console.log(res);
-        console.log("succes stergere!")
-      }, (error =>{
-        console.log(error);
-      }))
+      this.categoryService.deleteCategory(id).subscribe();
     }
   }
-
-
 
   onCreateAddRecord() {
     console.log("am intrat in oncreateaddRecord")

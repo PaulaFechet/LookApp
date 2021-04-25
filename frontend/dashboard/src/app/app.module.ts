@@ -30,7 +30,7 @@ import { AppComponent } from './app.component';
 import { CategoriesComponent } from './modules/categories/categories.component';
 import { AddRecordComponent } from './modules/add-record/add-record.component';
 
-import {JwtInterceptor} from '../app/shared/helpers/jwt.interceptor';
+import { JwtInterceptor } from '../app/shared/helpers/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -67,9 +67,7 @@ import {JwtInterceptor} from '../app/shared/helpers/jwt.interceptor';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-
-
-],
+  ],
   bootstrap: [AppComponent],
   entryComponents: [AddCategoryComponent]
 })
