@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
+import { Router } from '@angular/router'
 import { CategoryModel } from 'src/app/shared/models/category'
 import { CategoryService } from '../../shared/services/category.service'
 import { AddCategoryComponent } from '../add-category/add-category.component'
@@ -15,11 +16,9 @@ import { AddRecordComponent } from '../add-record/add-record.component'
 export class CategoriesComponent implements OnInit {
 
   public categoryList: CategoryModel[] = [];
-  public listData: MatTableDataSource<any>;
-  public displayedColumns: string[] = ['title', 'description', 'type'];
-  public productForm: FormGroup;
 
   constructor(
+    public router: Router,
     private dialog: MatDialog,
     private categoryService: CategoryService) { }
 
@@ -30,23 +29,18 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-
-  onSubmit(): void {
-    console.log(this.productForm.value);
-  }
-
   onCreateCategory() {
     const dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '70vw',
       maxHeight: '100vh',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
     });
   }
 
-  onEdit(row) {
+  onEdit() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -67,7 +61,7 @@ export class CategoriesComponent implements OnInit {
       maxHeight: '100vh',
       data: categoryId
     });
-    dialogReff.afterClosed().subscribe(result => {
+    dialogReff.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
     });
   }
