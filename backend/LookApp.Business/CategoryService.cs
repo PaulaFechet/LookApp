@@ -18,17 +18,17 @@ namespace LookApp.Business
 
         public List<Category> GetCategories(int userId)
         {
-            var startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
-
+            
             return _context.Categories
                 .Where(c => c.CreatorId == userId)
-                .Include(c => c.Records.Where(r => r.Date > startDate))
+                .Include(c => c.Records)
                 .ToList();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id, int userId)
         {
-            return await this._context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.CreatorId == userId);
+            var startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
+            return await this._context.Categories.Include(c => c.Records).FirstOrDefaultAsync(c => c.Id == id && c.CreatorId == userId);
         }
 
         public async Task<Category> CreateAsync(Category newCategory)
