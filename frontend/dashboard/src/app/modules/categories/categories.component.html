@@ -1,17 +1,11 @@
-<div class="container">
+<div class="categories-container">
   <button mat-raised-button class="add-button" (click)="onCreateCategory()">
     <mat-icon>add</mat-icon>Create
   </button>
 
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-  <mat-divider></mat-divider>
-
-  <div class="row">
-    <br>
-    <div *ngFor="let category of categoryList" class="col-sm-4">
+  <div class="categories-grid">
+    <div *ngFor="let category of categoryList">
       <mat-card class="example-card">
-
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>{{category.title}}</mat-card-title>
@@ -23,6 +17,11 @@
         </mat-card-content>
 
         <mat-card-actions>
+
+          <button mat-button (click)="router.navigate(['/categories/' + category.id])">
+            <mat-icon>visibility</mat-icon>
+          </button>
+
           <button mat-button (click)="onAddRecord(category.id)">
             <mat-icon>add</mat-icon>
           </button>
@@ -38,10 +37,6 @@
         </mat-card-actions>
 
       </mat-card>
-      <mat-divider></mat-divider>
-      <mat-divider></mat-divider>
-      <mat-divider></mat-divider>
-      <mat-divider></mat-divider>
     </div>
   </div>
 </div>
