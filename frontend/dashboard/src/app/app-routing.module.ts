@@ -7,6 +7,7 @@ import { CategoriesComponent } from './modules/categories/categories.component';
 import { AddCategoryComponent } from './modules/add-category/add-category.component';
 import { SignupComponent } from './modules/authentication/signup/signup.component';
 import { AuthGuard } from '../app/shared/helpers/auth.guard';
+import { CategoryDetailsComponent } from './modules/category-details/category-details.component';
 
 const routes: Routes = [
   {
@@ -29,7 +30,11 @@ const routes: Routes = [
       },
       {
         path: 'categories',
-        component: CategoriesComponent,
+        component: CategoriesComponent
+      },
+      {
+        path: 'categories/:id',
+        component: CategoryDetailsComponent
       },
       {
         path: 'add_category',
@@ -38,7 +43,7 @@ const routes: Routes = [
     ]
   },
   {
-    path : '**',
+    path: '**',
     component: LoginComponent
   },
 ];
