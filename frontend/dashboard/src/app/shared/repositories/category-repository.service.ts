@@ -16,6 +16,10 @@ export class CategoryRepositoryService {
     return this.http.get<CategoryModel[]>(`${this.endpoint}/allCategoryDetails`);
   }
 
+  getById(id: number): Observable<CategoryModel> {
+    return this.http.get<CategoryModel>(`${this.endpoint}/${id}`);
+  }
+
   addCategory(categoryModel: CategoryModel): Observable<CategoryModel> {
     return this.http.post<CategoryModel>(`${this.endpoint}`, categoryModel);
   }

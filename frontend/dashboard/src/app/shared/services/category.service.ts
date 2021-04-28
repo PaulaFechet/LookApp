@@ -3,6 +3,7 @@ import { CategoryRepositoryService } from './../repositories/category-repository
 import { Injectable } from '@angular/core';
 import { CategoryModel } from '../models/category';
 import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,14 @@ export class CategoryService {
 
   constructor(private categoryRepositoryService: CategoryRepositoryService) {
     this.categories = new BehaviorSubject<CategoryModel[]>([]);
+  }
+
+  getById(categoryId: number): Observable<CategoryModel> {
+    var category = this.categories.value.find(category => category.id === categoryId);
+    if (category == undefined) {
+      return this.categoryRepositoryService.getById(categoryId);
+    }
+    return of(category);
   }
 
   populateCategories(): Observable<void> {
