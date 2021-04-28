@@ -16,6 +16,26 @@ select {
   height: 80px;
 }
 
+.categories-grid {
+  display: grid;
+  width: 100%;
+  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.categories-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 50px;
+  padding: 0px 50px;
+  flex-direction: column;
+}
 
 @media only screen and (max-width: 640px){
   .my-class .mat-dialog-container{
