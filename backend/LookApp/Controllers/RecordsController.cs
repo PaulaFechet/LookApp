@@ -26,9 +26,33 @@ namespace LookApp.API.Controllers
         [HttpGet("allRecordDetails")]
         public ActionResult<List<Record>> GetAllInformationCategories()
         {
-            var categories = _recordService.GetRecords();
+            var record = _recordService.GetRecords();
 
-            return Ok(categories);
+            return Ok(record);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetByIdAsync([FromRoute] int id)
+        {
+            var records = await _recordService.GetRecordByIdAsync(id);
+            if (records == null)
+            {
+                return NotFound("There's no record with the provided id.");
+            }
+
+            return Ok(records);
+        }
+
+        [HttpGet("recordByCategoryId/{categoryId}")]
+        public ActionResult<List<Record>> GetByCategoryIdAsync([FromRoute] int categoryId)
+        {
+            var records =  _recordService.GetRecordsByCategoryId(categoryId);
+            if (records == null)
+            {
+                return NotFound("There's no category with the provided category id.");
+            }
+
+            return Ok(records);
         }
 
         [HttpDelete("{id}")]
