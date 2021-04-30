@@ -9,7 +9,8 @@ import { of } from 'rxjs';
   providedIn: 'root'
 })
 export class RecordService {
-  public recordsPerCategory: Map<number, BehaviorSubject<RecordModel[]>>;
+
+  private recordsPerCategory: Map<number, BehaviorSubject<RecordModel[]>>;
 
   constructor(private recordRepositoryService: RecordRepositoryService) {
     this.recordsPerCategory = new Map<number, BehaviorSubject<RecordModel[]>>();
@@ -35,18 +36,18 @@ export class RecordService {
       );
   }
 
-  populateRecords(categoryId: number): Observable<BehaviorSubject<RecordModel[]>> {
+  populateRecords(categoryId: number): Observable<Observable<RecordModel[]>> {
     return this.recordRepositoryService.getRecordsByCategoryId(categoryId)
       .pipe(
         map(records => {
           var categoryRecords = new BehaviorSubject<RecordModel[]>(records);
           this.recordsPerCategory.set(categoryId, categoryRecords);
-          return categoryRecords;
+          return categoryRecords.asObservable();
         })
       );
   }
 
-  getRecordsByCategoryId(categoryId: number): Observable<BehaviorSubject<RecordModel[]>> {
+  getRecordsByCategoryId(categoryId: number): Observable<Observable<RecordModel[]>> {
     var records = this.recordsPerCategory.get(categoryId);
     if (records === undefined) {
       return this.populateRecords(categoryId);

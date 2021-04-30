@@ -23,9 +23,10 @@ export class CategoriesComponent implements OnInit {
     private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categoryService.populateCategories().subscribe();
-    this.categoryService.categories.subscribe(categories => {
-      this.categoryList = categories;
+    this.categoryService.populateCategories().subscribe(categories$ => {
+      categories$.subscribe(categories => {
+        this.categoryList = categories;
+      });
     });
   }
 

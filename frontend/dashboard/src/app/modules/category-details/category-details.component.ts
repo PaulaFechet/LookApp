@@ -45,8 +45,8 @@ export class CategoryDetailsComponent implements OnInit {
         this.categoryTitle = category.title;
         this.categoryType = category.type;
 
-        this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(recordsSubject => {
-          recordsSubject.subscribe(records => {
+        this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(records$ => {
+          records$.subscribe(records => {
             this.recordList = records;
             this.createChart(this.categoryTitle, this.categoryType, this.recordList);
           });
@@ -133,11 +133,6 @@ export class CategoryDetailsComponent implements OnInit {
     });
 
     //this.changeDetectorRef.detectChanges();
-  }
-
-  onDeleteRecord(id: number): void {
-    console.log(id);
-    this.recordService.deleteRecord(this.categoryId, id).subscribe();
   }
 
   openDialog(action, obj) {

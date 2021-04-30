@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 })
 export class CategoryService {
 
-  public categories: BehaviorSubject<CategoryModel[]>;
+  private categories: BehaviorSubject<CategoryModel[]>;
 
   constructor(private categoryRepositoryService: CategoryRepositoryService) {
     this.categories = new BehaviorSubject<CategoryModel[]>([]);
@@ -24,11 +24,12 @@ export class CategoryService {
     return of(category);
   }
 
-  populateCategories(): Observable<void> {
+  populateCategories(): Observable<Observable<CategoryModel[]>> {
     return this.categoryRepositoryService.getAllCategories()
       .pipe(
         map(categories => {
           this.categories.next(categories);
+          return this.categories.asObservable();
         })
       );
   }

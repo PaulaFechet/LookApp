@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RecordModel } from '../models/record';
@@ -19,11 +19,11 @@ export class RecordRepositoryService {
     return this.http.delete<void>(`${this.endpoint}/${id}`)
   }
 
-  getAllRecords():Observable<RecordModel[]>{
+  getAllRecords(): Observable<RecordModel[]>{
     return this.http.get<RecordModel[]>(`${this.endpoint}/allRecordDetails`)
   }
 
-  getRecordsByCategoryId(categoryId: number):Observable<RecordModel[]>{
+  getRecordsByCategoryId(categoryId: number): Observable<RecordModel[]>{
     return this.http.get<RecordModel[]>(`${this.endpoint}/recordByCategoryId/${categoryId}`)
   }
 }

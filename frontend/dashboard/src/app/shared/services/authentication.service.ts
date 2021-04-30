@@ -8,12 +8,12 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private endpoint: string = 'https://localhost:44387/api/authentication';
 
+  private endpoint: string = 'https://localhost:44387/api/authentication';
   private currentUserSubject: BehaviorSubject<User>;
+
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-
   }
 
   public get currentUserValue(): User {
