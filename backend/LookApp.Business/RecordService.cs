@@ -29,10 +29,12 @@ namespace LookApp.Business
             return await this._context.Records.FindAsync(id);
         }
 
-        public async Task CreateAsync(Record newRecord)
+        public async Task<Record> CreateAsync(Record newRecord)
         {
             await this._context.Records.AddAsync(newRecord);
             await this._context.SaveChangesAsync();
+
+            return newRecord;
         }
 
         public async Task DeleteAsync(Record recordToDelete)

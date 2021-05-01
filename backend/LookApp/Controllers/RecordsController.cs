@@ -64,12 +64,12 @@ namespace LookApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync(CreateRecordRequest createRecordRequest)
+        public async Task<ActionResult<Record>> CreateAsync(CreateRecordRequest createRecordRequest)
         {
             var newRecord = _recordMapper.mapToRecord(createRecordRequest);
-            await _recordService.CreateAsync(newRecord);
+            var addedRecord = await _recordService.CreateAsync(newRecord);
 
-            return Created(newRecord.Id.ToString(), null);
+            return Created(newRecord.Id.ToString(), addedRecord);
         }
     }
 }

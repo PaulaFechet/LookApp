@@ -9,7 +9,7 @@ namespace LookApp.Business
         public List<Record> GetRecords();
         public Task<Record> GetRecordByIdAsync(int id);
         Task DeleteAsync(Record recordToDelete);
-        Task CreateAsync(Record newRecord);
+        Task<Record> CreateAsync(Record newRecord);
         public List<Record> GetRecordsByCategoryId(int id);
     }
 }
