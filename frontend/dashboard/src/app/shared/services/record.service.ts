@@ -24,7 +24,7 @@ export class RecordService {
           var records = this.recordsPerCategory.get(recordModel.categoryId)
           if (records) {
             records.value.add(addedRecord);
-            records.next(records.value);
+            records.next(SortedList.copy(records.value));
           }
         })
       );
@@ -36,7 +36,7 @@ export class RecordService {
         map(() => {
           var records = this.recordsPerCategory.get(categoryId);
           records.value.delete(r => r.id !== id);
-          records.next(records.value);
+          records.next(SortedList.copy(records.value));
         })
       );
   }

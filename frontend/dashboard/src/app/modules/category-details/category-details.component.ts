@@ -1,13 +1,11 @@
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as Chart from 'chart.js';
 import { CategoryModel } from 'src/app/shared/models/category';
-import { CategoryRepositoryService } from 'src/app/shared/repositories/category-repository.service';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ThrowStmt } from '@angular/compiler';
 import { RecordModel } from 'src/app/shared/models/record';
 
 @Component({
@@ -18,14 +16,13 @@ import { RecordModel } from 'src/app/shared/models/record';
 export class CategoryDetailsComponent implements OnInit {
 
   private categoryId: number;
+  private chart: Chart;
+
   public category: CategoryModel;
-  public dateChartList = [];
-  public valueChartList = [];
   public displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
-  public dataSource;
-  public recordList = [];
-  public categoryTitle = '';
-  public categoryType = '';
+  public recordList: RecordModel[] = [];
+  public categoryTitle: string = '';
+  public categoryType: string = '';
 
   constructor(
     private router: ActivatedRoute,
@@ -33,7 +30,7 @@ export class CategoryDetailsComponent implements OnInit {
     private recordService: RecordService,
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     console.log("ngOnInit");
@@ -47,16 +44,12 @@ export class CategoryDetailsComponent implements OnInit {
 
         this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(records$ => {
           records$.subscribe(records => {
-            this.recordList = records;
-            this.createChart(this.categoryTitle, this.categoryType, this.recordList);
+            this.recordList = records.values;
+            this.updateChart(this.categoryTitle, this.categoryType);
           });
         });
       });
     })
-  }
-
-  plotChart(): void {
-
   }
 
   sortVectorByDate(records) {
@@ -66,24 +59,34 @@ export class CategoryDetailsComponent implements OnInit {
     })
   }
 
-  createChart(categoryTitle: string, categoryType: string, recordList: RecordModel[]): Chart {
-    console.log("chart");
+  updateChart(categoryTitle: string, categoryType: string): Chart {
 
-    this.recordList = recordList;
-    this.sortVectorByDate(this.recordList);
-
-    this.dateChartList = [];
-    this.valueChartList = [];
+    var dateChartList: Date[] = [];
+    var valueChartList: number[] = [];
 
     this.recordList.forEach(r => {
-      this.dateChartList.push(r["date"]);
-      this.valueChartList.push(r["value"]);
-    })
+      dateChartList.push(r.date);
+      valueChartList.push(r.value);
+    });
+
+    if (this.chart === undefined) {
+      this.createChart(categoryTitle, categoryType, dateChartList, valueChartList);
+    } else {
+
+      this.chart.data.labels = dateChartList;
+      this.chart.data.datasets[0].data = valueChartList;
+      this.chart.update();
+    }
+  }
+
+  createChart(categoryTitle: string, categoryType: string, dateChartList: Date[], valueChartList: number[]) {
+
     var ctx = document.getElementById("recordChart");
 
-    var myChart = new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: 'line',
       options: {
+        onClick: this.onChartClickWrapper(),
         scales: {
           xAxes: [{
             type: 'time',
@@ -106,11 +109,11 @@ export class CategoryDetailsComponent implements OnInit {
         }
       },
       data: {
-        labels: this.dateChartList,
+        labels: dateChartList,
         datasets: [{
           label: categoryTitle,
           lineTension: 0,
-          data: this.valueChartList,
+          data: valueChartList,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -131,8 +134,6 @@ export class CategoryDetailsComponent implements OnInit {
         }]
       }
     });
-
-    //this.changeDetectorRef.detectChanges();
   }
 
   openDialog(action, obj) {
@@ -150,9 +151,19 @@ export class CategoryDetailsComponent implements OnInit {
         console.log("update");
       } else if (result.event == 'Delete') {
         this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe(() => {
-          this.createChart(this.categoryTitle, this.categoryType, this.recordList);
+          this.updateChart(this.categoryTitle, this.categoryType);
         });
       }
     });
+  }
+
+  onChartClickWrapper(): (event: MouseEvent) => void  {
+    return (event: MouseEvent): void => {
+      let x = this.chart.scales["x-axis-0"].getValueForPixel(event.offsetX)
+      let y = this.chart.scales["y-axis-0"].getValueForPixel(event.offsetY)
+
+      var newRecord = new RecordModel(x, y, this.categoryId, null);
+      this.recordService.addRecord(newRecord).subscribe();
+    };
   }
 }
