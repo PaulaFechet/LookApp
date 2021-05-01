@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { MatDialogRef } from '@angular/material/dialog';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { CategoryService } from 'src/app/shared/services/category.service';
@@ -14,6 +14,8 @@ export class AddCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
+  private readonly numberRegEx = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
+
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
     public formBuilder: FormBuilder,
@@ -23,10 +25,10 @@ export class AddCategoryComponent implements OnInit {
     this.categoryForm = this.formBuilder.group({
       title: ['', Validators.required],
       unitOfMeasure: ['', Validators.required],
-      lowerLimit: [''],
-      upperLimit: [''],
-      description: ['', Validators.required]
-    })
+      lowerLimit: ['', Validators.pattern(this.numberRegEx)],
+      upperLimit: ['', Validators.pattern(this.numberRegEx)],
+      description: ['']
+    }, { validators: this.checkIfLimitsAreValid })
   }
 
   get f() {
@@ -38,6 +40,10 @@ export class AddCategoryComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.categoryForm.valid) {
+      return;
+    }
+
     const data: CategoryModel = this.categoryForm.getRawValue();
     console.log(this.f.title.value, this.f.unitOfMeasure.value, this.f.description.value);
 
@@ -49,5 +55,30 @@ export class AddCategoryComponent implements OnInit {
   onClose() {
     console.log(this.categoryForm.value);
     this.dialogRef.close();
+  }
+
+  checkIfLimitsAreValid(categoryForm: AbstractControl): ValidationErrors | null {
+
+    var lowerLimitControl = categoryForm.get("lowerLimit");
+    var upperLimitControl = categoryForm.get("upperLimit");
+
+    if (lowerLimitControl.invalid ||
+        upperLimitControl.invalid) {
+      return null;
+    }
+
+    var lowerLimit = parseFloat(lowerLimitControl.value);
+    var upperLimit = parseFloat(upperLimitControl.value);
+
+    if (Number.isNaN(lowerLimit) ||
+        Number.isNaN(upperLimit)) {
+      return null;
+    }
+
+    if (lowerLimit < upperLimit) {
+      return null;
+    }
+
+    return { invalidLimits: true };
   }
 }

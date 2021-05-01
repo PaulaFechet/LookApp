@@ -11,7 +11,7 @@ import { RecordService } from './../../shared/services/record.service';
   styleUrls: ['./add-record.component.scss']
 })
 export class AddRecordComponent implements OnInit {
-  public productForm: FormGroup;
+  public recordForm: FormGroup;
 
   constructor(
     private dialogRef: MatDialogRef<AddRecordComponent>,
@@ -19,7 +19,7 @@ export class AddRecordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public id: number) { }
 
   ngOnInit(): void {
-    this.productForm = new FormGroup({
+    this.recordForm = new FormGroup({
       date: new FormControl('', Validators.required),
       note: new FormControl(''),
       value: new FormControl('', Validators.required),
@@ -27,15 +27,18 @@ export class AddRecordComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.productForm.value);
-    const recordToAdd: RecordModel = this.productForm.getRawValue();
+    if (!this.recordForm.valid) {
+      return;
+    }
+
+    const recordToAdd: RecordModel = this.recordForm.getRawValue();
     recordToAdd.categoryId = this.id;
     this.recordService.addRecord(recordToAdd).subscribe();
     this.onCloseMatDialog();
   }
 
   onCloseMatDialog() {
-    console.log(this.productForm.value);
+    console.log(this.recordForm.value);
     this.dialogRef.close();
   }
 }
