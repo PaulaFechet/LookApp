@@ -1,3 +1,5 @@
+USE LookApp;
+
 DECLARE @CategoryId INT;
 SET @CategoryId = 2;
 
