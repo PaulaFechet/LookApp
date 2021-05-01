@@ -50,7 +50,7 @@ namespace LookApp.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<Category>> GetByIdAsync([FromRoute] int id)
         {
             var result = await _categoryService.GetCategoryByIdAsync(id, this._currentUserId);
             if (result == null)

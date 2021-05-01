@@ -7,31 +7,29 @@
   <mat-grid-list cols="1" rowHeight="400px">
 
     <mat-grid-tile>
-      <div fxFlex fxLayoutAlign="center">
+      <div class="form-content">
+
         <mat-form-field appearance="fill">
           <mat-label>Choose a date</mat-label>
-
           <input matInput [matDatepicker]="picker" formControlName="date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <br>
+
         <mat-form-field>
           <input formControlName="note" matInput placeholder="Add a note (optional)">
         </mat-form-field>
-        <br>
 
         <mat-form-field>
           <input formControlName="value" matInput placeholder="Add value">
         </mat-form-field>
-        <br>
-        <br>
+
         <div class="button-row">
           <button mat-raised-button color="primary" type="submit">Submit</button>
           <!-- <button mat-raised-button color="warn" (click)="onClear()">Clear</button> -->
         </div>
+
       </div>
     </mat-grid-tile>
-
   </mat-grid-list>
 </form>

@@ -18,11 +18,9 @@ export class CategoryDetailsComponent implements OnInit {
   private categoryId: number;
   private chart: Chart;
 
-  public category: CategoryModel;
+  public category: CategoryModel = new CategoryModel();
   public displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
   public recordList: RecordModel[] = [];
-  public categoryTitle: string = '';
-  public categoryType: string = '';
 
   constructor(
     private router: ActivatedRoute,
@@ -39,13 +37,11 @@ export class CategoryDetailsComponent implements OnInit {
 
       this.categoryService.getById(this.categoryId).subscribe(category => {
         this.category = category;
-        this.categoryTitle = category.title;
-        this.categoryType = category.type;
 
         this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(records$ => {
           records$.subscribe(records => {
             this.recordList = records.values;
-            this.updateChart(this.categoryTitle, this.categoryType);
+            this.updateChart();
           });
         });
       });
@@ -59,7 +55,7 @@ export class CategoryDetailsComponent implements OnInit {
     })
   }
 
-  updateChart(categoryTitle: string, categoryType: string): Chart {
+  updateChart(): Chart {
 
     var dateChartList: Date[] = [];
     var valueChartList: number[] = [];
@@ -70,7 +66,7 @@ export class CategoryDetailsComponent implements OnInit {
     });
 
     if (this.chart === undefined) {
-      this.createChart(categoryTitle, categoryType, dateChartList, valueChartList);
+      this.createChart(dateChartList, valueChartList);
     } else {
 
       this.chart.data.labels = dateChartList;
@@ -79,7 +75,7 @@ export class CategoryDetailsComponent implements OnInit {
     }
   }
 
-  createChart(categoryTitle: string, categoryType: string, dateChartList: Date[], valueChartList: number[]) {
+  createChart(dateChartList: Date[], valueChartList: number[]) {
 
     var ctx = document.getElementById("recordChart");
 
@@ -96,13 +92,16 @@ export class CategoryDetailsComponent implements OnInit {
             scaleLabel: {
               display: true,
               labelString: 'Date'
-
             }
           }],
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: categoryType
+              labelString: this.category.unitOfMeasure
+            },
+            ticks: {
+              suggestedMax: this.category.upperLimit,
+              suggestedMin: this.category.lowerLimit
             }
           }],
           responsive: true,
@@ -111,7 +110,7 @@ export class CategoryDetailsComponent implements OnInit {
       data: {
         labels: dateChartList,
         datasets: [{
-          label: categoryTitle,
+          label: this.category.title,
           lineTension: 0,
           data: valueChartList,
           backgroundColor: [
@@ -151,7 +150,7 @@ export class CategoryDetailsComponent implements OnInit {
         console.log("update");
       } else if (result.event == 'Delete') {
         this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe(() => {
-          this.updateChart(this.categoryTitle, this.categoryType);
+          this.updateChart();
         });
       }
     });

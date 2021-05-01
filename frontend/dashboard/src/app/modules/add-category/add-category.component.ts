@@ -22,7 +22,9 @@ export class AddCategoryComponent implements OnInit {
   ngOnInit(): void {
     this.categoryForm = this.formBuilder.group({
       title: ['', Validators.required],
-      type: ['', Validators.required],
+      unitOfMeasure: ['', Validators.required],
+      lowerLimit: [''],
+      upperLimit: [''],
       description: ['', Validators.required]
     })
   }
@@ -37,7 +39,7 @@ export class AddCategoryComponent implements OnInit {
 
   onSubmit() {
     const data: CategoryModel = this.categoryForm.getRawValue();
-    console.log(this.f.title.value, this.f.type.value, this.f.description.value);
+    console.log(this.f.title.value, this.f.unitOfMeasure.value, this.f.description.value);
 
     this.categoryService.addCategory(data).subscribe();
 

@@ -12,7 +12,9 @@ namespace LookApp.API.Mappers
                 Id = 0,
                 Title = createCategoryRequest.Title,
                 Description = createCategoryRequest.Description,
-                Type = createCategoryRequest.Type,
+                UnitOfMeasure = createCategoryRequest.UnitOfMeasure,
+                LowerLimit = createCategoryRequest.LowerLimit,
+                UpperLimit = createCategoryRequest.UpperLimit,
                 CreatorId = creatorId,
                 Records = null
             };
@@ -24,7 +26,7 @@ namespace LookApp.API.Mappers
             {
                 Title = category.Title,
                 Description = category.Description,
-                Type = category.Type
+                Type = category.UnitOfMeasure
             };
         }
     }

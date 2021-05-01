@@ -4,14 +4,16 @@ using LookApp.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LookApp.Database.Migrations
 {
     [DbContext(typeof(LookAppContext))]
-    partial class LookAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210501135021_ReplaceTypeWithUnitOfMeasureAndRange")]
+    partial class ReplaceTypeWithUnitOfMeasureAndRange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace LookApp.Database.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("LowerLimit")
+                    b.Property<double>("LowerLimit")
                         .HasColumnType("float");
 
                     b.Property<string>("Title")
@@ -41,7 +43,7 @@ namespace LookApp.Database.Migrations
                     b.Property<string>("UnitOfMeasure")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("UpperLimit")
+                    b.Property<double>("UpperLimit")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

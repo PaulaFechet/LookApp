@@ -20,3 +20,10 @@ main {
   font-family: "Montserrat", sans-serif;
   height: 100%;
 }
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
