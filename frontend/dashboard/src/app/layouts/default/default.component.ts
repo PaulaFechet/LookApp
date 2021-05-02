@@ -6,13 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./default.component.scss']
 })
 export class DefaultComponent implements OnInit {
-  open = true;
+
+  public open: boolean = true;
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  sideBarToggler() {
+  toggleSideBar() {
     this.open = !this.open;
   }
 }
