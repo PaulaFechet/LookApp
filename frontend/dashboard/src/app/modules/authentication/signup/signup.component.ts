@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 
@@ -11,15 +11,19 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 })
 export class SignupComponent implements OnInit {
 
-  registerForm: FormGroup;
-  submitted = false;
-  error = '';
-  missMatchedPasswordError = '';
+  public registerForm: FormGroup;
+  public missMatchedPasswordError = '';
+
+  private error = '';
+  private submitted = false;
+
+  get registerFormControls() {
+    return this.registerForm.controls;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 
@@ -33,18 +37,13 @@ export class SignupComponent implements OnInit {
     })
   }
 
-  get f() {
-    return this.registerForm.controls;
-  }
-
   onSubmit() {
     this.submitted = true;
-    if (this.f.password.value != this.f.confirm_password.value) {
+    if (this.registerFormControls.password.value != this.registerFormControls.confirm_password.value) {
       this.missMatchedPasswordError = 'Passwords do not match';
-
     } else {
       this.submitted = true;
-      this.authenticationService.register(this.f.username.value, this.f.email.value, this.f.password.value)
+      this.authenticationService.register(this.registerFormControls.username.value, this.registerFormControls.email.value, this.registerFormControls.password.value)
         .pipe(first())
         .subscribe((res) => {
           this.router.navigateByUrl('/login');
@@ -55,4 +54,5 @@ export class SignupComponent implements OnInit {
         );
     }
   }
+
 }
