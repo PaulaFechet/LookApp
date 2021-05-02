@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { User } from '../models/user'
+import { LoggedInUser } from '../models/user'
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -10,13 +10,13 @@ import { map } from 'rxjs/operators';
 export class AuthenticationService {
 
   private endpoint: string = 'https://localhost:44387/api/authentication';
-  private currentUserSubject: BehaviorSubject<User>;
+  private currentUserSubject: BehaviorSubject<LoggedInUser>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<LoggedInUser>(JSON.parse(localStorage.getItem('currentUser')));
   }
 
-  public get currentUserValue(): User {
+  public get currentUserValue(): LoggedInUser {
     return this.currentUserSubject.value;
   }
 

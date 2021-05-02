@@ -1,9 +1,9 @@
 export class RecordModel{
-  id: number;
+  id?: number;
   date: Date;
-  note: string;
   value: number;
-  categoryId?: number;
+  categoryId: number;
+  note?: string;
 
   public constructor(date: Date, value: number, categoryId: number, note: string) {
     this.date = date;
