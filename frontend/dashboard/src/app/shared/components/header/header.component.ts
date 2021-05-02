@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service'
-import { AuthenticationService } from '../../services/authentication.service'
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -10,27 +9,23 @@ import { AuthenticationService } from '../../services/authentication.service'
 })
 export class HeaderComponent implements OnInit {
 
-  @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
+  @Output() toggleSideBarEmitter: EventEmitter<any> = new EventEmitter();
   public username: string;
 
   constructor(
     private readonly router: Router,
-    public readonly userService: UserService,
-    public authenticationService: AuthenticationService
-  ) {}
+    private readonly authenticationService: AuthenticationService
+  ) { }
 
   ngOnInit(): void {
-    try {
-      let user = JSON.parse(localStorage.getItem('currentUser')).email;
-      if (user != null) {
-        setTimeout(() => this.userService.username.next(user), 0);
-      }
-    } catch (error) {
+    let userEmail = JSON.parse(localStorage.getItem('currentUser')).email;
+    if (userEmail != null) {
+      this.username = userEmail;
     }
   }
 
   toggleSideBar() {
-    this.toggleSideBarForMe.emit();
+    this.toggleSideBarEmitter.emit();
     setTimeout(() => {
       window.dispatchEvent(
         new Event('resize')
@@ -41,6 +36,5 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.router.navigateByUrl('/login');
     this.authenticationService.logout();
-
   }
 }
