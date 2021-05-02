@@ -6,7 +6,7 @@ import { LoginComponent } from './modules/authentication/login/login.component';
 import { CategoriesComponent } from './modules/categories/categories.component';
 import { AddCategoryComponent } from './modules/add-category/add-category.component';
 import { SignupComponent } from './modules/authentication/signup/signup.component';
-import { AuthGuard } from '../app/shared/helpers/auth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 import { CategoryDetailsComponent } from './modules/category-details/category-details.component';
 
 const routes: Routes = [
