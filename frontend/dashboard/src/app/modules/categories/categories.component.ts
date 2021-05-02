@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { FormGroup } from '@angular/forms'
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
-import { MatTableDataSource } from '@angular/material/table'
 import { Router } from '@angular/router'
 import { CategoryModel } from 'src/app/shared/models/category'
 import { CategoryService } from '../../shared/services/category.service'
@@ -55,12 +53,11 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  onAddRecord(categoryId: number) {
-    console.log(categoryId);
+  onAddRecord(category: CategoryModel) {
     const dialogReff = this.dialog.open(AddRecordComponent, {
       width: '70vw',
       maxHeight: '100vh',
-      data: categoryId
+      data: category
     });
     dialogReff.afterClosed().subscribe(() => {
       console.log('The dialog was closed');

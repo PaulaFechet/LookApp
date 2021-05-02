@@ -1,3 +1,4 @@
+import { numberRegEx } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { MatDialogRef } from '@angular/material/dialog';
@@ -14,8 +15,6 @@ export class AddCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
-  private readonly numberRegEx = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
-
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
     public formBuilder: FormBuilder,
@@ -25,8 +24,8 @@ export class AddCategoryComponent implements OnInit {
     this.categoryForm = this.formBuilder.group({
       title: ['', Validators.required],
       unitOfMeasure: ['', Validators.required],
-      lowerLimit: ['', Validators.pattern(this.numberRegEx)],
-      upperLimit: ['', Validators.pattern(this.numberRegEx)],
+      lowerLimit: ['', Validators.pattern(numberRegEx)],
+      upperLimit: ['', Validators.pattern(numberRegEx)],
       description: ['']
     }, { validators: this.checkIfLimitsAreValid })
   }
@@ -67,8 +66,8 @@ export class AddCategoryComponent implements OnInit {
       return null;
     }
 
-    var lowerLimit = parseFloat(lowerLimitControl.value);
-    var upperLimit = parseFloat(upperLimitControl.value);
+    var lowerLimit = parseFloat(lowerLimitControl?.value);
+    var upperLimit = parseFloat(upperLimitControl?.value);
 
     if (Number.isNaN(lowerLimit) ||
         Number.isNaN(upperLimit)) {
