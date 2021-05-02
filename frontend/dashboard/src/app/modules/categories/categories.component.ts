@@ -34,9 +34,7 @@ export class CategoriesComponent implements OnInit {
       maxHeight: '100vh',
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed().subscribe();
   }
 
   onEdit() {
@@ -59,8 +57,6 @@ export class CategoriesComponent implements OnInit {
       maxHeight: '100vh',
       data: category
     });
-    dialogReff.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
-    });
+    dialogReff.afterClosed().subscribe();
   }
 }

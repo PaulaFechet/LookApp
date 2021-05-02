@@ -15,6 +15,10 @@ export class AddCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
+  get categoryFormControls() {
+    return this.categoryForm.controls;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
     public formBuilder: FormBuilder,
@@ -30,10 +34,6 @@ export class AddCategoryComponent implements OnInit {
     }, { validators: this.checkIfLimitsAreValid })
   }
 
-  get f() {
-    return this.categoryForm.controls;
-  }
-
   onClear() {
 
   }
@@ -44,15 +44,12 @@ export class AddCategoryComponent implements OnInit {
     }
 
     const data: CategoryModel = this.categoryForm.getRawValue();
-    console.log(this.f.title.value, this.f.unitOfMeasure.value, this.f.description.value);
-
     this.categoryService.addCategory(data).subscribe();
 
     this.onClose();
   }
 
   onClose() {
-    console.log(this.categoryForm.value);
     this.dialogRef.close();
   }
 

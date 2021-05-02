@@ -47,16 +47,12 @@ export class SignupComponent implements OnInit {
       this.authenticationService.register(this.f.username.value, this.f.email.value, this.f.password.value)
         .pipe(first())
         .subscribe((res) => {
-          console.log("ok!")
-          console.log(res);
           this.router.navigateByUrl('/login');
         },
           (error) => {
             this.error = error;
-            console.log(error);
           }
         );
-      console.log("it's perfect!");
     }
   }
 }

@@ -31,7 +31,6 @@ export class CategoryDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("ngOnInit");
     this.router.paramMap.subscribe(paramMap => {
       this.categoryId = +paramMap.get('id');
 
@@ -143,7 +142,6 @@ export class CategoryDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result.event == 'Add') {
         console.log("add");
       } else if (result.event == 'Update') {

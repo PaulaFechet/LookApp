@@ -41,16 +41,12 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe((res) => {
-        console.log("ok!")
         this.router.navigateByUrl('/');
       },
         (error) => {
           this.invalidPasswordOrUsernameError = 'Invalid username or password';
-          console.log(error);
         }
       );
-    console.log("it's perfect!");
-
   };
 }
 
