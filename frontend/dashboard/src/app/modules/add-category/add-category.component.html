@@ -9,7 +9,7 @@
       <div class="form-content">
         <mat-form-field>
           <input formControlName="title" matInput placeholder="Title">
-          <mat-error>This field is mandatory.</mat-error>
+          <mat-error>Field is mandatory</mat-error>
         </mat-form-field>
 
         <mat-form-field>
@@ -18,20 +18,22 @@
 
         <mat-form-field>
           <input formControlName="unitOfMeasure" matInput placeholder="Unit of measure">
-          <mat-error>This field is mandatory.</mat-error>
+          <mat-error>Field is mandatory</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input formControlName="lowerLimit" matInput placeholder="Lower limit (optional)">
-          <mat-error>This field is not a valid number.</mat-error>
+          <mat-error>Value must be a valid number</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input formControlName="upperLimit" matInput placeholder="Upper limit (optional)">
-          <mat-error>This field is not a valid number.</mat-error>
+          <mat-error>Value must be a valid number</mat-error>
         </mat-form-field>
 
-        <mat-error *ngIf="categoryForm.errors?.invalidLimits">Lower limit must be lower than upper limit.</mat-error>
+        <mat-error *ngIf="categoryForm.errors?.invalidLimits">
+          Lower limit must be lower than upper limit
+        </mat-error>
 
         <div class="button-row">
           <button mat-raised-button color="primary" type="submit">Submit</button>

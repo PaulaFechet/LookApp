@@ -24,24 +24,24 @@
           <input formControlName="value" matInput placeholder="Add value">
           <mat-error *ngIf="recordForm.controls.value.errors?.notInRange">
             <span *ngIf="category.lowerLimit && category.upperLimit">
-              The value must be between {{category.lowerLimit}} and {{category.upperLimit}}
+              Value must be between {{category.lowerLimit}} and {{category.upperLimit}}
             </span>
 
             <span *ngIf="!category.lowerLimit && category.upperLimit">
-              The value must be lower than {{category.upperLimit}}
+              Value must be lower than {{category.upperLimit}}
             </span>
 
             <span *ngIf="category.lowerLimit && !category.upperLimit">
-              The value must be greater than {{category.lowerLimit}}
+              Value must be greater than {{category.lowerLimit}}
             </span>
           </mat-error>
 
           <mat-error *ngIf="recordForm.controls.value.errors?.pattern">
-            The value must be a valid number
+            Value must be a valid number
           </mat-error>
 
           <mat-error *ngIf="recordForm.controls.value.errors?.required">
-            This field is mandatory
+            Field is mandatory
           </mat-error>
         </mat-form-field>
 
