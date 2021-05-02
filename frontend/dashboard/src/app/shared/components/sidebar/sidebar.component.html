@@ -2,7 +2,11 @@
 
   <h2 matSubheader>Pages</h2>
 
-  <a mat-list-item routerLinkActive="list-item-active" href="/dashboard"><mat-icon>dashboard</mat-icon> Dashboard</a>
-  <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/categories'])"><mat-icon>add</mat-icon>Add a new category</a>
+  <a mat-list-item routerLinkActive="list-item-active" href="/dashboard">
+    <mat-icon>dashboard</mat-icon> Dashboard
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/categories'])">
+    <mat-icon>add</mat-icon>Add a new category
+  </a>
 
 </mat-nav-list>

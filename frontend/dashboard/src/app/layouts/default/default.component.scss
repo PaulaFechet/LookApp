@@ -4,9 +4,8 @@
   height: 100%;
 }
 
-@media only screen and (max-width: 640px)
-{
-  mat-drawer{
+@media only screen and (max-width: 640px) {
+  mat-drawer {
     width: 50%;
   }
 }
@@ -21,4 +20,3 @@ mat-drawer-content {
   flex-direction: column;
   align-items: center;
 }
-

@@ -1,19 +1,15 @@
-
-/* styles applied directly to the ap-root element only */
+/* styles applied directly to the app-root element only */
 :host {
   .mat-icon {
     vertical-align: middle;
     margin-right: 20px;
   }
-  h2{
-    color:black;
+
+  h2 {
+    color: black;
   }
 
-  a{
-    color:black;
+  a {
+    color: black;
   }
 }
-
-
-
-
