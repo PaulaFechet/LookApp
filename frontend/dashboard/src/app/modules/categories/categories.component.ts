@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
+import { MatDialog } from '@angular/material/dialog'
 import { Router } from '@angular/router'
 import { CategoryModel } from 'src/app/shared/models/category'
 import { CategoryService } from '../../shared/services/category.service'
@@ -17,8 +17,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private dialog: MatDialog,
-    private categoryService: CategoryService) { }
+    private readonly modal: MatDialog,
+    private readonly categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.categoryService.populateCategories().subscribe(categories$ => {
@@ -28,35 +28,32 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  onCreateCategory() {
-    const dialogRef = this.dialog.open(AddCategoryComponent, {
+  onCreateCategory(): void {
+    this.modal.open(AddCategoryComponent, {
       width: '70vw',
-      maxHeight: '100vh',
+      maxHeight: '100vh'
     });
-
-    dialogRef.afterClosed().subscribe();
   }
 
-  onEdit() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "60%";
-    this.dialog.open(AddCategoryComponent, dialogConfig);
+  onEdit(): void {
+    this.modal.open(AddCategoryComponent, {
+      width: '60%',
+      disableClose: true,
+      autoFocus: true
+    });
   }
 
-  onDeleteCategory(id: number) {
-    if (confirm('Are you sure to delete this record ?')) {
+  onDeleteCategory(id: number): void {
+    if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id).subscribe();
     }
   }
 
-  onAddRecord(category: CategoryModel) {
-    const dialogReff = this.dialog.open(AddRecordComponent, {
+  onAddRecord(category: CategoryModel): void {
+    this.modal.open(AddRecordComponent, {
       width: '70vw',
       maxHeight: '100vh',
       data: category
     });
-    dialogReff.afterClosed().subscribe();
   }
 }
