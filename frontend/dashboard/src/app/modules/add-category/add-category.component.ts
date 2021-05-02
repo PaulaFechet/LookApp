@@ -55,16 +55,16 @@ export class AddCategoryComponent implements OnInit {
 
   checkIfLimitsAreValid(categoryForm: AbstractControl): ValidationErrors | null {
 
-    var lowerLimitControl = categoryForm.get("lowerLimit");
-    var upperLimitControl = categoryForm.get("upperLimit");
+    let lowerLimitControl = categoryForm.get("lowerLimit");
+    let upperLimitControl = categoryForm.get("upperLimit");
 
     if (lowerLimitControl.invalid ||
         upperLimitControl.invalid) {
       return null;
     }
 
-    var lowerLimit = parseFloat(lowerLimitControl?.value);
-    var upperLimit = parseFloat(upperLimitControl?.value);
+    let lowerLimit = parseFloat(lowerLimitControl?.value);
+    let upperLimit = parseFloat(upperLimitControl?.value);
 
     if (Number.isNaN(lowerLimit) ||
         Number.isNaN(upperLimit)) {

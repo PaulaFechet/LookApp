@@ -73,14 +73,14 @@ export class CategoryDetailsComponent implements OnInit {
       let x = this.chart.scales["x-axis-0"].getValueForPixel(event.offsetX);
       let y = this.chart.scales["y-axis-0"].getValueForPixel(event.offsetY);
 
-      var newRecord = new RecordModel(x, y, this.categoryId, null);
+      let newRecord = new RecordModel(x, y, this.categoryId, null);
       this.recordService.addRecord(newRecord).subscribe();
     };
   }
 
   private createChart(dateChartList: Date[], valueChartList: number[]): void {
 
-    var ctx = document.getElementById(this.chartCanvasId);
+    let ctx = document.getElementById(this.chartCanvasId);
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -140,8 +140,8 @@ export class CategoryDetailsComponent implements OnInit {
 
   private updateChart(): void {
 
-    var dateChartList: Date[] = this.recordList.map(r => r.date);
-    var valueChartList: number[] = this.recordList.map(r => r.value);
+    let dateChartList: Date[] = this.recordList.map(r => r.date);
+    let valueChartList: number[] = this.recordList.map(r => r.value);
 
     if (!this.chart) {
       this.createChart(dateChartList, valueChartList);

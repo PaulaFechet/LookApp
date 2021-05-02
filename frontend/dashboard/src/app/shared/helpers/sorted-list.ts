@@ -10,14 +10,14 @@ export class SortedList<T> {
   }
 
   public static copy<T>(sortedList: SortedList<T>): SortedList<T> {
-    var values = [...sortedList.values];
-    var comparator = sortedList.comparator;
+    let values = [...sortedList.values];
+    let comparator = sortedList.comparator;
     return new SortedList<T>(values, comparator);
   }
 
   public add(value: T): void {
-    for (var i = 0; i < this.values.length; i++) {
-      var currentValue = this.values[i];
+    for (let i = 0; i < this.values.length; i++) {
+      let currentValue = this.values[i];
       if (this.comparator(currentValue, value) > 0) {
         this.values.splice(i, 0, value);
         return;

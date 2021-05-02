@@ -52,7 +52,7 @@ export class AddRecordComponent implements OnInit {
   checkIfInRangeWrapper(): (recordForm: AbstractControl) => ValidationErrors | null {
 
     return (recordForm: AbstractControl): ValidationErrors | null => {
-      var value = parseFloat(recordForm.value);
+      let value = parseFloat(recordForm.value);
 
       if (Number.isNaN(value)) {
         return null;

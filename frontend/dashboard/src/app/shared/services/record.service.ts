@@ -20,7 +20,7 @@ export class RecordService {
     return this.recordRepositoryService.addRecord(recordModel)
       .pipe(
         map(addedRecord => {
-          var records = this.recordsPerCategory.get(recordModel.categoryId)
+          let records = this.recordsPerCategory.get(recordModel.categoryId)
           if (records) {
             let updatedRecords = SortedList.copy(records.value);
             updatedRecords.add(addedRecord);
@@ -34,7 +34,7 @@ export class RecordService {
     return this.recordRepositoryService.deleteRecord(id)
       .pipe(
         map(() => {
-          var records = this.recordsPerCategory.get(categoryId);
+          let records = this.recordsPerCategory.get(categoryId);
           if (records) {
             let updatedRecords = SortedList.copy(records.value);
             updatedRecords.delete(r => r.id !== id);
@@ -57,7 +57,7 @@ export class RecordService {
   }
 
   getRecordsByCategoryId(categoryId: number): Observable<Observable<SortedList<RecordModel>>> {
-    var records = this.recordsPerCategory.get(categoryId);
+    let records = this.recordsPerCategory.get(categoryId);
     if (!records) {
       return this.populateRecords(categoryId);
     }

@@ -26,7 +26,7 @@ export class CategoryService {
   }
 
   getById(categoryId: number): Observable<CategoryModel> {
-    var category = this.categories.value.find(category => category.id === categoryId);
+    let category = this.categories.value.find(category => category.id === categoryId);
     if (!category) {
       return this.categoryRepositoryService.getById(categoryId);
     }
