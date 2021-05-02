@@ -1,12 +1,12 @@
-import { CategoryService } from 'src/app/shared/services/category.service';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import * as Chart from 'chart.js';
 import { CategoryModel } from 'src/app/shared/models/category';
+import { RecordModel } from 'src/app/shared/models/record';
+import { CategoryService } from 'src/app/shared/services/category.service';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
-import { MatDialog } from '@angular/material/dialog';
-import { RecordModel } from 'src/app/shared/models/record';
 
 @Component({
   selector: 'app-category-details',
@@ -15,20 +15,20 @@ import { RecordModel } from 'src/app/shared/models/record';
 })
 export class CategoryDetailsComponent implements OnInit {
 
+  public readonly displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
+  public category: CategoryModel = new CategoryModel();
+  public recordList: RecordModel[] = [];
+
+  private readonly chartCanvasId: string = "recordChart";
   private categoryId: number;
   private chart: Chart;
 
-  public category: CategoryModel = new CategoryModel();
-  public displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
-  public recordList: RecordModel[] = [];
-
   constructor(
-    private router: ActivatedRoute,
-    private categoryService: CategoryService,
-    private recordService: RecordService,
-    public dialog: MatDialog,
-    public changeDetectorRef: ChangeDetectorRef
-  ) {}
+    private readonly router: ActivatedRoute,
+    private readonly categoryService: CategoryService,
+    private readonly recordService: RecordService,
+    private readonly modal: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.router.paramMap.subscribe(paramMap => {
@@ -37,8 +37,9 @@ export class CategoryDetailsComponent implements OnInit {
       this.categoryService.getById(this.categoryId).subscribe(category => {
         this.category = category;
 
-        this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(records$ => {
-          records$.subscribe(records => {
+        this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(record$ => {
+          record$.subscribe(records => {
+
             this.recordList = records.values;
             this.updateChart();
           });
@@ -47,36 +48,39 @@ export class CategoryDetailsComponent implements OnInit {
     })
   }
 
-  sortVectorByDate(records) {
-    records.sort(function (a, b) {
-      // convert date object into number to resolve issue in typescript
-      return +new Date(a.date) - +new Date(b.date);
-    })
-  }
-
-  updateChart(): Chart {
-
-    var dateChartList: Date[] = [];
-    var valueChartList: number[] = [];
-
-    this.recordList.forEach(r => {
-      dateChartList.push(r.date);
-      valueChartList.push(r.value);
+  openModal(action: string, obj: any): void {
+    obj.action = action;
+    const modalRef = this.modal.open(DialogBoxComponent, {
+      width: '250px',
+      data: obj
     });
 
-    if (this.chart === undefined) {
-      this.createChart(dateChartList, valueChartList);
-    } else {
-
-      this.chart.data.labels = dateChartList;
-      this.chart.data.datasets[0].data = valueChartList;
-      this.chart.update();
-    }
+    modalRef.afterClosed().subscribe(result => {
+      if (result.event == 'Add') {
+        console.log("add");
+      } else if (result.event == 'Update') {
+        console.log("update");
+      } else if (result.event == 'Delete') {
+        this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe(() => {
+          this.updateChart();
+        });
+      }
+    });
   }
 
-  createChart(dateChartList: Date[], valueChartList: number[]) {
+  onChartClickWrapper(): (event: MouseEvent) => void {
+    return (event: MouseEvent): void => {
+      let x = this.chart.scales["x-axis-0"].getValueForPixel(event.offsetX);
+      let y = this.chart.scales["y-axis-0"].getValueForPixel(event.offsetY);
 
-    var ctx = document.getElementById("recordChart");
+      var newRecord = new RecordModel(x, y, this.categoryId, null);
+      this.recordService.addRecord(newRecord).subscribe();
+    };
+  }
+
+  private createChart(dateChartList: Date[], valueChartList: number[]): void {
+
+    var ctx = document.getElementById(this.chartCanvasId);
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -134,33 +138,17 @@ export class CategoryDetailsComponent implements OnInit {
     });
   }
 
-  openDialog(action, obj) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: '250px',
-      data: obj
-    });
+  private updateChart(): void {
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.event == 'Add') {
-        console.log("add");
-      } else if (result.event == 'Update') {
-        console.log("update");
-      } else if (result.event == 'Delete') {
-        this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe(() => {
-          this.updateChart();
-        });
-      }
-    });
-  }
+    var dateChartList: Date[] = this.recordList.map(r => r.date);
+    var valueChartList: number[] = this.recordList.map(r => r.value);
 
-  onChartClickWrapper(): (event: MouseEvent) => void  {
-    return (event: MouseEvent): void => {
-      let x = this.chart.scales["x-axis-0"].getValueForPixel(event.offsetX)
-      let y = this.chart.scales["y-axis-0"].getValueForPixel(event.offsetY)
-
-      var newRecord = new RecordModel(x, y, this.categoryId, null);
-      this.recordService.addRecord(newRecord).subscribe();
-    };
+    if (!this.chart) {
+      this.createChart(dateChartList, valueChartList);
+    } else {
+      this.chart.data.labels = dateChartList;
+      this.chart.data.datasets[0].data = valueChartList;
+      this.chart.update();
+    }
   }
 }

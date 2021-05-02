@@ -21,8 +21,8 @@ export class CategoriesComponent implements OnInit {
     private readonly categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categoryService.populateCategories().subscribe(categories$ => {
-      categories$.subscribe(categories => {
+    this.categoryService.populateCategories().subscribe(categorie$ => {
+      categorie$.subscribe(categories => {
         this.categoryList = categories;
       });
     });
