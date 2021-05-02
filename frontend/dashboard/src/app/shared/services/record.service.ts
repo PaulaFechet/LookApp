@@ -1,19 +1,18 @@
-import { SortedList } from './../helpers/sorted-list';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RecordModel } from '../models/record';
 import { RecordRepositoryService } from '../repositories/record-repository.service';
-import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { SortedList } from './../helpers/sorted-list';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecordService {
 
-  private recordsPerCategory: Map<number, BehaviorSubject<SortedList<RecordModel>>>;
+  private readonly recordsPerCategory: Map<number, BehaviorSubject<SortedList<RecordModel>>>;
 
-  constructor(private recordRepositoryService: RecordRepositoryService) {
+  constructor(private readonly recordRepositoryService: RecordRepositoryService) {
     this.recordsPerCategory = new Map<number, BehaviorSubject<SortedList<RecordModel>>>();
   }
 
@@ -23,8 +22,9 @@ export class RecordService {
         map(addedRecord => {
           var records = this.recordsPerCategory.get(recordModel.categoryId)
           if (records) {
-            records.value.add(addedRecord);
-            records.next(SortedList.copy(records.value));
+            let updatedRecords = SortedList.copy(records.value);
+            updatedRecords.add(addedRecord);
+            records.next(updatedRecords);
           }
         })
       );
@@ -35,8 +35,11 @@ export class RecordService {
       .pipe(
         map(() => {
           var records = this.recordsPerCategory.get(categoryId);
-          records.value.delete(r => r.id !== id);
-          records.next(SortedList.copy(records.value));
+          if (records) {
+            let updatedRecords = SortedList.copy(records.value);
+            updatedRecords.delete(r => r.id !== id);
+            records.next(updatedRecords);
+          }
         })
       );
   }
@@ -45,8 +48,8 @@ export class RecordService {
     return this.recordRepositoryService.getRecordsByCategoryId(categoryId)
       .pipe(
         map(records => {
-          var newRecords = new SortedList(records, this.compareRecordsByDate);
-          var categoryRecords = new BehaviorSubject<SortedList<RecordModel>>(newRecords);
+          let newRecords = new SortedList(records, this.compareRecordsByDate);
+          let categoryRecords = new BehaviorSubject<SortedList<RecordModel>>(newRecords);
           this.recordsPerCategory.set(categoryId, categoryRecords);
           return categoryRecords.asObservable();
         })
@@ -55,10 +58,9 @@ export class RecordService {
 
   getRecordsByCategoryId(categoryId: number): Observable<Observable<SortedList<RecordModel>>> {
     var records = this.recordsPerCategory.get(categoryId);
-    if (records === undefined) {
+    if (!records) {
       return this.populateRecords(categoryId);
     }
-
     return of(records);
   }
 
@@ -66,4 +68,5 @@ export class RecordService {
     // convert date object into number to resolve issue in typescript
     return +new Date(a.date) - +new Date(b.date);
   }
+
 }
