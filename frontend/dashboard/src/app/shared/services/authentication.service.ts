@@ -1,44 +1,39 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { LoggedInUser } from '../models/user'
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
+import { LoggedInUser } from './../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private endpoint: string = 'https://localhost:44387/api/authentication';
-  private currentUserSubject: BehaviorSubject<LoggedInUser>;
+  public loggedInUser: LoggedInUser;
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<LoggedInUser>(JSON.parse(localStorage.getItem('currentUser')));
+  private readonly endpoint: string = 'https://localhost:44387/api/authentication';
+
+  constructor(private readonly http: HttpClient) {
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
   }
 
-  public get currentUserValue(): LoggedInUser {
-    return this.currentUserSubject.value;
+  login(email: string, password: string): Observable<LoggedInUser> {
+    return this.http.post<LoggedInUser>(`${this.endpoint}/login`, { email, password })
+      .pipe(
+        map(loggedInUser => {
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+          this.loggedInUser = loggedInUser;
+          return loggedInUser;
+        })
+      );
   }
 
-  login(email: string, password: string) {
-    return this.http.post<any>(`${this.endpoint}/login`, { email, password })
-      .pipe(map(user => {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-      }))
+  register(username: string, email: string, password: string): Observable<void> {
+    return this.http.post<void>(`${this.endpoint}/register`, { username, email, password });
   }
 
-  register(username: string, email: string, password: string) {
-    return this.http.post<any>(`${this.endpoint}/register`, { username, email, password })
-      .pipe(map(user => {
-        return user;
-      }))
-  }
-
-
-  logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+  logout(): void {
+    localStorage.removeItem('loggedInUser');
+    this.loggedInUser = null;
   }
 }
