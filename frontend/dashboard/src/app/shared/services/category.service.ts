@@ -1,27 +1,18 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-import { CategoryRepositoryService } from './../repositories/category-repository.service';
 import { Injectable } from '@angular/core';
-import { CategoryModel } from '../models/category';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { CategoryModel } from '../models/category';
+import { CategoryRepositoryService } from './../repositories/category-repository.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  private categories: BehaviorSubject<CategoryModel[]>;
+  private readonly categories: BehaviorSubject<CategoryModel[]>;
 
   constructor(private categoryRepositoryService: CategoryRepositoryService) {
     this.categories = new BehaviorSubject<CategoryModel[]>([]);
-  }
-
-  getById(categoryId: number): Observable<CategoryModel> {
-    var category = this.categories.value.find(category => category.id === categoryId);
-    if (category == undefined) {
-      return this.categoryRepositoryService.getById(categoryId);
-    }
-    return of(category);
   }
 
   populateCategories(): Observable<Observable<CategoryModel[]>> {
@@ -32,6 +23,14 @@ export class CategoryService {
           return this.categories.asObservable();
         })
       );
+  }
+
+  getById(categoryId: number): Observable<CategoryModel> {
+    var category = this.categories.value.find(category => category.id === categoryId);
+    if (!category) {
+      return this.categoryRepositoryService.getById(categoryId);
+    }
+    return of(category);
   }
 
   addCategory(categoryModel: CategoryModel): Observable<void> {
@@ -47,14 +46,9 @@ export class CategoryService {
     return this.categoryRepositoryService.deleteCategory(id)
       .pipe(
         map(() => {
-          var updatedCategories: CategoryModel[] = [];
-          for (const category of this.categories.value) {
-            if (category.id !== id) {
-              updatedCategories.push(category);
-            }
-          }
-          this.categories.next(updatedCategories);
+          this.categories.next(this.categories.value.filter(c => c.id !== id));
         })
       );
   }
+
 }

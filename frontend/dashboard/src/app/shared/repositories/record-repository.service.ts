@@ -7,23 +7,25 @@ import { RecordModel } from '../models/record';
   providedIn: 'root'
 })
 export class RecordRepositoryService {
-  private endpoint: string = 'https://localhost:44387/api/records';
 
-  constructor(private http: HttpClient) { }
+  private readonly endpoint: string = 'https://localhost:44387/api/records';
+
+  constructor(private readonly http: HttpClient) { }
 
   addRecord(recordModel: RecordModel): Observable<RecordModel> {
     return this.http.post<RecordModel>(`${this.endpoint}`, recordModel)
   }
 
-  deleteRecord(id: number): Observable<void>{
+  deleteRecord(id: number): Observable<void> {
     return this.http.delete<void>(`${this.endpoint}/${id}`)
   }
 
-  getAllRecords(): Observable<RecordModel[]>{
+  getAllRecords(): Observable<RecordModel[]> {
     return this.http.get<RecordModel[]>(`${this.endpoint}/allRecordDetails`)
   }
 
-  getRecordsByCategoryId(categoryId: number): Observable<RecordModel[]>{
+  getRecordsByCategoryId(categoryId: number): Observable<RecordModel[]> {
     return this.http.get<RecordModel[]>(`${this.endpoint}/recordByCategoryId/${categoryId}`)
   }
+
 }

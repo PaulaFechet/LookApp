@@ -1,16 +1,16 @@
-import { CategoryModel } from './../models/category';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CategoryModel } from './../models/category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryRepositoryService {
 
-  private endpoint: string = 'https://localhost:44387/api/categories';
+  private readonly endpoint: string = 'https://localhost:44387/api/categories';
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   getAllCategories(): Observable<CategoryModel[]> {
     return this.http.get<CategoryModel[]>(`${this.endpoint}/allCategoryDetails`);
@@ -27,4 +27,5 @@ export class CategoryRepositoryService {
   deleteCategory(id: number): Observable<void> {
     return this.http.delete<void>(`${this.endpoint}/${id}`);
   }
+
 }
