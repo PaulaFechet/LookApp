@@ -28,4 +28,7 @@ export class CategoryRepositoryService {
     return this.http.delete<void>(`${this.endpoint}/${id}`);
   }
 
+  updateCategory(id: number, categoryModel: CategoryModel): Observable<CategoryModel> {
+    return this.http.put<CategoryModel>(`${this.endpoint}/${id}`, categoryModel)
+  }
 }
