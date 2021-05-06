@@ -1,3 +1,4 @@
+import { UpdateCategoryComponent } from './../update-category/update-category.component';
 import { Component, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router } from '@angular/router'
@@ -35,11 +36,12 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  onEdit(): void {
-    this.modal.open(AddCategoryComponent, {
+  onEdit(category: CategoryModel): void {
+    this.modal.open(UpdateCategoryComponent, {
       width: '60%',
       disableClose: true,
-      autoFocus: true
+      autoFocus: true,
+      data: category
     });
   }
 

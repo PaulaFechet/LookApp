@@ -1,9 +1,9 @@
-import { numberRegEx } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { MatDialogRef } from '@angular/material/dialog';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { CategoryService } from 'src/app/shared/services/category.service';
+import { numberRegEx } from './../../shared/constants';
 
 @Component({
   selector: 'app-add-category',
@@ -22,7 +22,8 @@ export class AddCategoryComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
     public formBuilder: FormBuilder,
-    public categoryService: CategoryService) { }
+    public categoryService: CategoryService
+  ) { }
 
   ngOnInit(): void {
     this.categoryForm = this.formBuilder.group({
@@ -34,11 +35,12 @@ export class AddCategoryComponent implements OnInit {
     }, { validators: this.checkIfLimitsAreValid })
   }
 
-  onClear() {
+  onClear(): void {
+    this.categoryForm.reset()
 
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (!this.categoryForm.valid) {
       return;
     }
@@ -49,7 +51,7 @@ export class AddCategoryComponent implements OnInit {
     this.onClose();
   }
 
-  onClose() {
+  onClose(): void {
     this.dialogRef.close();
   }
 
@@ -59,7 +61,7 @@ export class AddCategoryComponent implements OnInit {
     let upperLimitControl = categoryForm.get("upperLimit");
 
     if (lowerLimitControl.invalid ||
-        upperLimitControl.invalid) {
+      upperLimitControl.invalid) {
       return null;
     }
 
@@ -67,7 +69,7 @@ export class AddCategoryComponent implements OnInit {
     let upperLimit = parseFloat(upperLimitControl?.value);
 
     if (Number.isNaN(lowerLimit) ||
-        Number.isNaN(upperLimit)) {
+      Number.isNaN(upperLimit)) {
       return null;
     }
 

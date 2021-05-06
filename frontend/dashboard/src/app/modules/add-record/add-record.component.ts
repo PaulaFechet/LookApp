@@ -1,13 +1,11 @@
-import { ValidationErrors } from '@angular/forms';
-import { AbstractControl } from '@angular/forms';
-import { Inject } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { numberRegEx } from 'src/app/shared/constants';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { RecordModel } from './../../shared/models/record';
 import { RecordService } from './../../shared/services/record.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-record',
@@ -34,7 +32,8 @@ export class AddRecordComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
+
     if (!this.recordForm.valid) {
       return;
     }
@@ -45,7 +44,7 @@ export class AddRecordComponent implements OnInit {
     this.onCloseMatDialog();
   }
 
-  onCloseMatDialog() {
+  onCloseMatDialog(): void {
     this.dialogRef.close();
   }
 
@@ -59,7 +58,7 @@ export class AddRecordComponent implements OnInit {
       }
 
       if ((!this.category.lowerLimit || value > this.category.lowerLimit) &&
-          (!this.category.upperLimit || value < this.category.upperLimit)) {
+        (!this.category.upperLimit || value < this.category.upperLimit)) {
         return null;
       }
 
