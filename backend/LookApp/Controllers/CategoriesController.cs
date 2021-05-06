@@ -82,5 +82,19 @@ namespace LookApp.API.Controllers
             await _categoryService.DeleteAsync(result);
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, UpdateCategoryRequest updatedCategoryRequest)
+        {
+            var categoryToUpdate = await _categoryService.GetCategoryByIdAsync(id, this._currentUserId);
+            if (categoryToUpdate == null)
+            {
+                return NotFound("There is no category with the provided id.");
+            }
+
+            var updatedCategory = _categoryMapper.MapToUpdatedCategory(categoryToUpdate, updatedCategoryRequest, this._currentUserId, id);
+            await _categoryService.UpdateAsync(categoryToUpdate);
+            return Ok(categoryToUpdate);
+        }
     }
 }

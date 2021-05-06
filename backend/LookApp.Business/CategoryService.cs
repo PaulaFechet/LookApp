@@ -49,5 +49,17 @@ namespace LookApp.Business
             this._context.Categories.Remove(categoryToDelete);
             await this._context.SaveChangesAsync();
         }
+
+
+        public async Task UpdateAsync(Category updatedCategory)
+        {
+            if (updatedCategory == null)
+            {
+                return;
+            }
+
+            this._context.Categories.Update(updatedCategory);
+            await this._context.SaveChangesAsync();
+        }
     }
 }
