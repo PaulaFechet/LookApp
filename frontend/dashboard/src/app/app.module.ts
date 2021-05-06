@@ -33,6 +33,7 @@ import { AddRecordComponent } from './modules/add-record/add-record.component';
 import { JwtInterceptor } from '../app/shared/interceptors/jwt.interceptor';
 import { CategoryDetailsComponent } from './modules/category-details/category-details.component';
 import { DialogBoxComponent } from './modules/dialog-box/dialog-box.component';
+import { UpdateCategoryComponent } from './modules/update-category/update-category.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { DialogBoxComponent } from './modules/dialog-box/dialog-box.component';
     AddCategoryComponent,
     CategoryDetailsComponent,
     DialogBoxComponent,
+    UpdateCategoryComponent,
   ],
   imports: [
     FormsModule,

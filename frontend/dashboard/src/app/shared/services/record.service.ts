@@ -44,6 +44,7 @@ export class RecordService {
       );
   }
 
+
   populateRecords(categoryId: number): Observable<Observable<SortedList<RecordModel>>> {
     return this.recordRepositoryService.getRecordsByCategoryId(categoryId)
       .pipe(

@@ -1,9 +1,9 @@
 export class SortedList<T> {
 
   public values: T[];
-  private comparator: any;
+  private readonly comparator: any;
 
-  constructor(list: T[], comparator: (a: T, b: T) => number) {
+  public constructor(list: T[], comparator: (a: T, b: T) => number) {
     this.values = [...list];
     this.comparator = comparator;
     this.values.sort(comparator);

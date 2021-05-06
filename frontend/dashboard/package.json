@@ -23,8 +23,10 @@
     "@angular/platform-browser-dynamic": "~10.0.4",
     "@angular/router": "~10.0.4",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-zoom": "^0.7.7",
     "highcharts": "^9.0.1",
     "highcharts-angular": "^2.10.0",
+    "moment": "^2.29.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

@@ -11,6 +11,22 @@ select {
   background-color: #8842d5;
 }
 
+@media (max-width: 600px){
+  .categories-container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: 50px;
+    padding: 0px 50px;
+    flex-direction: column;
+  }
+
+}
+
 .add-button {
   height: 80px;
 }
