@@ -42,6 +42,24 @@ export class CategoryService {
       );
   }
 
+  updateCategory(categoryId: number, categoryModel: CategoryModel): Observable<void> {
+    let updatedCategoryList = [];
+    return this.categoryRepositoryService.updateCategory(categoryId, categoryModel)
+      .pipe(
+        map(updatedCategory => {
+          this.categories.value.forEach(element => {
+            if (element.id == updatedCategory.id) {
+              updatedCategoryList.push(updatedCategory)
+            } else {
+              updatedCategoryList.push(element)
+            }
+          });
+          this.categories.next(updatedCategoryList);
+        }
+        )
+      )
+  }
+
   deleteCategory(id: number): Observable<void> {
     return this.categoryRepositoryService.deleteCategory(id)
       .pipe(
@@ -50,5 +68,4 @@ export class CategoryService {
         })
       );
   }
-
 }
