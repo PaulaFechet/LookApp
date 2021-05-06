@@ -7,5 +7,6 @@ namespace LookApp.API.Mappers
     {
         GetCategoryResponse MapToGetCategoryResponse(Category category);
         Category MapToCategory(CreateCategoryRequest createCategoryRequest, int creatorId);
+        Category MapToUpdatedCategory(Category categoryToUpdate, UpdateCategoryRequest updatedCategory, int creatorId, int categoryId);
     }
 }

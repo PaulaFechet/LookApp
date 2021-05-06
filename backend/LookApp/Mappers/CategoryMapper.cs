@@ -20,6 +20,19 @@ namespace LookApp.API.Mappers
             };
         }
 
+        public Category MapToUpdatedCategory(Category categoryToUpdate, UpdateCategoryRequest updatedCategory, int creatorId, int categoryId)
+        {
+            categoryToUpdate.Id = categoryId;
+            categoryToUpdate.CreatorId = creatorId;
+            categoryToUpdate.Title = updatedCategory.Title;
+            categoryToUpdate.Description = updatedCategory.Description;
+            categoryToUpdate.UnitOfMeasure = updatedCategory.UnitOfMeasure;
+            categoryToUpdate.LowerLimit = updatedCategory.LowerLimit;
+            categoryToUpdate.UpperLimit = updatedCategory.UpperLimit;
+
+            return categoryToUpdate;
+        }
+
         public GetCategoryResponse MapToGetCategoryResponse(Category category)
         {
             return new GetCategoryResponse
