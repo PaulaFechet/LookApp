@@ -17,5 +17,17 @@ namespace LookApp.API.Mappers
                 CategoryId = createRecordRequest.CategoryId
             };
         }
+
+        public Record MapToUpdatedRecord(Record recordToUpdate, UpdateRecordRequest updatedRecord, int recordId)
+        {
+            recordToUpdate.Id = recordId;
+            recordToUpdate.Date = updatedRecord.Date;
+            recordToUpdate.Note = updatedRecord.Note;
+            recordToUpdate.Value = updatedRecord.Value;
+            recordToUpdate.CategoryId = updatedRecord.CategoryId;
+   
+
+            return recordToUpdate;
+        }
     }
 }

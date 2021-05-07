@@ -46,5 +46,16 @@ namespace LookApp.Business
 
             await this._context.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(Record updatedRecord)
+        {
+            if (updatedRecord == null)
+            {
+                return;
+            }
+
+            this._context.Records.Update(updatedRecord);
+            await this._context.SaveChangesAsync();
+        }
     }
 }

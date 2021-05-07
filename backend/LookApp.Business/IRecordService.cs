@@ -11,5 +11,6 @@ namespace LookApp.Business
         Task DeleteAsync(Record recordToDelete);
         Task<Record> CreateAsync(Record newRecord);
         public List<Record> GetRecordsByCategoryId(int id);
+        public Task UpdateAsync(Record updatedRecord);
     }
 }

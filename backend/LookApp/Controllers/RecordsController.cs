@@ -71,5 +71,19 @@ namespace LookApp.API.Controllers
 
             return Created(newRecord.Id.ToString(), addedRecord);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, UpdateRecordRequest updatedRecordRequest)
+        {
+            var recordToUpdate = await _recordService.GetRecordByIdAsync(id);
+            if (recordToUpdate == null)
+            {
+                return NotFound("There is no record with the provided id.");
+            }
+
+            var updatedRecord = _recordMapper.MapToUpdatedRecord(recordToUpdate, updatedRecordRequest, id);
+            await _recordService.UpdateAsync(updatedRecord);
+            return Ok(updatedRecord);
+        }
     }
 }
