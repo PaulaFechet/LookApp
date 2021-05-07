@@ -15,6 +15,8 @@ import { AddRecordComponent } from '../add-record/add-record.component'
 export class CategoriesComponent implements OnInit {
 
   public categoryList: CategoryModel[] = [];
+  public searchText: string = '';
+  public filteredCategoryList: CategoryModel[] = [];
 
   constructor(
     public router: Router,
@@ -25,6 +27,7 @@ export class CategoriesComponent implements OnInit {
     this.categoryService.populateCategories().subscribe(categorie$ => {
       categorie$.subscribe(categories => {
         this.categoryList = categories;
+        this.filteredCategoryList = categories;
       });
     });
   }
@@ -57,5 +60,21 @@ export class CategoriesComponent implements OnInit {
       maxHeight: '100vh',
       data: category
     });
+  }
+
+  filterCategories(x) {
+    this.searchText = x.target.value + '';
+    console.log(this.searchText);
+    if(this.searchText == '')
+    {
+      this.categoryService.populateCategories().subscribe(categorie$ => {
+        categorie$.subscribe(categories => {
+          this.categoryList = categories;
+          this.filteredCategoryList = categories;
+        });
+      });
+    }
+    this.filteredCategoryList = this.categoryList.filter(c => c.title.toLowerCase().startsWith(this.searchText.toLowerCase()));
+    console.log(this.filteredCategoryList);
   }
 }
