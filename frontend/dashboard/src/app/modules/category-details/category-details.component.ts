@@ -1,5 +1,5 @@
-import { ChartService } from './../../shared/services/chart.service';
-import { Component, OnInit } from '@angular/core';
+import { UpdateRecordComponent } from './../update-record/update-record.component';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'chart.js';
@@ -8,13 +8,16 @@ import { RecordModel } from 'src/app/shared/models/record';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-category-details',
   templateUrl: './category-details.component.html',
   styleUrls: ['./category-details.component.scss']
 })
-export class CategoryDetailsComponent implements OnInit {
+export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   public readonly displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
   public category: CategoryModel = new CategoryModel();
@@ -24,10 +27,14 @@ export class CategoryDetailsComponent implements OnInit {
   public zoomOptions;
   public enableAddingRecordsFlag: boolean = false;
   public addingRecordStatus: string = '';
+  public dataSource;
 
   private readonly chartCanvasId: string = "recordChart";
   private categoryId: number;
   private chart: Chart;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
 
   constructor(
@@ -35,9 +42,11 @@ export class CategoryDetailsComponent implements OnInit {
     private readonly categoryService: CategoryService,
     private readonly recordService: RecordService,
     private readonly modal: MatDialog,
-    public readonly chartService: ChartService
   ) {
+    this.dataSource = new MatTableDataSource<RecordModel>();
   }
+
+
 
   ngOnInit(): void {
 
@@ -51,11 +60,18 @@ export class CategoryDetailsComponent implements OnInit {
           record$.subscribe(records => {
 
             this.recordList = records.values;
+            this.dataSource.data = this.recordList;
+            console.log(this.dataSource);
             this.updateChart();
           });
         });
       });
     })
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   openModal(action: string, obj: any): void {
@@ -191,7 +207,6 @@ export class CategoryDetailsComponent implements OnInit {
       }
     });
 
-    this.chartService.populateCharts(this.chart);
   }
 
 
@@ -223,5 +238,15 @@ export class CategoryDetailsComponent implements OnInit {
     link.href = this.chart.toBase64Image();
     link.download = `${this.category.title}-${currentDate}.png`;
     link.click();
+  }
+
+  onEdit(record: RecordModel, category: CategoryModel): void {
+    console.log(record);
+    this.modal.open(UpdateRecordComponent, {
+      width: '60%',
+      disableClose: true,
+      autoFocus: true,
+      data: [record, category]
+    });
   }
 }

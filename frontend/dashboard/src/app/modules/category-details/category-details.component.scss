@@ -25,6 +25,13 @@
   color: #A77B0E;
   text-align: center;
   border: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+#download:hover {
+  background-color: #FAE042;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+  color: #fff;
 }
 
 @media (max-width: 600px){

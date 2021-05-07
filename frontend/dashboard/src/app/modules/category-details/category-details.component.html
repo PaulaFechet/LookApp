@@ -45,37 +45,38 @@
       <mat-card-subtitle>{{category["type"]}}</mat-card-subtitle>
     </mat-card-header>
 
-    <table mat-table [dataSource]="recordList" class="mat-elevation-z8">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="this.dataSource"  matSort>
+
+        <ng-container matColumnDef="Date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Note">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Note(Optional) </th>
+          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+        </ng-container>
 
 
-      <ng-container matColumnDef="Date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-      </ng-container>
+        <ng-container matColumnDef="Value">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
+          <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="Note">
-        <th mat-header-cell *matHeaderCellDef> Note(Optional) </th>
-        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-      </ng-container>
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="onEdit(element, category)">Edit</a> |
+            <a (click)="openModal('Delete', element)">Delete</a>
+          </td>
+        </ng-container>
 
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-      <ng-container matColumnDef="Value">
-        <th mat-header-cell *matHeaderCellDef> Value </th>
-        <td mat-cell *matCellDef="let element"> {{element.value}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Action">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let element" class="action-link">
-          <a (click)="openModal('Update', element)">Edit</a> |
-          <a (click)="openModal('Delete', element)">Delete</a>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
   </mat-card>
 </div>
