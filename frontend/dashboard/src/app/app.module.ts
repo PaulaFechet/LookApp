@@ -34,6 +34,8 @@ import { JwtInterceptor } from '../app/shared/interceptors/jwt.interceptor';
 import { CategoryDetailsComponent } from './modules/category-details/category-details.component';
 import { DialogBoxComponent } from './modules/dialog-box/dialog-box.component';
 import { UpdateCategoryComponent } from './modules/update-category/update-category.component';
+import { UpdateRecordComponent } from './modules/update-record/update-record.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { UpdateCategoryComponent } from './modules/update-category/update-catego
     CategoryDetailsComponent,
     DialogBoxComponent,
     UpdateCategoryComponent,
+    UpdateRecordComponent,
   ],
   imports: [
     FormsModule,
@@ -66,6 +69,7 @@ import { UpdateCategoryComponent } from './modules/update-category/update-catego
     MatInputModule,
     MatSelectModule,
     MatPaginatorModule,
+    MatSortModule,
     MatTableModule,
     MatCardModule,
     MatDividerModule,
