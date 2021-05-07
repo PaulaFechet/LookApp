@@ -70,4 +70,18 @@ export class RecordService {
     return +new Date(a.date) - +new Date(b.date);
   }
 
+  updateRecord(recordId: number, recordModel: RecordModel): Observable<void> {
+    return this.recordRepositoryService.updateRecord(recordId, recordModel)
+      .pipe(
+        map(updatedCategory => {
+          let records = this.recordsPerCategory.get(recordModel.categoryId);
+          if (records) {
+            let updatedRecords = SortedList.copy(records.value);
+            updatedRecords.delete(r => r.id !== recordId);
+            updatedRecords.add(updatedCategory)
+            records.next(updatedRecords);
+          }
+        })
+      );
+  }
 }

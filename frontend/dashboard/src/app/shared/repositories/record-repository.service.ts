@@ -28,4 +28,8 @@ export class RecordRepositoryService {
     return this.http.get<RecordModel[]>(`${this.endpoint}/recordByCategoryId/${categoryId}`)
   }
 
+  updateRecord(id: number, recordModel: RecordModel): Observable<RecordModel> {
+    return this.http.put<RecordModel>(`${this.endpoint}/${id}`, recordModel)
+  }
+
 }
