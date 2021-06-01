@@ -1,0 +1,28 @@
+
+
+@media only screen and (max-width: 640px) {
+  canvas {
+    display: block;
+    height: 206px;
+    width: 110%;
+    padding-right: 30%;
+  }
+
+  #line-chart {
+    display: block;
+    height: 160%;
+    width: 130%;
+    padding-right: 30%;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  canvas {
+    width: 1000;
+  }
+}
+
+body {
+  background-color: #f3f6f8;
+  margin-top: 20px;
+}

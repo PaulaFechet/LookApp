@@ -1,0 +1,26 @@
+<p>correlation works!</p>
+
+<!-- <select [(ngModel)]="categoryList" (change)="selectFirstCategory($event)">
+  <option *ngFor="let category of categoryList" [value]="category.id">
+    {{category.title}}
+  </option>
+</select>
+
+<select [(ngModel)]="categoryList" (change)="selectSecondCategory($event)">
+  <option *ngFor="let category of categoryList" [value]="category.id">
+    {{category.title}}
+  </option>
+</select> -->
+
+<ng-multiselect-dropdown
+[settings]="dropdownSettings"
+  [placeholder]="'Select 2 categories'"
+  [(ngModel)]="selectedItems"
+  [data]="dropdownList"
+
+  (onSelect)="onItemSelect($event)"
+  (onSelectAll)="onSelectAll($event)"
+>
+</ng-multiselect-dropdown>
+
+<canvas id="canvas" width="1000"></canvas>

@@ -8,6 +8,7 @@ import { AddCategoryComponent } from './modules/add-category/add-category.compon
 import { SignupComponent } from './modules/authentication/signup/signup.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { CategoryDetailsComponent } from './modules/category-details/category-details.component';
+import { CorrelationComponent } from './modules/correlation/correlation.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
       {
         path: 'add_category',
         component: AddCategoryComponent,
+      },
+      {
+        path: 'correlation',
+        component: CorrelationComponent
       }
     ]
   },
