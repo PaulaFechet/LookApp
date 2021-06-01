@@ -74,7 +74,7 @@ export class CategoriesComponent implements OnInit {
         });
       });
     }
-    this.filteredCategoryList = this.categoryList.filter(c => c.title.toLowerCase().startsWith(this.searchText.toLowerCase()));
+    this.filteredCategoryList = this.categoryList.filter(c => c.title.toLowerCase().includes(this.searchText.toLowerCase()));
     console.log(this.filteredCategoryList);
   }
 }
