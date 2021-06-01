@@ -36,7 +36,8 @@ import { DialogBoxComponent } from './modules/dialog-box/dialog-box.component';
 import { UpdateCategoryComponent } from './modules/update-category/update-category.component';
 import { UpdateRecordComponent } from './modules/update-record/update-record.component';
 import { MatSortModule } from '@angular/material/sort';
-
+import { CorrelationComponent } from './modules/correlation/correlation.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import { MatSortModule } from '@angular/material/sort';
     DialogBoxComponent,
     UpdateCategoryComponent,
     UpdateRecordComponent,
+    CorrelationComponent,
   ],
   imports: [
     FormsModule,
@@ -73,7 +75,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatCardModule,
     MatDividerModule,
-    HttpClientModule
+    HttpClientModule,
+    NgMultiSelectDropDownModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
