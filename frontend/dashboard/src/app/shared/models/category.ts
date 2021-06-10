@@ -5,4 +5,5 @@ export class CategoryModel{
   description?: string;
   lowerLimit?: number;
   upperLimit?: number;
+  graphColor?: string;
 }

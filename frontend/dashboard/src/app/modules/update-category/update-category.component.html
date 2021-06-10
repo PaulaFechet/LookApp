@@ -7,6 +7,10 @@
   <mat-grid-list cols="1" rowHeight="400px">
     <mat-grid-tile>
       <div class="form-content">
+
+        <p>Choose the color of the graph</p>
+        <input formControlName="graphColor" [(colorPicker)]="color" [style.background]="color"/>
+
         <mat-form-field>
           <input formControlName="title" matInput placeholder="Title">
           <mat-error>Field is mandatory</mat-error>

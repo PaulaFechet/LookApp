@@ -15,6 +15,7 @@ export class UpdateCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
   public categoryDetailsToDisplay: CategoryModel = new CategoryModel();
+  public color: string = "";
 
   get categoryFormControls() {
     return this.categoryForm.controls;
@@ -28,8 +29,11 @@ export class UpdateCategoryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.color = this.category.graphColor;
+
     this.categoryDetailsToDisplay = this.category;
     this.categoryForm = this.formBuilder.group({
+      graphColor: [this.category.graphColor],
       title: [this.category.title, Validators.required],
       unitOfMeasure: [this.category.unitOfMeasure, Validators.required],
       lowerLimit: [this.category.lowerLimit, Validators.pattern(numberRegEx)],
@@ -47,6 +51,9 @@ export class UpdateCategoryComponent implements OnInit {
       return;
     }
 
+    this.categoryForm.controls.graphColor.setValue(this.color);
+
+    console.log(this.color)
     const categoryModel: CategoryModel = this.categoryForm.getRawValue();
     this.categoryService.updateCategory(categoryId, categoryModel).subscribe();
 
