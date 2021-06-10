@@ -38,6 +38,10 @@ import { UpdateRecordComponent } from './modules/update-record/update-record.com
 import { MatSortModule } from '@angular/material/sort';
 import { CorrelationComponent } from './modules/correlation/correlation.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
+import { ColorPickerModule } from 'ngx-color-picker';
+import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/category-graph-preview.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +53,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     UpdateCategoryComponent,
     UpdateRecordComponent,
     CorrelationComponent,
+    CategoryGraphPreviewComponent,
   ],
   imports: [
     FormsModule,
@@ -76,7 +81,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     MatCardModule,
     MatDividerModule,
     HttpClientModule,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
+    ColorPickerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

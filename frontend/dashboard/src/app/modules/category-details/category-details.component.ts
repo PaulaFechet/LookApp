@@ -127,25 +127,15 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
     let datasets = [{
       label: this.category.title,
+      fill: false,
       lineTension: 0,
       data: valueChartList,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
+      borderWidth: 3,
+      borderColor: this.category.graphColor,
+      pointBackgroundColor: this.category.graphColor,
+      pointBorderColor: this.category.graphColor,
+      pointHoverBackgroundColor: this.category.graphColor,
+      pointHoverBorderColor: this.category.graphColor,
     }];
 
 
@@ -166,7 +156,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
             },
             gridLines: {
               display: true,
-              drawOnChartArea: true,
+              // drawOnChartArea: true,
               drawBorder: true,
             },
             scaleLabel: {

@@ -15,6 +15,8 @@ export class AddCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
+  public color: string = "";
+
   get categoryFormControls() {
     return this.categoryForm.controls;
   }
@@ -27,12 +29,14 @@ export class AddCategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryForm = this.formBuilder.group({
+      graphColor: [''],
       title: ['', Validators.required],
       unitOfMeasure: ['', Validators.required],
       lowerLimit: ['', Validators.pattern(numberRegEx)],
       upperLimit: ['', Validators.pattern(numberRegEx)],
       description: ['']
     }, { validators: this.checkIfLimitsAreValid })
+
   }
 
   onClear(): void {
@@ -44,6 +48,8 @@ export class AddCategoryComponent implements OnInit {
     if (!this.categoryForm.valid) {
       return;
     }
+
+    this.categoryForm.controls.graphColor.setValue(this.color);
 
     const data: CategoryModel = this.categoryForm.getRawValue();
     this.categoryService.addCategory(data).subscribe();
