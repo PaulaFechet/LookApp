@@ -26,6 +26,7 @@ export class CorrelationComponent implements OnInit {
   limitSelection = false;
   dropdownSettings: IDropdownSettings = {};
 
+  public categoryColor: string;
   dropdownList = [];
 
   public categoryList: CategoryModel[] = [];
@@ -89,13 +90,38 @@ export class CorrelationComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-
     this.addRecordsToChart(item.id, item.text);
   }
 
 
   onSelectAll(items: any) {
     console.log(items);
+    for(var i =0;i<items.length;i++){
+      this.addRecordsToChart(items[i].id, items[i].text);
+    }
+  }
+
+  onDeSelectAll(items: any){
+    this.chart.data.datasets = [];
+
+    this.chart.update();
+  }
+
+
+  onItemDeSelect(deselectedCategory: any): void {
+    console.log(deselectedCategory);
+
+    for (var i = 0; i < this.chart.data.datasets.length; i++) {
+      console.log(this.chart.data.datasets[i].label)
+
+      if (this.chart.data.datasets[i].label == deselectedCategory.text) {
+        this.chart.data.datasets.splice(i, 1)
+
+        this.chart.update();
+
+      }
+    }
+    console.log(this.chart.data.datasets);
   }
 
   addRecordsToChart(categoryId: number, categoryTitle: string): void {
@@ -113,18 +139,18 @@ export class CorrelationComponent implements OnInit {
           });
         }
 
-        var color = ["#ff6384", "#5959e6", "#2babab", "#8c4d15", "#8bc34a", "#607d8b", "#009688"];
-
-        var randomNumber = Math.floor(Math.random() * 6) + 1;
+        this.categoryService.getById(categoryId).subscribe(category => {
+          this.categoryColor = category.graphColor;
+        });
 
         var newDataset = {
 
           backgroundColor: "transparent",
-          borderColor: color[randomNumber],
-          pointBackgroundColor: color[randomNumber],
-          pointBorderColor: color[randomNumber],
-          pointHoverBackgroundColor: color[randomNumber],
-          pointHoverBorderColor: color[randomNumber],
+          borderColor: this.categoryColor,
+          pointBackgroundColor: this.categoryColor,
+          pointBorderColor: this.categoryColor,
+          pointHoverBackgroundColor: this.categoryColor,
+          pointHoverBorderColor: this.categoryColor,
           data: chartData,
           borderWidth: 3,
           label: categoryTitle,
@@ -136,6 +162,4 @@ export class CorrelationComponent implements OnInit {
       });
     });
   }
-
-
 }
