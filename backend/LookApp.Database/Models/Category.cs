@@ -11,6 +11,7 @@ namespace LookApp.Database.Models
         public double? LowerLimit { get; set; }
         public double? UpperLimit { get; set; }
 
+        public string? GraphColor { get; set; }
         public ICollection<Record> Records { get; set; }
 
         public int CreatorId { get; set; }

@@ -15,6 +15,7 @@ namespace LookApp.API.Mappers
                 UnitOfMeasure = createCategoryRequest.UnitOfMeasure,
                 LowerLimit = createCategoryRequest.LowerLimit,
                 UpperLimit = createCategoryRequest.UpperLimit,
+                GraphColor = createCategoryRequest.GraphColor,
                 CreatorId = creatorId,
                 Records = null
             };
@@ -29,7 +30,7 @@ namespace LookApp.API.Mappers
             categoryToUpdate.UnitOfMeasure = updatedCategory.UnitOfMeasure;
             categoryToUpdate.LowerLimit = updatedCategory.LowerLimit;
             categoryToUpdate.UpperLimit = updatedCategory.UpperLimit;
-
+            categoryToUpdate.GraphColor = updatedCategory.GraphColor;
             return categoryToUpdate;
         }
 
