@@ -14,14 +14,14 @@ export class AuthenticationService {
   private readonly endpoint: string = 'https://localhost:44387/api/authentication';
 
   constructor(private readonly http: HttpClient) {
-    this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    this.loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
   }
 
   login(email: string, password: string): Observable<LoggedInUser> {
     return this.http.post<LoggedInUser>(`${this.endpoint}/login`, { email, password })
       .pipe(
         map(loggedInUser => {
-          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+          sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
           this.loggedInUser = loggedInUser;
           return loggedInUser;
         })
@@ -33,7 +33,7 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    localStorage.removeItem('loggedInUser');
+    sessionStorage.removeItem('loggedInUser');
     this.loggedInUser = null;
   }
 }

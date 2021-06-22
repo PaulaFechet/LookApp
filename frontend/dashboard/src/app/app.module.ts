@@ -42,6 +42,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/category-graph-preview.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,10 +84,12 @@ import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/
     MatDividerModule,
     HttpClientModule,
     NgMultiSelectDropDownModule,
-    ColorPickerModule
+    ColorPickerModule,
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddCategoryComponent]
