@@ -1,16 +1,25 @@
-
-<ng-multiselect-dropdown
-[settings]="dropdownSettings"
-  [placeholder]="'Select categories'"
-  [(ngModel)]="selectedItems"
-  [data]="dropdownList"
-
-  (onDeSelect)="onItemDeSelect($event)"
-  (onDeSelectAll)="onDeSelectAll($event)"
-
-  (onSelect)="onItemSelect($event)"
-  (onSelectAll)="onSelectAll($event)"
->
+<ng-multiselect-dropdown [settings]="dropdownSettings" [placeholder]="'Select categories'" [(ngModel)]="selectedItems"
+  [data]="dropdownList" (onDeSelect)="onItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+  (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
 </ng-multiselect-dropdown>
 
+<section>
+  <div class="example-button-row">
+    <button mat-raised-button [disabled]="disabledButton" (click)="correlate()">Correlate</button>
+  </div>
+</section>
+
+<div *ngIf="errorMessage">
+  <p class="errorMessage">{{errorMessage}}</p>
+</div>
+
+
+
 <canvas id="canvas" width="1000"></canvas>
+
+<div *ngIf="correlationCoefficientInfoMessage">
+  <p class="correlationCoeffInfoMessage">{{correlationCoefficientInfoMessage}}</p>
+</div>
+
+
+<canvas id="scatterCorrelationChart" width="1000"></canvas>
