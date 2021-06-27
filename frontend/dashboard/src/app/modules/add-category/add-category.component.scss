@@ -1,4 +1,43 @@
-// input{
-//   border-radius: 50%;
-//   width: 28px;
-// }
+.form-content {
+  margin-top: 50px;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.form-rows {
+  display: flex;
+  flex-direction: row;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  width: 1em;
+  height: 1em;
+  float: right;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+
+.no-color {
+  position: relative;
+}
+
+.button-row {
+  margin-top: 50px;
+
+  button {
+    width: 85px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}

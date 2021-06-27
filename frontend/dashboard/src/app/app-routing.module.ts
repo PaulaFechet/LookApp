@@ -1,3 +1,4 @@
+import { ChangePasswordComponent } from './modules/authentication/change-password/change-password.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultComponent } from './layouts/default/default.component';
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'changePassword',
+    component: ChangePasswordComponent
   },
   {
     path: '',
@@ -54,7 +59,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+    })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

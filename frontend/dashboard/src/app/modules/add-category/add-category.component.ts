@@ -17,6 +17,8 @@ export class AddCategoryComponent implements OnInit {
 
   public color: string = "";
 
+  public selectedColor: string  = '';
+
   get categoryFormControls() {
     return this.categoryForm.controls;
   }
@@ -50,8 +52,10 @@ export class AddCategoryComponent implements OnInit {
     }
 
     this.categoryForm.controls.graphColor.setValue(this.color);
+    console.log("color", this.color);
 
     const data: CategoryModel = this.categoryForm.getRawValue();
+    console.log(data);
     this.categoryService.addCategory(data).subscribe();
 
     this.onClose();

@@ -42,6 +42,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/category-graph-preview.component';
 
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 
 @NgModule({
@@ -85,7 +86,7 @@ import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/
     HttpClientModule,
     NgMultiSelectDropDownModule,
     ColorPickerModule,
-
+    NgxCsvParserModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
