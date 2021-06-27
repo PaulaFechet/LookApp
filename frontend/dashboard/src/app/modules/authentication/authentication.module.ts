@@ -4,9 +4,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent],
+  declarations: [LoginComponent, SignupComponent, ChangePasswordComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -36,4 +36,10 @@ export class AuthenticationService {
     sessionStorage.removeItem('loggedInUser');
     this.loggedInUser = null;
   }
+
+  forgotPassword(email: string, newPassword: string){
+    return this.http.post(`${this.endpoint}/changePassword`, { email, newPassword });
+  }
+
+
 }

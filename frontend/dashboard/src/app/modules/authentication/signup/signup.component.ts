@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
@@ -12,10 +12,10 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 export class SignupComponent implements OnInit {
 
   public registerForm: FormGroup;
-  public missMatchedPasswordError = '';
 
-  private error = '';
-  private submitted = false;
+  public successfulMessage : string = '';
+  public errorMessage: string = '';
+  public submitted = false;
 
   get registerFormControls() {
     return this.registerForm.controls;
@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")],
       password: ['', Validators.required],
       username: ['', Validators.required],
       confirm_password: ['', Validators.required]
@@ -37,19 +37,39 @@ export class SignupComponent implements OnInit {
     })
   }
 
+  public get passwordControl(): FormControl {
+    return this.registerForm.controls.password as FormControl;
+  }
+
   onSubmit() {
+    this.errorMessage = '';
     this.submitted = true;
+    this.successfulMessage = '';
+
+    if (this.registerFormControls.password.value == '' || this.registerFormControls.email.value == '') {
+      this.errorMessage = 'Please fill the following fields.';
+      return;
+    }
+
+    if (this.registerFormControls.email.invalid) {
+      this.errorMessage = "Please use a valid email.";
+      return;
+    }
+
     if (this.registerFormControls.password.value != this.registerFormControls.confirm_password.value) {
-      this.missMatchedPasswordError = 'Passwords do not match';
+      this.errorMessage = 'Passwords do not match';
+      return;
     } else {
       this.submitted = true;
       this.authenticationService.register(this.registerFormControls.username.value, this.registerFormControls.email.value, this.registerFormControls.password.value)
         .pipe(first())
-        .subscribe((res) => {
-          this.router.navigateByUrl('/login');
+        .subscribe(() => {
+          this.successfulMessage = 'You have successfully been registered.';
+          // this.router.navigateByUrl('/login');
         },
           (error) => {
-            this.error = error;
+            console.log(error);
+            this.errorMessage = error.error;
           }
         );
     }

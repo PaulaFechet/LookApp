@@ -5,12 +5,31 @@
     <div class="form-container signup-container">
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <h1>Signup</h1>
-        <section *ngIf="missMatchedPasswordError">
-          <div>{{missMatchedPasswordError}}</div>
-        </section>
+
+        <div class="error-message">
+
+          <section *ngIf="errorMessage">
+            <div>{{errorMessage}}</div>
+          </section>
+        </div>
+
+        <div class="successful-message">
+          <section *ngIf="successfulMessage">
+            <div>{{successfulMessage}}</div>
+            <p>Go to <a href="/login">login page</a></p>
+          </section>
+        </div>
+
+
         <input type="email" formControlName="email" placeholder="Email" />
+        <div class="invalid-feedback">Please fill out this field.</div>
+
         <input type="username" formControlName="username" placeholder="Username" />
-        <input type="password" formControlName="password" placeholder="Password" />
+
+        <input type="password" formControlName="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+        placeholder="Password" required />
+
+
         <input type="password" formControlName="confirm_password" placeholder="Confirm Password" />
         <br>
         <button>Sign up</button>

@@ -32,6 +32,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.invalidUsernameOrPasswordError = '';
     this.authenticationService.login(this.loginFormControls.email.value, this.loginFormControls.password.value)
       .subscribe(
         (result) => {

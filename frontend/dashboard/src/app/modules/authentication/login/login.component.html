@@ -6,18 +6,15 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
         <h1>Login</h1>
-        <div *ngIf="invalidUsernameOrPasswordError">
+
+        <div class="error-message" *ngIf="invalidUsernameOrPasswordError">
           <br>
           <span class="warning">{{invalidUsernameOrPasswordError}}</span>
         </div>
-        <div class="social-container">
-          <a href="#" class="social"><i class="fa fa-facebook fa-2x"></i></a>
-          <a href="#" class="social"><i class="fab fa fa-twitter fa-2x"></i></a>
-        </div>
-        <span>or use your account</span>
+
         <input type="email" formControlName="email" placeholder="Email" />
         <input type="password" formControlName="password" placeholder="Password" />
-        <a href="/forgotPassword">Forgot your password?</a>
+        <a href="/changePassword">Change your password</a>
         <a href="/signup">Not a member? Register</a>
         <button>Log In</button>
       </form>
