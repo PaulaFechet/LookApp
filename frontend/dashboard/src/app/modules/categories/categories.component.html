@@ -8,30 +8,30 @@
   </div>
 </div>
 
-<div class="categories-container">
-  <button mat-raised-button class="add-button" (click)="onCreateCategory()">
-    <mat-icon>add</mat-icon>Create
-  </button>
+<button mat-raised-button class="add-button" (click)="onCreateCategory()">
+  <mat-icon>add</mat-icon>
+  Create
+</button>
 
+<div class="categories-container">
   <div class="categories-grid">
     <div *ngFor="let category of filteredCategoryList">
       <mat-card class="example-card">
-        <div class="graphImage">
+        <div class="graph-image">
           <app-category-graph-preview [categoryId]="category.id"></app-category-graph-preview>
         </div>
 
         <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>{{category.title}}</mat-card-title>
-          <mat-card-subtitle>Unit of measure: {{category.unitOfMeasure}}</mat-card-subtitle>
-
-          <div *ngIf="category.lowerLimit || category.upperLimit ; else elseBlock">
-            <mat-card-subtitle>Limits: [{{category.lowerLimit}}: {{category.upperLimit}}]</mat-card-subtitle>
-          </div>
-
-          <ng-template #elseBlock>
-            <mat-card-subtitle>No limits</mat-card-subtitle>
-          </ng-template>
+          <mat-card-subtitle>
+            <div>
+              <p class="subtitle">Unit of measure: {{category.unitOfMeasure}}</p>
+              <p class="subtitle">
+                Limits: ({{category.lowerLimit != null ? category.lowerLimit : '-&infin;'}}:
+                         {{category.upperLimit != null ? category.upperLimit : '&infin;'}})
+              </p>
+            </div>
+          </mat-card-subtitle>
 
         </mat-card-header>
 

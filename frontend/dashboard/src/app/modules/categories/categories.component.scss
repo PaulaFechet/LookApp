@@ -97,8 +97,6 @@ select {
   font-size: 20px;
 }
 
-
-
 #check:checked ~ .search-box .icon{
   background: #fded56;
   color: #FFF;
@@ -111,32 +109,9 @@ select {
   display: none;
 }
 
-
 .categories-container {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-  // height: 100%;
-  // gap: 50px;
-  // padding: 0px 50px;
-  // flex-direction: column;
   width: 1000px;
 }
-
-@media only screen and (max-width: 640px) {
-  .my-class .mat-dialog-container {
-    width: "80vw";
-    height: "100vh";
-    border-radius: 10px;
-    background: lightcyan;
-    color: #039be5;
-  }
-}
-
 
 .card {
   background-color: dodgerblue;
@@ -150,6 +125,45 @@ select {
   margin: 0 auto;
   display: grid;
   grid-gap: 1rem;
+}
+
+.graph-image {
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  margin: 0px;
+}
+
+mat-card-content {
+  margin-left: 16px;
+  height: 1em;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+
+  button {
+    outline: none;
+    margin: 0px;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .my-class .mat-dialog-container {
+    width: "80vw";
+    height: "100vh";
+    border-radius: 10px;
+    background: lightcyan;
+    color: #039be5;
+  }
 }
 
 /* Screen larger than 600px? 2 column */

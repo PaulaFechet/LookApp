@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { numberRegEx } from 'src/app/shared/constants';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { RecordModel } from './../../shared/models/record';
 import { RecordService } from './../../shared/services/record.service';
-import * as moment from 'moment';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-add-record',
@@ -24,7 +24,7 @@ export class AddRecordComponent implements OnInit {
 
   ngOnInit(): void {
     this.recordForm = this.formBuilder.group({
-      date: ['', Validators.required],
+      date: [formatDate(new Date(), 'yyyy-MM-ddThh:mm', 'en'), Validators.required],
       note: [''],
       value: ['', Validators.compose(
         [Validators.required, Validators.pattern(numberRegEx), this.checkIfInRangeWrapper()])

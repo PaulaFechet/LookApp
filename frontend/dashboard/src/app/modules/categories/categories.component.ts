@@ -34,8 +34,9 @@ export class CategoriesComponent implements OnInit {
 
   onCreateCategory(): void {
     this.modal.open(AddCategoryComponent, {
-      width: '70vw',
-      maxHeight: '100vh'
+      width: '600px',
+      minWidth: '600px',
+      maxHeight: '100vh',
     });
   }
 
@@ -56,7 +57,7 @@ export class CategoriesComponent implements OnInit {
 
   onAddRecord(category: CategoryModel): void {
     this.modal.open(AddRecordComponent, {
-      width: '70vw',
+      width: '400px',
       maxHeight: '100vh',
       data: category
     });

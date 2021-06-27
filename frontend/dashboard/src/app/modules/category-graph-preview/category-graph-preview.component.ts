@@ -76,36 +76,22 @@ export class CategoryGraphPreviewComponent implements AfterViewInit {
     this.chart = new Chart(ctx, {
       type: 'line',
       options: {
-        layout: {
-          padding: 20
+        legend: {
+          display: false
         },
         scales: {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'day'
+              unit: 'month'
             },
-            gridLines: {
-              display: true,
-              drawBorder: true,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: 'Date',
-              fontFamily: 'sans-serif',
-              fontStyle: 'blond'
+            ticks: {
+              display: false
             }
           }],
           yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: this.category.unitOfMeasure,
-              fontFamily: 'sans-serif',
-              fontStyle: 'blond'
-            },
             ticks: {
-              suggestedMax: this.category.upperLimit,
-              suggestedMin: this.category.lowerLimit,
+              display: false
             }
           }],
           responsive: true,
