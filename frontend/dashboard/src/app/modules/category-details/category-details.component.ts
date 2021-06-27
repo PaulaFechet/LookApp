@@ -1,3 +1,4 @@
+import { ChartPointModel } from './../../shared/models/chart-point';
 import { UpdateRecordComponent } from './../update-record/update-record.component';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +12,9 @@ import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { saveAs } from 'file-saver';
+import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+
 
 @Component({
   selector: 'app-category-details',
@@ -33,8 +37,19 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   private categoryId: number;
   private chart: Chart;
 
+  public selectedValue: string;
+
+  public chartPoints: ChartPointModel[] = [];
+
+  public csvRecords: any[] = [];
+  public header = true;
+
+  public dateListFromCsvImport = [];
+  public valueListFromCsvImport = [];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
 
 
   constructor(
@@ -42,6 +57,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     private readonly categoryService: CategoryService,
     private readonly recordService: RecordService,
     private readonly modal: MatDialog,
+    private ngxCsvParser: NgxCsvParser
   ) {
     this.dataSource = new MatTableDataSource<RecordModel>();
   }
@@ -92,6 +108,14 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  getSelectedChartType(data): void {
+    console.log(data);
+  }
+
+  print() {
+    console.log(this.selectedValue);
   }
 
   onChartClickWrapper(): (event: MouseEvent) => void {
@@ -197,6 +221,10 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       }
     });
 
+    for (var i = 0; i < dateChartList.length; i++) {
+      this.chartPoints.push({ "x": dateChartList[i].toString(), "y": valueChartList[i] })
+    }
+
   }
 
 
@@ -221,7 +249,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     (this.enableAddingRecordsFlag == true) ? this.addingRecordStatus = 'enabled' : this.addingRecordStatus = 'disabled';
   }
 
-  downloadChart(): void {
+  downloadAsPng(): void {
     let currentDate = new Date();
 
     let link = document.createElement('a');
@@ -230,6 +258,53 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     link.click();
   }
 
+  downloadAsCsv(): void {
+    let data = this.chartPoints;
+    console.log(data);
+    const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+    let header = Object.keys(data[0]);
+    console.log("header", header);
+    let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+    csv.unshift(header.join(','));
+    let csvArray = csv.join('\r\n');
+
+    var blob = new Blob([csvArray], { type: 'text/csv' })
+    saveAs(blob, `${this.category.title}` + ".csv");
+  }
+
+  handleFileInput(e) {
+    let file = (e.target as HTMLInputElement).files[0];
+
+
+    const regex = new RegExp("(.*?)\.(csv)$");
+    if (regex.test(file.name)) {
+      const files = e.srcElement.files;
+
+      this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ',' })
+        .pipe().subscribe((result: Array<any>) => {
+
+          console.log('Result', result);
+
+          this.csvRecords = result;
+          for (var i = 0; i < this.csvRecords.length; i++) {
+            this.dateListFromCsvImport.push(this.csvRecords[i].x);
+            this.valueListFromCsvImport.push(this.csvRecords[i].y);
+            let newRecord = new RecordModel(this.csvRecords[i].x, this.csvRecords[i].y, this.categoryId, null);
+            this.recordService.addRecord(newRecord).subscribe();
+          }
+
+          this.chart.update();
+
+          console.log(this.chart.data.datasets);
+        }, (error: NgxCSVParserError) => {
+          console.log('Error', error);
+        });
+    } else {
+      alert("File not supported!")
+    }
+  }
+
+
   onEdit(record: RecordModel, category: CategoryModel): void {
     console.log(record);
     this.modal.open(UpdateRecordComponent, {
@@ -237,6 +312,25 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       disableClose: true,
       autoFocus: true,
       data: [record, category]
+    });
+  }
+
+  undoImportCsv(): void{
+    this.confirmUndoAction("Undo");
+  }
+
+  confirmUndoAction(action: string): void {
+    let obj = {action: ''};
+    obj.action = action;
+    const modalRef = this.modal.open(DialogBoxComponent, {
+      width: '250px',
+      data: obj
+    });
+
+    modalRef.afterClosed().subscribe(result => {
+      if (result.event == 'Undo') {
+        console.log("undo");
+      }
     });
   }
 }
