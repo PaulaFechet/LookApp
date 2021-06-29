@@ -1,16 +1,11 @@
-
-img{
+img {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
 }
 
-.container {
-  padding-top: 10%;
-}
-
-.example-card{
+.example-card {
   background-color: white;
 }
 
@@ -23,43 +18,32 @@ select {
   background-color: #8842d5;
 }
 
-@media (max-width: 600px){
-  .categories-container {
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    gap: 50px;
-    padding: 0px 50px;
-    flex-direction: column;
-  }
-
-}
-
 .add-button {
-  height: 80px;
+  height: 50px;
   margin: 19px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 25px;
+  left: 100px;
+  background: #fded56;
+  outline: none;
+  color: black;
 }
 
 .categories-grid {
+  margin-top: 30px;
   display: grid;
   width: 100%;
   grid-gap: 30px;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
-.box{
-  max-width: 400px;
+.box {
+  max-width: 700px;
   width: 100%;
-  background-color: white;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
-  border-radius: 25px 25px 25px 25px;
+  display: flex;
 }
 
-.box .search-box{
+.box .search-box {
   position: relative;
   height: 50px;
   margin: auto;
@@ -68,22 +52,25 @@ select {
   transition: all 0.3s ease;
 }
 
-
-
-.search-box input{
- position: absolute;
- height: 100%;
- width: 100%;
- border-radius: 25px;
- background: #fff;
- outline: none;
- border: none;
- padding-left: 20px;
- font-size: 18px;
- cursor: pointer;
+.search-box input {
+  height: 100%;
+  width: 100%;
+  border-radius: 25px;
+  background: #fff;
+  outline: none;
+  border: none;
+  padding-left: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  justify-content: center;
 }
 
-.search-box .icon{
+.search-box {
+  justify-content: center;
+  width: 100%;
+}
+
+.search-box .icon {
   position: absolute;
   right: -2px;
   top: 0;
@@ -91,21 +78,26 @@ select {
   text-align: center;
   line-height: 50px;
   background: #fded56;
-  color: #FFF;
+  color: #fff;
   width: 60px;
   border-radius: 0 25px 25px 0;
   font-size: 20px;
+  color: black;
 }
 
-#check:checked ~ .search-box .icon{
+.search-and-add-btn {
+  display: flex;
+  flex-direction: row;
+}
+
+#check:checked ~ .search-box .icon {
   background: #fded56;
-  color: #FFF;
+  color: #fff;
   width: 60px;
   border-radius: 0 25px 25px 0;
-
 }
 
-#check{
+#check {
   display: none;
 }
 
@@ -156,22 +148,86 @@ mat-card-actions {
   }
 }
 
-@media only screen and (max-width: 640px) {
-  .my-class .mat-dialog-container {
-    width: "80vw";
-    height: "100vh";
-    border-radius: 10px;
-    background: lightcyan;
-    color: #039be5;
+mat-card {
+  width: 85%;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+
+  .container {
+    width: 50%;
+    justify-content: center;
   }
+
+  .categories-container {
+    width: 50%;
+    position: relative;
+  }
+
+  .add-button {
+    height: 50px;
+    margin: 19px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+    left: 100px;
+    background: #fded56;
+    outline: none;
+    color: black;
+  }
+
+  .search-and-add-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-box input{
+    height: 100%;
+    width: 150%;
+    border-radius: 25px;
+    background: #fff;
+    outline: none;
+    border: none;
+    padding-left: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    justify-content: center;
+  }
+
+  .add-button{
+    justify-content: center;
+  }
+  .search-box .icon{
+    position: absolute;
+    right: -106px;
+    top: 0;
+    height: 100%;
+    text-align: center;
+    line-height: 50px;
+    background: #fded56;
+    color: #fff;
+    border-radius: 0 25px 25px 0;
+    font-size: 20px;
+    color: black;
+    width: 26%;
+  }
+
 }
 
 /* Screen larger than 600px? 2 column */
 @media (min-width: 600px) {
-  .cards { grid-template-columns: repeat(2, 1fr); }
+  .cards {
+
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Screen larger than 900px? 3 columns */
 @media (min-width: 900px) {
-  .cards { grid-template-columns: repeat(3, 1fr); }
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

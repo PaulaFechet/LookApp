@@ -86,7 +86,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     HttpClientModule,
     NgMultiSelectDropDownModule,
     ColorPickerModule,
-    NgxCsvParserModule
+    NgxCsvParserModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
