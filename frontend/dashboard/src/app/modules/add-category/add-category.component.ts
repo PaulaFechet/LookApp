@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { numberRegEx } from './../../shared/constants';
@@ -15,9 +15,10 @@ export class AddCategoryComponent implements OnInit {
   public categoryForm: FormGroup;
   public categoryModel: CategoryModel;
 
-  public color: string = "";
+  public color: string = "#000000";
 
-  public selectedColor: string  = '';
+  public readonly action: string;
+  public readonly local_data: any;
 
   get categoryFormControls() {
     return this.categoryForm.controls;
@@ -26,8 +27,13 @@ export class AddCategoryComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
     public formBuilder: FormBuilder,
-    public categoryService: CategoryService
-  ) { }
+    public categoryService: CategoryService,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any //@Optional() is used to prevent error if no data is passed
+
+  ) {
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+  }
 
   ngOnInit(): void {
     this.categoryForm = this.formBuilder.group({
@@ -58,11 +64,11 @@ export class AddCategoryComponent implements OnInit {
     console.log(data);
     this.categoryService.addCategory(data).subscribe();
 
-    this.onClose();
+    this.dialogRef.close({ event: this.action });
   }
 
   onClose(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({event: "Close"});
   }
 
   checkIfLimitsAreValid(categoryForm: AbstractControl): ValidationErrors | null {

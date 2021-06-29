@@ -49,6 +49,8 @@ export class CorrelationComponent implements OnInit {
 
   public displayScatterCorrelationChart: boolean = false;
 
+  public element: any;
+
   constructor(
     private categoryService: CategoryService,
     private recordService: RecordService,
@@ -109,6 +111,14 @@ export class CorrelationComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.element = document.getElementById("scatterCorrelationChart");
+  }
+
+  public scrollToBottom() {
+    this.element.scrollIntoView(false); // Bottom
+  }
+
   onItemSelect(item: any) {
 
     this.addRecordsToChart(item.id, item.text);
@@ -123,7 +133,6 @@ export class CorrelationComponent implements OnInit {
 
 
   onSelectAll(items: any) {
-    console.log(items);
     for (var i = 0; i < items.length; i++) {
       this.addRecordsToChart(items[i].id, items[i].text);
     }
@@ -137,7 +146,6 @@ export class CorrelationComponent implements OnInit {
 
 
   onItemDeSelect(deselectedCategory: any): void {
-    console.log(deselectedCategory);
     for (var i = 0; i < this.chart.data.datasets.length; i++) {
       if (this.chart.data.datasets[i].label == deselectedCategory.text) {
         this.chart.data.datasets.splice(i, 1)
@@ -235,23 +243,10 @@ export class CorrelationComponent implements OnInit {
 
     categoriesToCorrelate.push({ "firstCategory": firstDataSet, "secondCategory": secondDataSet });
 
-    console.log(categoriesToCorrelate);
-
     return categoriesToCorrelate;
   }
 
   correlate(): void {
-    // this.router.events.pipe(filter(e => e instanceof Scroll)).subscribe((e: any) => {
-    //   console.log(e);
-
-    //   // this is fix for dynamic generated(loaded..?) content
-    //   setTimeout(() => {
-    //       this.viewportScroller.scrollToPosition([0, 0]);
-    //   });
-    // });
-
-    // var elmnt = document.getElementById("correlationCoeffInfoMessage");
-    // elmnt.scrollIntoView();
 
     let parsedRecordGraphs: RecordsByDay[] = [];
     let categoryTitle: string = '';
@@ -267,14 +262,14 @@ export class CorrelationComponent implements OnInit {
       parsedRecordGraphs.push(recordsByDay);
     }
 
-    console.log(parsedRecordGraphs);
     let categoriesToCorrelate: CategoriesToCorrelate[] = this.getValuesOnSameDate(parsedRecordGraphs);
-    console.log(categoriesToCorrelate);
-    // let correlationCoeff = this.calculateCorrelation(categoriesToCorrelate);
-    // console.log(correlationCoeff);
+    let correlationCoeff = this.calculateCorrelation(categoriesToCorrelate);
     this.drawScatterCorrelationChart(categoriesToCorrelate);
-    let correlationCoeff = this.calculateCorrelation2(categoriesToCorrelate);
-    console.log(correlationCoeff);
+    this.scrollToBottom();
+
+
+    // let correlationCoeff = this.calculateCorrelation2(categoriesToCorrelate);
+    // console.log(correlationCoeff);
 
   }
 
@@ -299,29 +294,19 @@ export class CorrelationComponent implements OnInit {
     let n = Object.getOwnPropertyNames(categoriesToCorrelate[0].firstCategory.recordsByDay).length;
     if (n < 3) {
       this.errorMessage = 'Error: You may enter at least 5 related category values';
-      return -1;
+      return;
     }
 
     for (const [key, value] of Object.entries(categoriesToCorrelate[0].firstCategory.recordsByDay)) {
       x = value;
-      console.log("x", x);
       sumOfX += x;
 
       y = categoriesToCorrelate[0].secondCategory.recordsByDay[key];
-      console.log("y", y);
       sumOfY += y;
     }
 
-
-    console.log("sumOFx", sumOfY);
-    console.log("sumOfY", sumOfX);
-
-
     mediaX = sumOfX / n;
     mediaY = sumOfY / n;
-
-    console.log("mediaX", mediaX);
-    console.log("mediaY", mediaY);
 
     for (const [key, value] of Object.entries(categoriesToCorrelate[0].firstCategory.recordsByDay)) {
       x = value;
@@ -329,27 +314,16 @@ export class CorrelationComponent implements OnInit {
 
       diff1 = x - mediaX;
       diff2 = y - mediaY;
-      console.log("diff1", diff1);
-      console.log("diff2", diff2);
-
 
       sxy += diff1 * diff2;
-      console.log("sxy", sxy);
-
       sx += (x - mediaX) * (x - mediaX);
-      console.log("sx", sx);
       sy += (y - mediaY) * (y - mediaY);
-      console.log("sy", sy);
 
     }
 
     sxy = sxy;
-    console.log("sxy", sxy);
     sx = sx;
     sy = sy;
-
-    console.log("sx", sx);
-    console.log("sy", sy);
 
     let correlationCoeff = sxy / Math.sqrt(sx * sy);
     this.correlationCoefficientInfoMessage = 'Correlation Coefficient: ' + correlationCoeff;
@@ -373,11 +347,9 @@ export class CorrelationComponent implements OnInit {
 
     for (const [key, value] of Object.entries(categoriesToCorrelate[0].firstCategory.recordsByDay)) {
       x = value;
-      console.log("x", x);
       sumOfX += x;
 
       y = categoriesToCorrelate[0].secondCategory.recordsByDay[key];
-      console.log("y", y);
       sumOfY += y;
 
       sumOfXMultipliedWithY += x * y;
@@ -391,7 +363,7 @@ export class CorrelationComponent implements OnInit {
 
     if (n < 3) {
       this.errorMessage = 'Error: You may enter at least 5 related category values';
-      return -1;
+      return;
     }
 
     this.errorMessage = '';
@@ -416,7 +388,6 @@ export class CorrelationComponent implements OnInit {
   drawScatterCorrelationChart(categoriesToCorrelate: CategoriesToCorrelate[]): void {
     this.displayScatterCorrelationChart = true;
     let context = document.getElementById("scatterCorrelationChart");
-    console.log(categoriesToCorrelate);
 
     let x: string = '';
     let y: number = 0;
@@ -429,7 +400,6 @@ export class CorrelationComponent implements OnInit {
       chartDataset.push({ "x": x, "y": y });
     }
 
-    console.log(chartDataset);
     this.scatterCorrelationChart = new Chart(context, {
       type: 'scatter',
       data: {
