@@ -1,16 +1,42 @@
-<mat-nav-list class="sidebar">
+
+<mat-nav-list>
+  <div class="profile-card">
+    <div class="header">
+      <section *ngIf="username">
+        <h2>Welcome, {{username}}!</h2>
+      </section>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
 
   <h2 matSubheader>Pages</h2>
 
-  <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/dashboard'])">
-    <mat-icon>dashboard</mat-icon> Dashboard
-  </a>
+  <!-- <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/dashboard'])">
+   <mat-icon>dashboard</mat-icon>Dashboard
+  </a> -->
+
   <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/categories'])">
-    <mat-icon>add</mat-icon>Add a new category
+    <mat-icon>dashboard</mat-icon>Categories
   </a>
 
   <a mat-list-item routerLinkActive="list-item-active" (click)="router.navigate(['/correlation'])">
-    <mat-icon>add</mat-icon>Correlate 2 charts
+    <mat-icon>visibility</mat-icon>Correlation
   </a>
+
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader>Tools</h2>
+
+  <a mat-list-item routerLinkActive="list-item-active" (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
+    Sign out
+  </a>
+
+  <a mat-list-item routerLinkActive="list-item-active">
+    <mat-icon>help_outline</mat-icon>
+    Help
+  </a>
+
 
 </mat-nav-list>

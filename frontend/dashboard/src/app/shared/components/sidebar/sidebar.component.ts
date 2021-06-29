@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,8 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(public router: Router) {}
+  public username : string = '';
+  public userEmail : string = '';
 
-  ngOnInit(): void {}
+  constructor(public router: Router,
+    private readonly authenticationService: AuthenticationService) {}
+
+  ngOnInit(): void {
+    let userEmail = JSON.parse(sessionStorage.getItem('loggedInUser'))?.email;
+    if (userEmail) {
+      userEmail = userEmail.split("@")
+      this.username = userEmail[0];
+    }
+  }
+
+  logout() {
+    this.router.navigateByUrl('/login');
+    this.authenticationService.logout();
+  }
 
 }
