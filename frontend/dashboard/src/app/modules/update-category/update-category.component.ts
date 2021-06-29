@@ -32,6 +32,7 @@ export class UpdateCategoryComponent implements OnInit {
     this.color = this.category.graphColor;
 
     this.categoryDetailsToDisplay = this.category;
+
     this.categoryForm = this.formBuilder.group({
       graphColor: [this.category.graphColor],
       title: [this.category.title, Validators.required],

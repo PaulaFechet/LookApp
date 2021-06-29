@@ -1,50 +1,60 @@
-<mat-toolbar>
-  <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">
-    <mat-icon>clear</mat-icon>
-  </button>
-</mat-toolbar>
+<button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">
+  <mat-icon>clear</mat-icon>
+</button>
+
 <form [formGroup]="categoryForm" class="normal-form" (submit)="onSubmit(categoryDetailsToDisplay.id)">
   <mat-grid-list cols="1" rowHeight="400px">
     <mat-grid-tile>
       <div class="form-content">
 
-        <p>Choose the color of the graph</p>
-        <input formControlName="graphColor" [(colorPicker)]="color" [style.background]="color"/>
+        <div class="form-row">
+          <div class="form-column">
 
-        <mat-form-field>
-          <input formControlName="title" matInput placeholder="Title">
-          <mat-error>Field is mandatory</mat-error>
-        </mat-form-field>
+            <mat-form-field>
+              <input formControlName="title" matInput  required placeholder="Title">
+              <mat-error>Field is mandatory</mat-error>
+            </mat-form-field>
 
-        <mat-form-field>
-          <input formControlName="description" matInput placeholder="Add description (optional)">
-        </mat-form-field>
+            <mat-form-field class="form-field">
+              <mat-label>Color</mat-label>
+              <input matInput type="color" formControlName="graphColor"  [(ngModel)]="color" required placeholder="Color">
+              <mat-error>Field is mandatory</mat-error>
+            </mat-form-field>
 
-        <mat-form-field>
-          <input formControlName="unitOfMeasure" matInput placeholder="Unit of measure">
-          <mat-error>Field is mandatory</mat-error>
-        </mat-form-field>
+            <mat-form-field>
+              <input formControlName="lowerLimit" matInput placeholder="Lower limit">
+              <mat-error>Value must be a valid number</mat-error>
+            </mat-form-field>
 
-        <mat-form-field>
-          <input formControlName="lowerLimit" matInput placeholder="Lower limit (optional)">
-          <mat-error>Value must be a valid number</mat-error>
-        </mat-form-field>
+          </div>
+          <div class="form-column">
+            <mat-form-field>
+              <input formControlName="unitOfMeasure" matInput required placeholder="Unit of measure">
+              <mat-error>Field is mandatory</mat-error>
+            </mat-form-field>
 
-        <mat-form-field>
-          <input formControlName="upperLimit" matInput placeholder="Upper limit (optional)">
-          <mat-error>Value must be a valid number</mat-error>
-        </mat-form-field>
+            <mat-form-field>
+              <input formControlName="description" matInput placeholder="Description">
+            </mat-form-field>
+
+
+
+            <mat-form-field>
+              <input formControlName="upperLimit" matInput placeholder="Upper limit">
+              <mat-error>Value must be a valid number</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
 
         <mat-error *ngIf="categoryForm.errors?.invalidLimits">
           Lower limit must be lower than upper limit
         </mat-error>
-
         <div class="button-row">
           <button mat-raised-button color="primary" type="submit">Submit</button>
           <button mat-raised-button color="warn" (click)="onClear()">Clear</button>
         </div>
+
       </div>
     </mat-grid-tile>
-
   </mat-grid-list>
 </form>
