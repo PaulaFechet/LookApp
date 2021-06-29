@@ -16,7 +16,7 @@ export class RecordService {
     this.recordsPerCategory = new Map<number, BehaviorSubject<SortedList<RecordModel>>>();
   }
 
-  addRecord(recordModel: RecordModel): Observable<void> {
+  addRecord(recordModel: RecordModel): Observable<RecordModel> {
     return this.recordRepositoryService.addRecord(recordModel)
       .pipe(
         map(addedRecord => {
@@ -26,6 +26,8 @@ export class RecordService {
             updatedRecords.add(addedRecord);
             records.next(updatedRecords);
           }
+
+          return addedRecord;
         })
       );
   }
