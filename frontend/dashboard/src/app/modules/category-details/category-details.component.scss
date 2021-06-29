@@ -1,8 +1,8 @@
 .chart-container {
-  width: 1000px;
   height: 600px;
   background-color: white;
   position: relative;
+  box-shadow: -5px 7px 11px 1px rgb(0 0 0 / 5%) !important;
 }
 
 .categoryTitle {
@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-#download {
+#download, .chart-btn, .enable-btn {
   border-radius: 50%;
   margin: 5px;
   background-color: #fae042;
@@ -20,7 +20,7 @@
   text-transform: uppercase;
   text-align: center;
   cursor: pointer;
-  font-family: monospace;
+  // font-family: monospace;
   transition: all 0.25s ease-out;
   color: #a77b0e;
   text-align: center;
@@ -28,11 +28,16 @@
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-#download:hover {
+.chart-btn:hover, #download:hover, .enable-btn:hover {
   background-color: #fae042;
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
   color: #fff;
 }
+
+.enable-btn-focused {
+  color: #fff;
+}
+
 
 @media (max-width: 600px) {
   #recordChart {
@@ -72,6 +77,11 @@ mat-card-header {
   justify-content: center;
 }
 
+.record-table{
+  margin-top:15px;
+}
+
+
 .wrap-collabsible {
   margin-bottom: 1.2rem 0;
 }
@@ -96,7 +106,7 @@ mat-icon {
   text-transform: uppercase;
   text-align: center;
   cursor: pointer;
-  font-family: monospace;
+  // font-family: monospace;
   transition: all 0.25s ease-out;
   color: #a77b0e;
   border-radius: 50%;
@@ -108,23 +118,22 @@ mat-icon {
   background-color: #fae042;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: #fae042;
 }
 
 p {
-  display: flex;
-  justify-content: center;
   color: #a77b0e;
-  font-family: monospace;
+  // font-family: monospace;
   font-size: 1.3rem;
+  max-width: 1000px;
 }
 
 .lbl-toggle {
   display: block;
 
   font-weight: bold;
-  font-family: monospace;
+  // font-family: monospace;
   font-size: 1.2rem;
   text-transform: uppercase;
   text-align: center;
@@ -189,35 +198,25 @@ p {
   font-size: 2rem;
 }
 
-
-.export-as-csv{
-  display:flex;
+.export-as-csv {
+  display: flex;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
-
-.export{
-  width:100%;
+input[type="file"] {
+  font-size: 1em;
+  // font-family: monospace;
 }
 
-.undo{
-  height:100%;
-
-  background-color: #fae042;
+.informationAboutAddStatus{
+  display: flex;
+  justify-content: center;
   font-weight: bold;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  text-align: center;
-  cursor: pointer;
-  font-family: monospace;
-  transition: all 0.25s ease-out;
-  color: #a77b0e;
-  text-align: center;
-  border: none;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.undo:hover {
-  background-color: #fae042;
-  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
-  color: #fff;
+.export {
+  width: 100%;
 }
+
+

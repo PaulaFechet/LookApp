@@ -1,3 +1,5 @@
+import { AddRecordCommand } from './../../shared/command-pattern/command';
+import { CommandService } from '../../shared/services/command.service';
 import { ChartPointModel } from './../../shared/models/chart-point';
 import { UpdateRecordComponent } from './../update-record/update-record.component';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
@@ -29,8 +31,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   public zoomStatus;
   public panStatus;
   public zoomOptions;
-  public enableAddingRecordsFlag: boolean = false;
-  public addingRecordStatus: string = '';
   public dataSource;
 
   private readonly chartCanvasId: string = "recordChart";
@@ -47,22 +47,23 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   public dateListFromCsvImport = [];
   public valueListFromCsvImport = [];
 
+  public isAddBtnOn: boolean = false;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
-
 
   constructor(
     private readonly router: ActivatedRoute,
     private readonly categoryService: CategoryService,
     private readonly recordService: RecordService,
+    private readonly commandService: CommandService,
     private readonly modal: MatDialog,
     private ngxCsvParser: NgxCsvParser
   ) {
+
     this.dataSource = new MatTableDataSource<RecordModel>();
   }
-
-
 
   ngOnInit(): void {
 
@@ -98,14 +99,8 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     });
 
     modalRef.afterClosed().subscribe(result => {
-      if (result.event == 'Add') {
-        console.log("add");
-      } else if (result.event == 'Update') {
-        console.log("update");
-      } else if (result.event == 'Delete') {
-        this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe(() => {
-          this.updateChart();
-        });
+      if (result.event == 'Delete') {
+        this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe();
       }
     });
   }
@@ -120,14 +115,15 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   onChartClickWrapper(): (event: MouseEvent) => void {
     return (event: MouseEvent): void => {
-      if (this.enableAddingRecordsFlag == false) {
+      if (this.isAddBtnOn == false) {
         return;
       }
       let x = this.chart.scales["x-axis-0"].getValueForPixel(event.offsetX);
       let y = this.chart.scales["y-axis-0"].getValueForPixel(event.offsetY);
 
       let newRecord = new RecordModel(x, y, this.categoryId, null);
-      this.recordService.addRecord(newRecord).subscribe();
+      let addRecordCommand = new AddRecordCommand(this.recordService, newRecord);
+      this.commandService.do(addRecordCommand);
     };
   }
 
@@ -161,9 +157,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       pointHoverBackgroundColor: this.category.graphColor,
       pointHoverBorderColor: this.category.graphColor,
     }];
-
-
-
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -224,10 +217,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     for (var i = 0; i < dateChartList.length; i++) {
       this.chartPoints.push({ "x": dateChartList[i].toString(), "y": valueChartList[i] })
     }
-
   }
-
-
 
   private updateChart(): void {
 
@@ -243,10 +233,8 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  enableAddingRecords(): void {
-    this.enableAddingRecordsFlag = !this.enableAddingRecordsFlag;
-    console.log(this.enableAddingRecordsFlag);
-    (this.enableAddingRecordsFlag == true) ? this.addingRecordStatus = 'enabled' : this.addingRecordStatus = 'disabled';
+  toggleAddingRecords(): void {
+    this.isAddBtnOn = !this.isAddBtnOn;
   }
 
   downloadAsPng(): void {
@@ -274,7 +262,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   handleFileInput(e) {
     let file = (e.target as HTMLInputElement).files[0];
-
 
     const regex = new RegExp("(.*?)\.(csv)$");
     if (regex.test(file.name)) {
@@ -304,7 +291,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   onEdit(record: RecordModel, category: CategoryModel): void {
     console.log(record);
     this.modal.open(UpdateRecordComponent, {
@@ -329,7 +315,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
     modalRef.afterClosed().subscribe(result => {
       if (result.event == 'Undo') {
-        console.log("undo");
+        this.commandService.undo();
       }
     });
   }

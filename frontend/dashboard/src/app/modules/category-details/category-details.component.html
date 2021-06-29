@@ -1,11 +1,23 @@
 <h2 class="categoryTitle">{{category.title}}<sub>&nbsp;&nbsp;[{{category.unitOfMeasure}}]</sub></h2>
+
 <div class="wrap-collabsible">
   <input id="collapsible" class="toggle" type="checkbox">
   <label for="collapsible" class="lbl-toggle">See description</label>
   <div class="collapsible-content">
     <div class="content-inner">
       <p>
-        {{category.description}}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod velit vitae maximus mattis. Curabitur
+        eleifend leo a nunc congue volutpat. Sed et viverra dolor. Integer sed dictum arcu. Aliquam congue sapien ac sem
+        sodales porta. Nulla vitae ligula sem. Proin nec luctus risus.
+
+        Quisque consequat massa a eros bibendum facilisis sed sed est. Donec interdum dolor in volutpat tincidunt. Nunc
+        eget hendrerit augue. Nulla nec justo tempus velit elementum vehicula. Curabitur eu lectus eget odio finibus
+        ullamcorper vel sed ante. Fusce pharetra ante quis turpis pulvinar, vel efficitur purus gravida. Donec
+        sollicitudin dictum purus, non eleifend diam venenatis non. Phasellus facilisis rutrum finibus. Nam urna turpis,
+        tempus sit amet justo id, mollis tincidunt risus. Vestibulum at dolor eget augue euismod pulvinar in eget felis.
+        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam at purus
+        fermentum, egestas augue sed, pharetra ante. Duis porttitor eros nunc, vitae convallis est rutrum vel. Proin
+        pulvinar vehicula tristique. Proin blandit ut diam vestibulum fermentum. Proin a pharetra mi, non lobortis ante.
       </p>
 
     </div>
@@ -18,19 +30,18 @@
     <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
       (change)="handleFileInput($event)" required>
   </div>
-
-  <div>
-    <button class="undo" (click)="undoImportCsv()">
-      <i class="fa fa-undo" aria-hidden="true"></i>
-    </button>
-  </div>
 </div>
 
 
 <div class="chart-container">
   <canvas id="recordChart"></canvas>
+
   <div class="chart-action">
-    <button id="download" (click)="enableAddingRecords()" title="click to enable/disable record adding">
+    <button
+      [ngClass]="isAddBtnOn ? 'enable-btn enable-btn-focused' : 'enable-btn'"
+      (click)="toggleAddingRecords()"
+      title="click to enable/disable record adding">
+
       <i class="fa fa-plus"></i>
     </button>
 
@@ -46,57 +57,49 @@
       </ul>
     </div>
 
-
+    <button class="chart-btn" (click)="undoImportCsv()">
+      <i class="fa fa-undo" aria-hidden="true"></i>
+    </button>
   </div>
-  <div *ngIf="enableAddingRecordsFlag;else disabled">
-    <p class="informationAboutAddStatus">Add record mood: enabled</p>
-  </div>
-
-  <ng-template #disabled>
-    <p>Add record mood: disabled</p>
-  </ng-template>
 </div>
 
-<div>
-  <mat-card class="example-card">
+<mat-card class="record-table">
 
-    <mat-card-header>
-      <mat-card-title>{{category.title}}</mat-card-title>
-      <mat-card-subtitle>{{category["type"]}}</mat-card-subtitle>
-    </mat-card-header>
+  <mat-card-header>
+    <mat-card-subtitle>{{category["type"]}}</mat-card-subtitle>
+  </mat-card-header>
 
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="this.dataSource" matSort>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="this.dataSource" matSort>
 
-        <ng-container matColumnDef="Date">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-        </ng-container>
+      <ng-container matColumnDef="Date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+      </ng-container>
 
-        <ng-container matColumnDef="Note">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Note(Optional) </th>
-          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-        </ng-container>
+      <ng-container matColumnDef="Note">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Note(Optional) </th>
+        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+      </ng-container>
 
 
-        <ng-container matColumnDef="Value">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
-          <td mat-cell *matCellDef="let element"> {{element.value}} </td>
-        </ng-container>
+      <ng-container matColumnDef="Value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
+        <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+      </ng-container>
 
-        <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let element" class="action-link">
-            <a (click)="onEdit(element, category)">Edit</a> |
-            <a (click)="openModal('Delete', element)">Delete</a>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" class="action-link">
+          <a (click)="onEdit(element, category)">Edit</a> |
+          <a (click)="openModal('Delete', element)">Delete</a>
+        </td>
+      </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-      </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </div>
-  </mat-card>
-</div>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</mat-card>
