@@ -46,6 +46,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -94,7 +95,6 @@ import { DashboardComponent } from './modules/dashboard/dashboard.component';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-
   ],
   bootstrap: [AppComponent],
   entryComponents: [AddCategoryComponent]

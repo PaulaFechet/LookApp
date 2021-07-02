@@ -51,7 +51,7 @@ export class RecordService {
     return this.recordRepositoryService.getRecordsByCategoryId(categoryId)
       .pipe(
         map(records => {
-          let newRecords = new SortedList(records, this.compareRecordsByDate);
+          let newRecords = new SortedList(records, this.orderByDateDescending);
           let categoryRecords = new BehaviorSubject<SortedList<RecordModel>>(newRecords);
           this.recordsPerCategory.set(categoryId, categoryRecords);
           return categoryRecords.asObservable();
@@ -67,9 +67,9 @@ export class RecordService {
     return of(records);
   }
 
-  compareRecordsByDate(a: RecordModel, b: RecordModel) {
+  orderByDateDescending(a: RecordModel, b: RecordModel) {
     // convert date object into number to resolve issue in typescript
-    return +new Date(a.date) - +new Date(b.date);
+    return +new Date(b.date) - +new Date(a.date);
   }
 
   updateRecord(recordId: number, recordModel: RecordModel): Observable<void> {

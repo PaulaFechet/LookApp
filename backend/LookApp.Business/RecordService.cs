@@ -21,7 +21,10 @@ namespace LookApp.Business
 
         public List<Record> GetRecordsByCategoryId(int id)
         {
-            return _context.Records.Where(r => r.CategoryId == id).ToList();
+            return _context.Records
+                .Where(r => r.CategoryId == id)
+                .OrderByDescending(r => r.Date)
+                .ToList();
         }
 
         public async Task<Record> GetRecordByIdAsync(int id)

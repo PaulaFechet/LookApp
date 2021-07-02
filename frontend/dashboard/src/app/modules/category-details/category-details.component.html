@@ -5,24 +5,9 @@
   <label for="collapsible" class="lbl-toggle">See description</label>
   <div class="collapsible-content">
     <div class="content-inner">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod velit vitae maximus mattis. Curabitur
-        eleifend leo a nunc congue volutpat. Sed et viverra dolor. Integer sed dictum arcu. Aliquam congue sapien ac sem
-        sodales porta. Nulla vitae ligula sem. Proin nec luctus risus.
-
-        Quisque consequat massa a eros bibendum facilisis sed sed est. Donec interdum dolor in volutpat tincidunt. Nunc
-        eget hendrerit augue. Nulla nec justo tempus velit elementum vehicula. Curabitur eu lectus eget odio finibus
-        ullamcorper vel sed ante. Fusce pharetra ante quis turpis pulvinar, vel efficitur purus gravida. Donec
-        sollicitudin dictum purus, non eleifend diam venenatis non. Phasellus facilisis rutrum finibus. Nam urna turpis,
-        tempus sit amet justo id, mollis tincidunt risus. Vestibulum at dolor eget augue euismod pulvinar in eget felis.
-        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam at purus
-        fermentum, egestas augue sed, pharetra ante. Duis porttitor eros nunc, vitae convallis est rutrum vel. Proin
-        pulvinar vehicula tristique. Proin blandit ut diam vestibulum fermentum. Proin a pharetra mi, non lobortis ante.
-      </p>
-
+      <p>{{category.description}}</p>
     </div>
   </div>
-
 </div>
 
 <div class="export-as-csv">
@@ -35,7 +20,6 @@
 
 <div class="chart-container">
   <canvas id="recordChart"></canvas>
-
   <div class="chart-action">
     <button
       [ngClass]="isAddBtnOn ? 'enable-btn enable-btn-focused' : 'enable-btn'"
@@ -57,49 +41,50 @@
       </ul>
     </div>
 
-    <button class="chart-btn" (click)="undoImportCsv()">
+    <button *ngIf="isUndoBtnDisplayed" class="chart-btn" (click)="undo()">
       <i class="fa fa-undo" aria-hidden="true"></i>
     </button>
   </div>
 </div>
 
-<mat-card class="record-table">
+<div class="record-table mat-elevation-z8">
+  <mat-table [dataSource]="this.dataSource" matSort>
 
-  <mat-card-header>
-    <mat-card-subtitle>{{category["type"]}}</mat-card-subtitle>
-  </mat-card-header>
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.date | date}} </mat-cell>
+    </ng-container>
 
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="this.dataSource" matSort>
+    <ng-container matColumnDef="note">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Note </mat-header-cell>
+      <mat-cell
+        [ngClass]="{'empty-note': !element.note}"
+        *matCellDef="let element"> {{element.note || '(empty)'}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="Date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-      </ng-container>
+    <ng-container matColumnDef="value">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Value </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.value.toFixed(2)}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="Note">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Note(Optional) </th>
-        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-      </ng-container>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="action-link">
 
+        <button class="action-btn" (click)="onEdit(element, category)">
+          <mat-icon class="action-icon">edit</mat-icon>
+        </button>
 
-      <ng-container matColumnDef="Value">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
-        <td mat-cell *matCellDef="let element"> {{element.value}} </td>
-      </ng-container>
+        <button class="action-btn" (click)="openModal('Delete', element)">
+          <mat-icon class="action-icon">delete</mat-icon>
+        </button>
 
-      <ng-container matColumnDef="Action">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let element" class="action-link">
-          <a (click)="onEdit(element, category)">Edit</a> |
-          <a (click)="openModal('Delete', element)">Delete</a>
-        </td>
-      </ng-container>
+      </mat-cell>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-  </div>
-</mat-card>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+</div>

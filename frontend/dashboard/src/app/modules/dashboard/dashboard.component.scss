@@ -63,3 +63,29 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   color: green;
   font-weight: bold;
 }
+
+.gray-text {
+  color: darkgrey;
+  font-weight: bold;
+}
+
+.correlation-table-container {
+  box-shadow: -5px 7px 11px 1px rgb(0 0 0 / 5%) !important;
+}
+
+.mat-column-category1 {
+  justify-content: center;
+}
+
+.mat-column-category2 {
+  justify-content: center;
+}
+
+.mat-column-coefficient {
+  justify-content: center;
+}
+
+::ng-deep .mat-sort-header-arrow {
+  position: absolute !important;
+  right: -15px !important;
+}

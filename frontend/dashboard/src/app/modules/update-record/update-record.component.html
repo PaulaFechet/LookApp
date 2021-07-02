@@ -1,24 +1,15 @@
-<mat-toolbar>
-  <button class="btn-dialog-close" mat-stroked-button (click)="onCloseMatDialog()" tabIndex="-1">
-    <mat-icon>clear</mat-icon>
-  </button>
-</mat-toolbar>
+<button class="btn-dialog-close" mat-stroked-button (click)="onCloseMatDialog()" tabIndex="-1">
+  <mat-icon>clear</mat-icon>
+</button>
+
 <form [formGroup]="recordForm" class="normal-form" (submit)="onSubmit(record.id)">
   <mat-grid-list cols="1" rowHeight="400px">
 
     <mat-grid-tile>
       <div class="form-content">
 
-        <mat-form-field appearance="fill">
-          <input formControlName="date" matInput type="datetime-local" placeholder="start date">
-        </mat-form-field>
-
         <mat-form-field>
-          <input formControlName="note" matInput placeholder="Add a note (optional)">
-        </mat-form-field>
-
-        <mat-form-field>
-          <input formControlName="value" matInput placeholder="Add value">
+          <input formControlName="value" matInput placeholder="Value" required>
           <mat-error *ngIf="recordForm.controls.value.errors?.notInRange">
             <span *ngIf="category.lowerLimit && category.upperLimit">
               Value must be between {{category.lowerLimit}} and {{category.upperLimit}}
@@ -42,8 +33,18 @@
           </mat-error>
         </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Date</mat-label>
+          <input formControlName="date" matInput type="datetime-local" required>
+          <mat-error>Field is mandatory</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input formControlName="note" matInput placeholder="Note">
+        </mat-form-field>
+
         <div class="button-row">
-          <button mat-raised-button color="primary" type="submit">Submit</button>
+          <button class="submit-btn" mat-raised-button color="primary" type="submit">Submit</button>
           <!-- <button mat-raised-button color="warn" (click)="onClear()">Clear</button> -->
         </div>
 

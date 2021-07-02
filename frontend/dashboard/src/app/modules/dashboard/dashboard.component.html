@@ -2,31 +2,32 @@
 
 <div class="table" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
   <div  class="table1" fxFlex="60">
-      <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="this.dataSource">
+    <div class="correlation-table-container mat-elevation-z8">
+      <mat-table [dataSource]="this.dataSource" matSort>
 
-              <ng-container matColumnDef="category1">
-                  <th mat-header-cell *matHeaderCellDef>CATEGORY1</th>
-                  <td mat-cell *matCellDef="let element"> {{element.category1}} </td>
-              </ng-container>
+        <ng-container matColumnDef="category1">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Category 1</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.category1}} </mat-cell>
+        </ng-container>
 
+        <ng-container matColumnDef="category2">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Category 2</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.category2}}</mat-cell>
+        </ng-container>
 
-              <ng-container matColumnDef="category2">
-                  <th mat-header-cell *matHeaderCellDef>CATEGORY2</th>
-                  <td mat-cell *matCellDef="let element"> {{element.category2}}</td>
-              </ng-container>
+        <ng-container matColumnDef="coefficient">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Coefficient</mat-header-cell>
+            <mat-cell *matCellDef="let element"
+              [ngClass]="{'green-text': element.coefficient > 0,
+                          'red-text': element.coefficient < 0,
+                          'gray-text': element.coefficient == 0}"> {{element.coefficient.toFixed(2)}} </mat-cell>
+        </ng-container>
 
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
 
-              <ng-container matColumnDef="coefficient">
-                  <th mat-header-cell *matHeaderCellDef>COEFFICIENT</th>
-                  <td mat-cell *matCellDef="let element"  [ngClass]="element.coefficient>0 ? 'green-text' : 'red-text'"> {{element.coefficient.toFixed(2)}} </td>
-              </ng-container>
-
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+    </div>
   </div>
+</div>

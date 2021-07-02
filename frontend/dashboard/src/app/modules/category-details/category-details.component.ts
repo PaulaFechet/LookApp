@@ -51,9 +51,11 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  public readonly displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
+  public readonly displayedColumns: string[] = ['value', 'date', 'note', 'action'];
 
   @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
+
+  public isUndoBtnDisplayed: boolean = false;
 
   constructor(
     private readonly router: ActivatedRoute,
@@ -85,6 +87,14 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
         });
       });
     })
+
+    this.commandService.commandCount$.subscribe(commandCount => {
+      if (commandCount > 0) {
+        this.isUndoBtnDisplayed = true;
+      } else {
+        this.isUndoBtnDisplayed = false;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -299,29 +309,13 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   onEdit(record: RecordModel, category: CategoryModel): void {
     console.log(record);
     this.modal.open(UpdateRecordComponent, {
-      width: '60%',
-      disableClose: true,
-      autoFocus: true,
+      width: '400px',
+      maxHeight: '100vh',
       data: [record, category]
     });
   }
 
-  undoImportCsv(): void{
-    this.confirmUndoAction("Undo");
-  }
-
-  confirmUndoAction(action: string): void {
-    let obj = {action: ''};
-    obj.action = action;
-    const modalRef = this.modal.open(DialogBoxComponent, {
-      width: '250px',
-      data: obj
-    });
-
-    modalRef.afterClosed().subscribe(result => {
-      if (result.event == 'Undo') {
-        this.commandService.undo();
-      }
-    });
+  undo(): void {
+    this.commandService.undo();
   }
 }

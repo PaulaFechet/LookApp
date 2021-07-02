@@ -63,8 +63,8 @@ export class UpdateRecordComponent implements OnInit {
         return null;
       }
 
-      if ((!this.category.lowerLimit || value > this.category.lowerLimit) &&
-        (!this.category.upperLimit || value < this.category.upperLimit)) {
+      if ((!this.category.lowerLimit || value >= this.category.lowerLimit) &&
+        (!this.category.upperLimit || value <= this.category.upperLimit)) {
         return null;
       }
 

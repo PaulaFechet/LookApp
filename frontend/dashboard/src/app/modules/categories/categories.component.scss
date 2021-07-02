@@ -70,7 +70,7 @@ select {
   width: 100%;
 }
 
-.search-box .icon {
+.search-box .search-icon {
   position: absolute;
   right: -2px;
   top: 0;
@@ -90,11 +90,17 @@ select {
   flex-direction: row;
 }
 
-#check:checked ~ .search-box .icon {
+#check:checked ~ .search-box .search-icon {
   background: #fded56;
   color: #fff;
   width: 60px;
   border-radius: 0 25px 25px 0;
+}
+
+.search-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #check {
@@ -200,7 +206,7 @@ mat-card {
   .add-button{
     justify-content: center;
   }
-  .search-box .icon{
+  .search-box .search-icon{
     position: absolute;
     right: -106px;
     top: 0;

@@ -1,8 +1,7 @@
-import { forkJoin, Observable } from 'rxjs';
 import { CorrelatedCategories } from './../../shared/models/correlated-categories';
 import { RecordsByDay } from './../../shared/models/records-by-day';
 import { CorrelationService } from './../../shared/services/correlation.service';
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
@@ -20,7 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
   public chartOptions: any;
   public spark1: any;
@@ -43,8 +42,6 @@ export class DashboardComponent implements OnInit {
     private correlationService: CorrelationService,
     private recordService: RecordService) {
     this.dataSource = new MatTableDataSource<CorrelatedCategories>();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
@@ -72,7 +69,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   correlate(): void {
 
