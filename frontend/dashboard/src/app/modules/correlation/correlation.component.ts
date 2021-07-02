@@ -1,3 +1,4 @@
+import { CorrelationService } from './../../shared/services/correlation.service';
 import { CategoriesToCorrelate } from './../../shared/models/categories-to-correlate';
 import { first } from 'rxjs/operators';
 import { CategoryRecords } from './../../shared/models/category-records';
@@ -50,13 +51,13 @@ export class CorrelationComponent implements OnInit {
   public displayScatterCorrelationChart: boolean = false;
 
   public element: any;
+  public correlationCoeff :number = undefined;
 
   constructor(
     private categoryService: CategoryService,
     private recordService: RecordService,
-    private viewportScroller: ViewportScroller,
-    private router: Router) {
-
+    private router: Router,
+    private correlationService: CorrelationService) {
   }
 
   ngOnInit() {
@@ -202,50 +203,6 @@ export class CorrelationComponent implements OnInit {
     });
   }
 
-  groupRecordsByDay(chartDataSetToCorrelate: ChartPointModel[], categoryId: number, categoryTitle: string): RecordsByDay {
-
-    let groupedDataSet: RecordsByDay = chartDataSetToCorrelate.reduce(
-      (acc: RecordsByDay, record: ChartPointModel) => {
-
-        let day: string = record.x.toString().split("T")[0];
-        let val: number = record.y;
-
-        if (acc.recordsByDay[day]) {
-          acc.recordsByDay[day] += val;
-        } else {
-          acc.recordsByDay[day] = val;
-        }
-
-        return acc;
-
-      }, new RecordsByDay(categoryId, categoryTitle));
-
-    return groupedDataSet;
-  }
-
-  getValuesOnSameDate(parsedRecordGraphs: RecordsByDay[]): CategoriesToCorrelate[] {
-    let firstDataSet: RecordsByDay = parsedRecordGraphs[0];
-    let secondDataSet: RecordsByDay = parsedRecordGraphs[1];
-
-    let categoriesToCorrelate: CategoriesToCorrelate[] = [];
-
-    for (const [key, value] of Object.entries(secondDataSet.recordsByDay)) {
-      if (firstDataSet.recordsByDay[key] == undefined) {
-        delete secondDataSet.recordsByDay[key];
-      }
-    }
-
-    for (const [key, value] of Object.entries(firstDataSet.recordsByDay)) {
-      if (secondDataSet.recordsByDay[key] == undefined) {
-        delete firstDataSet.recordsByDay[key];
-      }
-    }
-
-    categoriesToCorrelate.push({ "firstCategory": firstDataSet, "secondCategory": secondDataSet });
-
-    return categoriesToCorrelate;
-  }
-
   correlate(): void {
 
     let parsedRecordGraphs: RecordsByDay[] = [];
@@ -257,20 +214,21 @@ export class CorrelationComponent implements OnInit {
         categoryTitle = category.title;
       });
 
+      console.log("recordGraphs", this.recordGraphs)
       let chartPoints = this.toChartPoints(records.records);
-      let recordsByDay = this.groupRecordsByDay(chartPoints, records.categoryId, categoryTitle);
+
+      let recordsByDay = this.correlationService.groupRecordsByDay(chartPoints, records.categoryId, categoryTitle);
       parsedRecordGraphs.push(recordsByDay);
+      console.log("parsed",parsedRecordGraphs);
     }
 
-    let categoriesToCorrelate: CategoriesToCorrelate[] = this.getValuesOnSameDate(parsedRecordGraphs);
-    let correlationCoeff = this.calculateCorrelation(categoriesToCorrelate);
+    let categoriesToCorrelate: CategoriesToCorrelate[] =
+    this.correlationService.getValuesOnSameDate(parsedRecordGraphs[0], parsedRecordGraphs[1]);
+
+    console.log(categoriesToCorrelate);
+    this.correlationCoeff = this.correlationService.calculateCorrelationCoef(categoriesToCorrelate);
     this.drawScatterCorrelationChart(categoriesToCorrelate);
     this.scrollToBottom();
-
-
-    // let correlationCoeff = this.calculateCorrelation2(categoriesToCorrelate);
-    // console.log(correlationCoeff);
-
   }
 
   calculateCorrelation2(categoriesToCorrelate: CategoriesToCorrelate[]): number {
@@ -292,10 +250,6 @@ export class CorrelationComponent implements OnInit {
     let sxy: number = 0;
 
     let n = Object.getOwnPropertyNames(categoriesToCorrelate[0].firstCategory.recordsByDay).length;
-    if (n < 3) {
-      this.errorMessage = 'Error: You may enter at least 5 related category values';
-      return;
-    }
 
     for (const [key, value] of Object.entries(categoriesToCorrelate[0].firstCategory.recordsByDay)) {
       x = value;
@@ -331,51 +285,6 @@ export class CorrelationComponent implements OnInit {
     return sxy / sx * sy;
   }
 
-  calculateCorrelation(categoriesToCorrelate: CategoriesToCorrelate[]): number {
-    let sumOfX: number = 0;
-    let sumOfY: number = 0;
-
-    let x: number = 0;
-    let y: number = 0;
-
-    let sumOfXMultipliedWithY: number = 0;
-
-    let sumOfSquareX = 0;
-    let sumOfSquareY = 0;
-
-    let n = 0;
-
-    for (const [key, value] of Object.entries(categoriesToCorrelate[0].firstCategory.recordsByDay)) {
-      x = value;
-      sumOfX += x;
-
-      y = categoriesToCorrelate[0].secondCategory.recordsByDay[key];
-      sumOfY += y;
-
-      sumOfXMultipliedWithY += x * y;
-
-      sumOfSquareX += x * x;
-      sumOfSquareY += y * y;
-
-
-    }
-    n = Object.getOwnPropertyNames(categoriesToCorrelate[0].firstCategory.recordsByDay).length;
-
-    if (n < 3) {
-      this.errorMessage = 'Error: You may enter at least 5 related category values';
-      return;
-    }
-
-    this.errorMessage = '';
-
-    let numitor: number = Math.sqrt((n * sumOfSquareX - sumOfX * sumOfX) * (n * sumOfSquareY - sumOfY * sumOfY));
-    let numarator: number = (n * sumOfXMultipliedWithY - sumOfX * sumOfY);
-    let correlationCoeff: number = numarator / numitor;
-
-    this.correlationCoefficientInfoMessage = 'Correlation Coefficient: ' + correlationCoeff;
-
-    return correlationCoeff;
-  }
 
   toChartPoints(records: RecordModel[]): ChartPointModel[] {
 

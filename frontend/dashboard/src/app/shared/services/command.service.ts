@@ -12,12 +12,13 @@ export class CommandService {
 
     command.do();
     this.commandHistory.push(command);
+    console.log(this.commandHistory);
   }
 
   public undo(): void {
 
     let lastCommand = this.commandHistory.pop();
-
+    console.log("undo", lastCommand);
     if (lastCommand != undefined) {
       lastCommand.undo();
     }

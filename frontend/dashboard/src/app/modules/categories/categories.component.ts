@@ -33,7 +33,6 @@ export class CategoriesComponent implements OnInit {
         this.filteredCategoryList = categories;
       });
     });
-
   }
 
   ngAfterViewInit() {
@@ -46,7 +45,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   onCreateCategory(): void {
-    let obj = {action: ''};
+    let obj = { action: '' };
     obj.action = "Create";
     const createModal = this.modal.open(AddCategoryComponent, {
       width: '600px',

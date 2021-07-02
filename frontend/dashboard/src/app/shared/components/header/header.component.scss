@@ -2,14 +2,31 @@ ul li {
   list-style: none;
 }
 
-.menuButton{
+.menuButton {
   background-color: transparent;
   background-repeat: no-repeat;
   border: none;
-  cursor:pointer;
+  cursor: pointer;
   overflow: hidden;
-  outline:none;
+  outline: none;
   font-size: 0.8em;
   padding: 0px;
   color: white;
+}
+
+.header {
+  display: flex;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+}
+
+
+ol, ul {
+  margin-top: 0;
+  margin-bottom: 0px;
 }

@@ -43,8 +43,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { CategoryGraphPreviewComponent } from './modules/category-graph-preview/category-graph-preview.component';
 
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
-
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +58,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     UpdateRecordComponent,
     CorrelationComponent,
     CategoryGraphPreviewComponent,
+    DashboardComponent
   ],
   imports: [
     FormsModule,
@@ -87,6 +89,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     NgMultiSelectDropDownModule,
     ColorPickerModule,
     NgxCsvParserModule,
+    NgApexchartsModule
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

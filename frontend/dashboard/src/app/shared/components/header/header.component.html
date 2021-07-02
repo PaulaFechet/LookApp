@@ -1,11 +1,11 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="header" color="primary">
   <mat-toolbar-row>
     <button mat-icon-button class="menuButton" (click)="toggleSideBar()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span> Look </span>
+
     <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-      <ul fxLayout="row" fxLayoutGap="20px">
+      <ul class="header-info" fxLayoutGap="20px">
         <section *ngIf="username">
           <p>{{username}}</p>
         </section>

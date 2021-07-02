@@ -37,6 +37,7 @@ button {
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+  outline: none;
 }
 
 form {
@@ -141,3 +142,5 @@ input {
   margin-bottom: 15px;
   font-weight: bold;
 }
+
+

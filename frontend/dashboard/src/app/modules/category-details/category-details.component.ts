@@ -1,4 +1,4 @@
-import { AddRecordCommand } from './../../shared/command-pattern/command';
+import { AddRecordCommand, ImportRecordCommand } from './../../shared/command-pattern/command';
 import { CommandService } from '../../shared/services/command.service';
 import { ChartPointModel } from './../../shared/models/chart-point';
 import { UpdateRecordComponent } from './../update-record/update-record.component';
@@ -25,7 +25,6 @@ import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 })
 export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
-  public readonly displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
   public category: CategoryModel = new CategoryModel();
   public recordList: RecordModel[] = [];
   public zoomStatus;
@@ -48,9 +47,12 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   public valueListFromCsvImport = [];
 
   public isAddBtnOn: boolean = false;
+  public newRecordModelList: RecordModel[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  public readonly displayedColumns: string[] = ['Date', 'Note', 'Value', 'Action'];
+
   @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
 
   constructor(
@@ -78,7 +80,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
             this.recordList = records.values;
             this.dataSource.data = this.recordList;
-            console.log(this.dataSource);
             this.updateChart();
           });
         });
@@ -249,7 +250,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   downloadAsCsv(): void {
     let data = this.chartPoints;
     console.log(data);
-    const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+    const replacer = (key, value) => value === null ? '' : value;
     let header = Object.keys(data[0]);
     console.log("header", header);
     let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
@@ -277,8 +278,12 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
             this.dateListFromCsvImport.push(this.csvRecords[i].x);
             this.valueListFromCsvImport.push(this.csvRecords[i].y);
             let newRecord = new RecordModel(this.csvRecords[i].x, this.csvRecords[i].y, this.categoryId, null);
-            this.recordService.addRecord(newRecord).subscribe();
+            this.newRecordModelList.push(newRecord);
           }
+
+          console.log(this.newRecordModelList);
+          let addRecordCommand = new ImportRecordCommand(this.recordService, this.newRecordModelList, this.categoryId);
+          this.commandService.do(addRecordCommand);
 
           this.chart.update();
 
