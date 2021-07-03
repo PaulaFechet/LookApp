@@ -54,7 +54,6 @@ export class UpdateCategoryComponent implements OnInit {
 
     this.categoryForm.controls.graphColor.setValue(this.color);
 
-    console.log(this.color)
     const categoryModel: CategoryModel = this.categoryForm.getRawValue();
     this.categoryService.updateCategory(categoryId, categoryModel).subscribe();
 

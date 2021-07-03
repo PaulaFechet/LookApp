@@ -25,7 +25,6 @@ export class UpdateRecordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public recordAndCategoryDetails: any) { }
 
   ngOnInit(): void {
-    console.log(this.recordAndCategoryDetails);
     this.record = this.recordAndCategoryDetails[0];
     this.category = this.recordAndCategoryDetails[1];
 

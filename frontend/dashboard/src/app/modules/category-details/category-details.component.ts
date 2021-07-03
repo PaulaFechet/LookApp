@@ -114,14 +114,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getSelectedChartType(data): void {
-    console.log(data);
-  }
-
-  print() {
-    console.log(this.selectedValue);
-  }
-
   onChartClickWrapper(): (event: MouseEvent) => void {
     return (event: MouseEvent): void => {
       if (this.isAddBtnOn == false) {
@@ -268,11 +260,10 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   }
 
   downloadAsCsv(): void {
+
     let data = this.chartPoints;
-    console.log(data);
     const replacer = (key, value) => value === null ? '' : value;
     let header = Object.keys(data[0]);
-    console.log("header", header);
     let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
     csv.unshift(header.join(','));
     let csvArray = csv.join('\r\n');
@@ -291,8 +282,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ',' })
         .pipe().subscribe((result: Array<any>) => {
 
-          console.log('Result', result);
-
           this.csvRecords = result;
           for (var i = 0; i < this.csvRecords.length; i++) {
             this.dateListFromCsvImport.push(this.csvRecords[i].x);
@@ -301,13 +290,10 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
             this.newRecordModelList.push(newRecord);
           }
 
-          console.log(this.newRecordModelList);
           let addRecordCommand = new ImportRecordCommand(this.recordService, this.newRecordModelList, this.categoryId);
           this.commandService.do(addRecordCommand);
 
           this.chart.update();
-
-          console.log(this.chart.data.datasets);
         }, (error: NgxCSVParserError) => {
           console.log('Error', error);
         });
@@ -317,7 +303,7 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
   }
 
   onEdit(record: RecordModel, category: CategoryModel): void {
-    console.log(record);
+
     this.modal.open(UpdateRecordComponent, {
       width: '400px',
       maxHeight: '100vh',

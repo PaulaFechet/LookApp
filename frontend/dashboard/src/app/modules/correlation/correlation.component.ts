@@ -214,18 +214,15 @@ export class CorrelationComponent implements OnInit {
         categoryTitle = category.title;
       });
 
-      console.log("recordGraphs", this.recordGraphs)
       let chartPoints = this.toChartPoints(records.records);
 
       let recordsByDay = this.correlationService.groupRecordsByDay(chartPoints, records.categoryId, categoryTitle);
       parsedRecordGraphs.push(recordsByDay);
-      console.log("parsed",parsedRecordGraphs);
     }
 
     let categoriesToCorrelate: CategoriesToCorrelate[] =
     this.correlationService.getValuesOnSameDate(parsedRecordGraphs[0], parsedRecordGraphs[1]);
 
-    console.log(categoriesToCorrelate);
     this.correlationCoeff = this.correlationService.calculateCorrelationCoef(categoriesToCorrelate);
     this.drawScatterCorrelationChart(categoriesToCorrelate);
     this.scrollToBottom();

@@ -48,10 +48,8 @@ export class ImportRecordCommand implements Command {
 
     for (let i = 0; i < this.recordModel.length; i++) {
       let index = i;
-      console.log(index);
       this.recordService.addRecord(this.recordModel[index]).subscribe(addedRecord => {
         this.recordModel[index].id = addedRecord.id;
-        console.log(this.recordModel);
       });
     }
   }

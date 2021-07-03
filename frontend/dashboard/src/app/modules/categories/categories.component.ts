@@ -55,7 +55,6 @@ export class CategoriesComponent implements OnInit {
     });
 
     createModal.afterClosed().subscribe(result => {
-      console.log(result);
       if (result.event == 'Create') {
         this.scrollToBottom();
       }
@@ -97,7 +96,6 @@ export class CategoriesComponent implements OnInit {
 
   filterCategories(x) {
     this.searchText = x.target.value + '';
-    console.log(this.searchText);
     if (this.searchText == '') {
       this.categoryService.populateCategories().subscribe(categorie$ => {
         categorie$.subscribe(categories => {
@@ -107,6 +105,5 @@ export class CategoriesComponent implements OnInit {
       });
     }
     this.filteredCategoryList = this.categoryList.filter(c => c.title.toLowerCase().includes(this.searchText.toLowerCase()));
-    console.log(this.filteredCategoryList);
   }
 }

@@ -54,9 +54,6 @@ export class CorrelationService {
     let firstDataSET = JSON.parse(JSON.stringify(firstDataSet));
     let secondDataSET = JSON.parse(JSON.stringify(secondDataSet));
 
-    console.log(firstDataSET);
-    console.log(secondDataSET);
-
     let categoriesToCorrelate: CategoriesToCorrelate[] = [];
 
     for (const [key, value] of Object.entries(secondDataSET.recordsByDay)) {

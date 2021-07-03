@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.categoryService.populateCategories().subscribe(categorie$ => {
       categorie$.subscribe(categories => {
+
         this.categoryList = categories;
 
         let expectedRecordLists = this.categoryList.length;
@@ -104,8 +105,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         "coefficient": this.correlationCoeff
       })
     }
-    this.sortCorrelatedCategories(this.correlatedCategories);
-    console.log("sorted",this.sortCorrelatedCategories(this.correlatedCategories));
 
     this.dataSource.data = this.sortCorrelatedCategories(this.correlatedCategories);
   }
