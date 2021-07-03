@@ -10,14 +10,6 @@
   </div>
 </div>
 
-<div class="export-as-csv">
-  <div class="export">
-    <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
-      (change)="handleFileInput($event)" required>
-  </div>
-</div>
-
-
 <div class="chart-container">
   <canvas id="recordChart"></canvas>
   <div class="chart-action">
@@ -28,6 +20,20 @@
 
       <i class="fa fa-plus"></i>
     </button>
+
+    <!-- <button class="chart-btn">
+      <label class="chart-btn file-label" for="file">
+        <mat-icon class="action-icon">file_upload</mat-icon>
+      </label>
+      <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
+        (change)="handleFileInput($event)" required>
+    </button> -->
+
+    <label class="chart-btn file-label" for="file">
+      <mat-icon class="action-icon">file_upload</mat-icon>
+    </label>
+    <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
+      (change)="handleFileInput($event)" required>
 
     <div class="btn-group">
       <a id="download" data-toggle="dropdown" class="btn btn-primary float-right bg-flat-color-1" title="Download">
