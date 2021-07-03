@@ -14,8 +14,8 @@
 
         <input type="email" formControlName="email" placeholder="Email" />
         <input type="password" formControlName="password" placeholder="Password" />
-        <a href="/changePassword">Change your password</a>
-        <a href="/signup">Not a member? Register</a>
+        <a (click)="router.navigate(['/changePassword'])">Change your password</a>
+        <a (click)="router.navigate(['/signup'])">Not a member? Register</a>
         <button>Log In</button>
       </form>
     </div>
