@@ -28,9 +28,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   public category: CategoryModel = new CategoryModel();
   public recordList: RecordModel[] = [];
-  public zoomStatus;
-  public panStatus;
-  public zoomOptions;
   public dataSource;
 
   private readonly chartCanvasId: string = "recordChart";
@@ -141,20 +138,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   private createChart(dateChartList: Date[], valueChartList: number[]): void {
 
-    this.zoomOptions = {
-      zoom: {
-        enabled: true,
-        mode: 'xy',
-      },
-      pan: {
-        enabled: true,
-        mode: 'xy',
-      }
-    };
-
-    this.panStatus = () => this.zoomOptions.pan.enabled ? 'enabled' : 'disabled';
-    this.zoomStatus = () => this.zoomOptions.zoom.enabled ? 'enabled' : 'disabled';
-
     let ctx = document.getElementById(this.chartCanvasId);
 
     let datasets = [{
@@ -185,7 +168,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
             type: 'time',
             gridLines: {
               display: true,
-              // drawOnChartArea: true,
               drawBorder: true,
             },
             scaleLabel: {
@@ -211,18 +193,8 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
         },
 
         plugins: {
-          zoom: this.zoomOptions,
-          title: {
-            display: true,
-            position: 'bottom',
-            text: this.zoomStatus
-          },
-          chartAreaBorder: {
-            borderColor: this.category.graphColor,
-            borderWidth: 2,
-            borderDash: [5, 5],
-            borderDashOffset: 2
-          }
+          zoom: this.getZoomOptions(),
+          chartAreaBorder: this.getChartAreaBorderOptions()
         },
       },
       data: {
@@ -235,6 +207,37 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     for (var i = 0; i < dateChartList.length; i++) {
       this.chartPoints.push({ "x": dateChartList[i].toString(), "y": valueChartList[i] })
     }
+  }
+
+  private getZoomOptions(): any {
+
+    const rangeMin = { y: this.category.lowerLimit ?? null };
+    const rangeMax = { y: this.category.upperLimit ?? null };
+
+    return {
+      zoom: {
+        enabled: true,
+        mode: 'xy',
+        rangeMin: rangeMin,
+        rangeMax: rangeMax
+      },
+      pan: {
+        enabled: true,
+        mode: 'xy',
+        rangeMin: rangeMin,
+        rangeMax: rangeMax
+      }
+    };
+  }
+
+  private getChartAreaBorderOptions(): any {
+
+    return {
+      borderColor: this.category.graphColor,
+      borderWidth: 2,
+      borderDash: [5, 5],
+      borderDashOffset: 2
+    };
   }
 
   private updateChart(): void {
