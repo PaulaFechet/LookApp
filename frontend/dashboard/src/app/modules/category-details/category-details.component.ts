@@ -182,9 +182,6 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
         scales: {
           xAxes: [{
             type: 'time',
-            time: {
-              unit: 'day'
-            },
             gridLines: {
               display: true,
               // drawOnChartArea: true,
