@@ -16,6 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { saveAs } from 'file-saver';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+import { Plugins } from 'src/app/shared/plugins';
 
 
 @Component({
@@ -215,14 +216,20 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
             display: true,
             position: 'bottom',
             text: this.zoomStatus
+          },
+          chartAreaBorder: {
+            borderColor: this.category.graphColor,
+            borderWidth: 2,
+            borderDash: [5, 5],
+            borderDashOffset: 2
           }
         },
-      }
-      ,
+      },
       data: {
         labels: dateChartList,
         datasets: datasets
-      }
+      },
+      plugins: [Plugins.chartAreaBorderPlugin()]
     });
 
     for (var i = 0; i < dateChartList.length; i++) {

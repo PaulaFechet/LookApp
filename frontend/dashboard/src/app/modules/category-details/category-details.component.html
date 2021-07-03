@@ -11,7 +11,10 @@
 </div>
 
 <div class="chart-container">
-  <canvas id="recordChart"></canvas>
+  <div style="position: relative">
+    <canvas id="recordChart"></canvas>
+  </div>
+
   <div class="chart-action">
     <button
       [ngClass]="isAddBtnOn ? 'enable-btn enable-btn-focused' : 'enable-btn'"
