@@ -49,7 +49,6 @@ export class AddCategoryComponent implements OnInit {
 
   onClear(): void {
     this.categoryForm.reset()
-
   }
 
   onSubmit(): void {

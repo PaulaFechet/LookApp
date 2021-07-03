@@ -53,12 +53,12 @@ export class CategoriesComponent implements OnInit {
       maxHeight: '100vh',
       data: obj
     });
+
     createModal.afterClosed().subscribe(result => {
       console.log(result);
       if (result.event == 'Create') {
         this.scrollToBottom();
       }
-
     });
   }
 
@@ -72,7 +72,6 @@ export class CategoriesComponent implements OnInit {
       data: category
     });
   }
-
 
   onDeleteCategory(obj: any): void {
     obj.action = "Delete";

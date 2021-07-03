@@ -3,14 +3,14 @@
     <div class="box">
       <div class="search-box">
         <input type="text" placeholder="Search for categories..." (keyup)="filterCategories($event)">
-        <label for="check" class="search-icon">
+        <label for="check" class="search-icon" title="Start searching">
           <mat-icon>search</mat-icon>
         </label>
       </div>
     </div>
 
     <div class="add-btn">
-      <button mat-raised-button class="add-button" #scroll (click)="onCreateCategory()">
+      <button mat-raised-button class="add-button" #scroll (click)="onCreateCategory()" title="Create a category">
         <mat-icon>add</mat-icon>
         Create
       </button>
@@ -48,19 +48,19 @@
 
             <mat-card-actions>
 
-              <button mat-button (click)="router.navigate(['/categories/' + category.id])">
+              <button mat-button (click)="router.navigate(['/categories/' + category.id])" title="View category">
                 <mat-icon>visibility</mat-icon>
               </button>
 
-                <button mat-button (click)="onAddRecord(category)">
+                <button mat-button (click)="onAddRecord(category)" title="Add a record for this category">
                   <mat-icon>add</mat-icon>
                 </button>
 
-              <button mat-button (click)="onDeleteCategory(category)">
+              <button mat-button (click)="onDeleteCategory(category)" title="Delete category">
                 <mat-icon>delete</mat-icon>
               </button>
 
-              <button mat-button (click)="onEdit(category)">
+              <button mat-button (click)="onEdit(category)" title="Edit category">
                 <mat-icon>edit</mat-icon>
               </button>
 

@@ -19,12 +19,12 @@
     <button
       [ngClass]="isAddBtnOn ? 'enable-btn enable-btn-focused' : 'enable-btn'"
       (click)="toggleAddingRecords()"
-      title="click to enable/disable record adding">
+      title="Enable/Disable record adding">
 
       <mat-icon class="action-icon">add</mat-icon>
     </button>
 
-    <label class="chart-btn file-label" for="file">
+    <label class="chart-btn file-label" for="file" title="Import">
       <mat-icon class="action-icon">file_upload</mat-icon>
     </label>
     <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
@@ -42,7 +42,7 @@
       </ul>
     </div>
 
-    <button *ngIf="isUndoBtnDisplayed" class="chart-btn" (click)="undo()">
+    <button *ngIf="isUndoBtnDisplayed" class="chart-btn" (click)="undo()" title="Undo">
       <mat-icon class="action-icon">undo</mat-icon>
     </button>
   </div>
@@ -72,11 +72,11 @@
       <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="action-link">
 
-        <button class="action-btn" (click)="onEdit(element, category)">
+        <button class="action-btn" (click)="onEdit(element, category)" title="Edit record">
           <mat-icon class="action-icon">edit</mat-icon>
         </button>
 
-        <button class="action-btn" (click)="openModal('Delete', element)">
+        <button class="action-btn" (click)="openModal('Delete', element)" title="Delete record">
           <mat-icon class="action-icon">delete</mat-icon>
         </button>
 
