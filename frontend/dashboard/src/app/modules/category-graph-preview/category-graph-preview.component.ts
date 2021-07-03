@@ -1,17 +1,23 @@
 import { CategoryService } from './../../shared/services/category.service';
-import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { RecordModel } from 'src/app/shared/models/record';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { Chart } from 'chart.js';
 import { Plugins } from 'src/app/shared/plugins';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 @Component({
   selector: 'app-category-graph-preview',
   templateUrl: './category-graph-preview.component.html',
   styleUrls: ['./category-graph-preview.component.scss']
 })
-export class CategoryGraphPreviewComponent implements AfterViewInit {
+export class CategoryGraphPreviewComponent implements AfterViewInit, OnDestroy {
+
+  private readonly componentDestroyed$: Subject<boolean> = new Subject();
+  private chart: Chart;
+
   @Input() categoryId: number;
 
   @ViewChild('chartCanvas') canvas: ElementRef;
@@ -19,26 +25,35 @@ export class CategoryGraphPreviewComponent implements AfterViewInit {
   public category: CategoryModel = new CategoryModel();
   public recordList: RecordModel[] = [];
 
-  private chart: Chart;
-
-
-  constructor(public categoryService: CategoryService,
-    public recordService: RecordService) { }
+  constructor(public categoryService: CategoryService, public recordService: RecordService) { }
 
   ngAfterViewInit(): void {
 
-    this.categoryService.getById(this.categoryId).subscribe(category => {
-      this.category = category;
+    this.categoryService.getById(this.categoryId)
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(category => {
 
-      this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(record$ => {
-        record$.subscribe(records => {
+        this.category = category;
 
-          this.recordList = records.values;
-          this.updateChart();
-        });
+        this.recordService.getRecordsByCategoryId(this.categoryId)
+          .pipe(takeUntil(this.componentDestroyed$))
+          .subscribe(record$ => {
+
+            record$
+              .pipe(takeUntil(this.componentDestroyed$))
+              .subscribe(records => {
+
+                this.recordList = records.values;
+                this.updateChart();
+              });
+          });
       });
-    });
   };
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
+  }
 
   private updateChart(): void {
 

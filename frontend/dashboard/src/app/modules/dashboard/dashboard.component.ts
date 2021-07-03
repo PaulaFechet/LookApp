@@ -1,7 +1,7 @@
 import { CorrelatedCategories } from './../../shared/models/correlated-categories';
 import { RecordsByDay } from './../../shared/models/records-by-day';
 import { CorrelationService } from './../../shared/services/correlation.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
@@ -11,6 +11,8 @@ import { CategoryService } from "src/app/shared/services/category.service";
 import { RecordService } from 'src/app/shared/services/record.service';
 import { CategoriesToCorrelate } from 'src/app/shared/models/categories-to-correlate';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/operators';
 
 
 
@@ -19,7 +21,9 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private readonly componentDestroyed$: Subject<boolean> = new Subject();
 
   public chartOptions: any;
   public spark1: any;
@@ -46,33 +50,49 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.categoryService.populateCategories().subscribe(categorie$ => {
-      categorie$.subscribe(categories => {
+    this.categoryService.populateCategories()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(categorie$ => {
 
-        this.categoryList = categories;
+        categorie$
+          .pipe(takeUntil(this.componentDestroyed$))
+          .subscribe(categories => {
 
-        let expectedRecordLists = this.categoryList.length;
+            this.categoryList = categories;
+            let expectedRecordLists = this.categoryList.length;
 
-        for (var i = 0; i < this.categoryList.length; i++) {
-          let index = i;
-          this.recordService.getRecordsByCategoryId(this.categoryList[index].id).subscribe(record$ => {
-            record$.subscribe(records => {
-              this.recordGraphs.push({ "categoryId": this.categoryList[index].id, "records": records.values });
+            for (var i = 0; i < this.categoryList.length; i++) {
 
-              expectedRecordLists--;
-              if (expectedRecordLists === 0) {
-                this.correlate();
-              }
-            });
+              let index = i;
+              this.recordService.getRecordsByCategoryId(this.categoryList[index].id)
+                .pipe(takeUntil(this.componentDestroyed$))
+                .subscribe(record$ => {
+
+                  record$
+                    .pipe(takeUntil(this.componentDestroyed$))
+                    .subscribe(records => {
+
+                      this.recordGraphs.push({ "categoryId": this.categoryList[index].id, "records": records.values });
+
+                      expectedRecordLists--;
+                      if (expectedRecordLists === 0) {
+                        this.correlate();
+                      }
+                    });
+                });
+            }
           });
-        }
       });
-    });
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
   correlate(): void {
@@ -81,13 +101,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     for (let records of this.recordGraphs) {
 
-      this.categoryService.getById(records.categoryId).subscribe(category => {
-        categoryTitle = category.title;
+      this.categoryService.getById(records.categoryId)
+        .pipe(takeUntil(this.componentDestroyed$))
+        .subscribe(category => {
+          categoryTitle = category.title;
 
-        let chartPoints = this.correlationService.toChartPoints(records.records);
-        let recordsByDay = this.correlationService.groupRecordsByDay(chartPoints, records.categoryId, categoryTitle);
-        this.parsedRecordGraphs.push(recordsByDay);
-      });
+          let chartPoints = this.correlationService.toChartPoints(records.records);
+          let recordsByDay = this.correlationService.groupRecordsByDay(chartPoints, records.categoryId, categoryTitle);
+          this.parsedRecordGraphs.push(recordsByDay);
+        });
     }
 
     for (var i = 0; i < this.parsedRecordGraphs.length; i++) {

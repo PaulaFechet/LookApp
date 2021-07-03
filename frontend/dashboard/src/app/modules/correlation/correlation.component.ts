@@ -1,11 +1,9 @@
 import { CorrelationService } from './../../shared/services/correlation.service';
 import { CategoriesToCorrelate } from './../../shared/models/categories-to-correlate';
-import { first } from 'rxjs/operators';
 import { CategoryRecords } from './../../shared/models/category-records';
 import { RecordsByDay } from './../../shared/models/records-by-day';
 import { RecordModel } from './../../shared/models/record';
-import { DatePipe, ViewportScroller } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as Chart from 'chart.js';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -14,61 +12,61 @@ import { CategoryService } from 'src/app/shared/services/category.service';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { ChartPointModel } from './../../shared/models/chart-point';
 import { MultiselectItem } from './multiselect-item';
-import { keyframes } from '@angular/animations';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
-import { Router, Scroll, RouterModule, Routes } from '@angular/router';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-correlation',
   templateUrl: './correlation.component.html',
   styleUrls: ['./correlation.component.scss']
 })
-export class CorrelationComponent implements OnInit {
-  public chart: Chart;
-  public scatterCorrelationChart: Chart;
+export class CorrelationComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private readonly componentDestroyed$: Subject<boolean> = new Subject();
 
   @ViewChild('multiSelect') multiSelect;
 
+  public chart: Chart;
+  public scatterCorrelationChart: Chart;
   public selectedItems: MultiselectItem[];
   public myForm: FormGroup;
   public ShowFilter = false;
   public limitSelection = false;
   public dropdownSettings: IDropdownSettings = {};
   public dropdownList = [];
-
   public categoryColor: string;
-
   public categoryList: CategoryModel[] = [];
-
   public recordGraphs: CategoryRecords[] = [];
-
   public disabledButton: boolean = true;
-
   public errorMessage: string = '';
   public correlationCoefficientInfoMessage: string = '';
-
   public displayScatterCorrelationChart: boolean = false;
-
   public element: any;
   public correlationCoeff :number = undefined;
 
   constructor(
     private categoryService: CategoryService,
     private recordService: RecordService,
-    private router: Router,
-    private correlationService: CorrelationService) {
-  }
+    private correlationService: CorrelationService
+  ) {}
 
-  ngOnInit() {
-    this.categoryService.populateCategories().subscribe(categorie$ => {
-      categorie$.subscribe(categories => {
-        this.categoryList = categories;
-        this.categoryList.forEach(element => {
-          this.dropdownList = this.dropdownList.concat({ "id": element.id, "text": element.title })
-        });
+  ngOnInit(): void {
+
+    this.categoryService.populateCategories()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(categorie$ => {
+
+        categorie$
+          .pipe(takeUntil(this.componentDestroyed$))
+          .subscribe(categories => {
+
+            this.categoryList = categories;
+            this.categoryList.forEach(element => {
+              this.dropdownList = this.dropdownList.concat({ "id": element.id, "text": element.title })
+            });
+          });
       });
-    });
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -85,9 +83,7 @@ export class CorrelationComponent implements OnInit {
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        datasets: [
-
-        ]
+        datasets: []
       },
       options: {
         title: {
@@ -104,19 +100,23 @@ export class CorrelationComponent implements OnInit {
             type: 'time',
             time: {
               unit: 'day'
-            },
-
+            }
           }]
         }
       }
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.element = document.getElementById("scatterCorrelationChart");
   }
 
-  public scrollToBottom() {
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
+  }
+
+  public scrollToBottom(): void {
     this.element.scrollIntoView(false); // Bottom
   }
 
@@ -129,9 +129,7 @@ export class CorrelationComponent implements OnInit {
       this.displayScatterCorrelationChart = false;
       this.scatterCorrelationChart.destroy();
     }
-
   }
-
 
   onSelectAll(items: any) {
     for (var i = 0; i < items.length; i++) {
@@ -141,17 +139,15 @@ export class CorrelationComponent implements OnInit {
 
   onDeSelectAll(items: any) {
     this.chart.data.datasets = [];
-
     this.chart.update();
   }
 
-
   onItemDeSelect(deselectedCategory: any): void {
+
     for (var i = 0; i < this.chart.data.datasets.length; i++) {
       if (this.chart.data.datasets[i].label == deselectedCategory.text) {
         this.chart.data.datasets.splice(i, 1)
         this.chart.update();
-
       }
     }
 
@@ -173,34 +169,43 @@ export class CorrelationComponent implements OnInit {
 
   addRecordsToChart(categoryId: number, categoryTitle: string): void {
 
-    this.recordService.getRecordsByCategoryId(categoryId).subscribe(record$ => {
-      record$.subscribe(records => {
-        this.recordGraphs.push({ "categoryId": categoryId, "records": records.values });
+    this.recordService.getRecordsByCategoryId(categoryId)
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(record$ => {
 
-        this.categoryService.getById(categoryId).subscribe(category => {
-          this.categoryColor = category.graphColor;
-        });
+        record$
+          .pipe(takeUntil(this.componentDestroyed$))
+          .subscribe(records => {
 
-        var newDataset = {
+            this.recordGraphs.push({ "categoryId": categoryId, "records": records.values });
 
-          backgroundColor: "transparent",
-          borderColor: this.categoryColor,
-          pointBackgroundColor: this.categoryColor,
-          pointBorderColor: this.categoryColor,
-          pointHoverBackgroundColor: this.categoryColor,
-          pointHoverBorderColor: this.categoryColor,
-          data: this.toChartPoints(records.values),
-          borderWidth: 3,
-          label: categoryTitle,
-          lineTension: 0
-        };
+            this.categoryService.getById(categoryId)
+              .pipe(takeUntil(this.componentDestroyed$))
+              .subscribe(category => {
 
-        this.chart.data.datasets.push(newDataset);
-        this.chart.update();
+                this.categoryColor = category.graphColor;
+              });
 
-        this.disabledButton = this.chart.data.datasets.length != 2;
+            var newDataset = {
+
+              backgroundColor: "transparent",
+              borderColor: this.categoryColor,
+              pointBackgroundColor: this.categoryColor,
+              pointBorderColor: this.categoryColor,
+              pointHoverBackgroundColor: this.categoryColor,
+              pointHoverBorderColor: this.categoryColor,
+              data: this.toChartPoints(records.values),
+              borderWidth: 3,
+              label: categoryTitle,
+              lineTension: 0
+            };
+
+            this.chart.data.datasets.push(newDataset);
+            this.chart.update();
+
+            this.disabledButton = this.chart.data.datasets.length != 2;
+          });
       });
-    });
   }
 
   correlate(): void {
@@ -210,9 +215,12 @@ export class CorrelationComponent implements OnInit {
 
     for (let records of this.recordGraphs) {
 
-      this.categoryService.getById(records.categoryId).subscribe(category => {
-        categoryTitle = category.title;
-      });
+      this.categoryService.getById(records.categoryId)
+        .pipe(takeUntil(this.componentDestroyed$))
+        .subscribe(category => {
+
+          categoryTitle = category.title;
+        });
 
       let chartPoints = this.toChartPoints(records.records);
 
@@ -229,6 +237,7 @@ export class CorrelationComponent implements OnInit {
   }
 
   calculateCorrelation2(categoriesToCorrelate: CategoriesToCorrelate[]): number {
+
     let mediaX: number = 0;
     let mediaY: number = 0;
 
@@ -282,14 +291,12 @@ export class CorrelationComponent implements OnInit {
     return sxy / sx * sy;
   }
 
-
   toChartPoints(records: RecordModel[]): ChartPointModel[] {
 
     return records.map((record: RecordModel) => {
       return new ChartPointModel(record.date.toString(), record.value);
     });
   }
-
 
   drawScatterCorrelationChart(categoriesToCorrelate: CategoriesToCorrelate[]): void {
     this.displayScatterCorrelationChart = true;

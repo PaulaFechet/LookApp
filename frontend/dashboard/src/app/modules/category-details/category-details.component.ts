@@ -2,7 +2,7 @@ import { AddRecordCommand, ImportRecordCommand } from './../../shared/command-pa
 import { CommandService } from '../../shared/services/command.service';
 import { ChartPointModel } from './../../shared/models/chart-point';
 import { UpdateRecordComponent } from './../update-record/update-record.component';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'chart.js';
@@ -17,6 +17,8 @@ import { MatSort } from '@angular/material/sort';
 import { saveAs } from 'file-saver';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { Plugins } from 'src/app/shared/plugins';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 
 @Component({
@@ -24,36 +26,32 @@ import { Plugins } from 'src/app/shared/plugins';
   templateUrl: './category-details.component.html',
   styleUrls: ['./category-details.component.scss']
 })
-export class CategoryDetailsComponent implements OnInit, AfterViewInit {
+export class CategoryDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private readonly chartCanvasId: string = "recordChart";
+  private readonly componentDestroyed$: Subject<boolean> = new Subject();
+
+  private categoryId: number;
+  private chart: Chart;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
+
+  public readonly displayedColumns: string[] = ['value', 'date', 'note', 'action'];
 
   public category: CategoryModel = new CategoryModel();
   public recordList: RecordModel[] = [];
   public dataSource;
-
-  private readonly chartCanvasId: string = "recordChart";
-  private categoryId: number;
-  private chart: Chart;
-
   public selectedValue: string;
-
   public chartPoints: ChartPointModel[] = [];
-
   public csvRecords: any[] = [];
   public header = true;
-
   public dateListFromCsvImport = [];
   public valueListFromCsvImport = [];
-
   public isAddBtnOn: boolean = false;
-  public newRecordModelList: RecordModel[] = [];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  public readonly displayedColumns: string[] = ['value', 'date', 'note', 'action'];
-
-  @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
-
   public isUndoBtnDisplayed: boolean = false;
+  public newRecordModelList: RecordModel[] = [];
 
   constructor(
     private readonly router: ActivatedRoute,
@@ -69,35 +67,54 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.router.paramMap.subscribe(paramMap => {
-      this.categoryId = +paramMap.get('id');
+    this.router.paramMap
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(paramMap => {
 
-      this.categoryService.getById(this.categoryId).subscribe(category => {
-        this.category = category;
+        this.categoryId = +paramMap.get('id');
 
-        this.recordService.getRecordsByCategoryId(this.categoryId).subscribe(record$ => {
-          record$.subscribe(records => {
+        this.categoryService.getById(this.categoryId)
+          .pipe(takeUntil(this.componentDestroyed$))
+          .subscribe(category => {
 
-            this.recordList = records.values;
-            this.dataSource.data = this.recordList;
-            this.updateChart();
+            this.category = category;
+
+            this.recordService.getRecordsByCategoryId(this.categoryId)
+              .pipe(takeUntil(this.componentDestroyed$))
+              .subscribe(record$ => {
+
+                record$
+                  .pipe(takeUntil(this.componentDestroyed$))
+                  .subscribe(records => {
+
+                    this.recordList = records.values;
+                    this.dataSource.data = this.recordList;
+                    this.updateChart();
+                  });
+              });
           });
-        });
       });
-    })
 
-    this.commandService.commandCount$.subscribe(commandCount => {
-      if (commandCount > 0) {
-        this.isUndoBtnDisplayed = true;
-      } else {
-        this.isUndoBtnDisplayed = false;
-      }
-    });
+    this.commandService.commandCount$
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(commandCount => {
+
+        if (commandCount > 0) {
+          this.isUndoBtnDisplayed = true;
+        } else {
+          this.isUndoBtnDisplayed = false;
+        }
+      });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
   openModal(action: string, obj: any): void {
@@ -107,11 +124,16 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       data: obj
     });
 
-    modalRef.afterClosed().subscribe(result => {
-      if (result.event == 'Delete') {
-        this.recordService.deleteRecord(this.categoryId, result.data.id).subscribe();
-      }
-    });
+    modalRef.afterClosed()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe(result => {
+
+        if (result.event == 'Delete') {
+          this.recordService.deleteRecord(this.categoryId, result.data.id)
+            .pipe(takeUntil(this.componentDestroyed$))
+            .subscribe();
+        }
+      });
   }
 
   onChartClickWrapper(): (event: MouseEvent) => void {
@@ -280,26 +302,27 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
       const files = e.srcElement.files;
 
       this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ',' })
-        .pipe().subscribe((result: Array<any>) => {
+        .pipe(takeUntil(this.componentDestroyed$))
+        .subscribe((result: Array<any>) => {
 
-          this.csvRecords = result;
-          for (var i = 0; i < this.csvRecords.length; i++) {
-            this.dateListFromCsvImport.push(this.csvRecords[i].x);
-            this.valueListFromCsvImport.push(this.csvRecords[i].y);
-            let newRecord = new RecordModel(this.csvRecords[i].x, this.csvRecords[i].y, this.categoryId, null);
-            this.newRecordModelList.push(newRecord);
-          }
+            this.csvRecords = result;
+            for (var i = 0; i < this.csvRecords.length; i++) {
+              this.dateListFromCsvImport.push(this.csvRecords[i].x);
+              this.valueListFromCsvImport.push(this.csvRecords[i].y);
+              let newRecord = new RecordModel(this.csvRecords[i].x, this.csvRecords[i].y, this.categoryId, null);
+              this.newRecordModelList.push(newRecord);
+            }
 
-          let addRecordCommand = new ImportRecordCommand(this.recordService, this.newRecordModelList, this.categoryId);
-          this.commandService.do(addRecordCommand);
+            let addRecordCommand = new ImportRecordCommand(this.recordService, this.newRecordModelList, this.categoryId);
+            this.commandService.do(addRecordCommand);
 
-          this.chart.update();
-        }, (error: NgxCSVParserError) => {
-          console.log('Error', error);
-        });
-    } else {
-      alert("File not supported!")
-    }
+            this.chart.update();
+          }, (error: NgxCSVParserError) => {
+            console.log('Error', error);
+          });
+      } else {
+        alert("File not supported!")
+      }
   }
 
   onEdit(record: RecordModel, category: CategoryModel): void {
