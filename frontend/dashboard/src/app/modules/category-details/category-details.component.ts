@@ -172,6 +172,9 @@ export class CategoryDetailsComponent implements OnInit, AfterViewInit {
     this.chart = new Chart(ctx, {
       type: 'line',
       options: {
+        legend: {
+          display: false
+        },
         onClick: this.onChartClickWrapper(),
         layout: {
           padding: 20
