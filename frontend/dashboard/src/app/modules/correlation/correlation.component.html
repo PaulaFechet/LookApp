@@ -20,20 +20,20 @@
 
 <div *ngIf="correlationCoeff">
   <div class="content" id="scrollHere">
-    <p id="correlationCoeffInfoMessage">Coeficientul de corelare este {{correlationCoeff}}</p>
+    <p id="correlationCoeffInfoMessage">Coeficientul de corelatie este {{correlationCoeff.toFixed(2)}}</p>
     <p class="coefficient-explanation">
       Coeficientul de corelare indica cat de puternica este relatia intre date.
     </p>
     <div class="list">
       <ul>
         <li>
-          1 indica o relatie pozitiva puternica. Pentru orice crestere pozitiva a unui set de date A, creste si setul de date B.
+          1 indicates a strong positive relationship. If dataset A increases, dataset B also increases.
         </li>
         <li>
-          -1 indica o relatie negativa puternica. Pentru orice crestere a unui set de date A, exista o descrestere a setului de date B.
+          -1 indicates a strong negative relationship. If dataset A decreases, dataset B increases, or vice-versa.
         </li>
         <li>
-          0 indica ca nu exista nicio relatie
+          0 indicates that there is no relationship
         </li>
       </ul>
     </div>
