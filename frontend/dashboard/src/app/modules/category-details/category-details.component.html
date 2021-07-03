@@ -18,16 +18,8 @@
       (click)="toggleAddingRecords()"
       title="click to enable/disable record adding">
 
-      <i class="fa fa-plus"></i>
+      <mat-icon class="action-icon">add</mat-icon>
     </button>
-
-    <!-- <button class="chart-btn">
-      <label class="chart-btn file-label" for="file">
-        <mat-icon class="action-icon">file_upload</mat-icon>
-      </label>
-      <input type="file" id="file" name="file" class="form-control" ngModel #nameField="ngModel"
-        (change)="handleFileInput($event)" required>
-    </button> -->
 
     <label class="chart-btn file-label" for="file">
       <mat-icon class="action-icon">file_upload</mat-icon>
@@ -37,7 +29,7 @@
 
     <div class="btn-group">
       <a id="download" data-toggle="dropdown" class="btn btn-primary float-right bg-flat-color-1" title="Download">
-        <i class="fa fa-download"></i>
+        <mat-icon class="action-icon">download</mat-icon>
       </a>
       <ul class="dropdown-menu">
         <div class="btn-group btn-group-vertical">
@@ -48,7 +40,7 @@
     </div>
 
     <button *ngIf="isUndoBtnDisplayed" class="chart-btn" (click)="undo()">
-      <i class="fa fa-undo" aria-hidden="true"></i>
+      <mat-icon class="action-icon">undo</mat-icon>
     </button>
   </div>
 </div>
