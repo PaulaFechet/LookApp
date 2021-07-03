@@ -1,9 +1,10 @@
 import { CategoryService } from './../../shared/services/category.service';
-import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { CategoryModel } from 'src/app/shared/models/category';
 import { RecordModel } from 'src/app/shared/models/record';
 import { RecordService } from 'src/app/shared/services/record.service';
 import { Chart } from 'chart.js';
+import { Plugins } from 'src/app/shared/plugins';
 
 @Component({
   selector: 'app-category-graph-preview',
@@ -70,9 +71,6 @@ export class CategoryGraphPreviewComponent implements AfterViewInit {
       pointHoverBorderColor: this.category.graphColor,
     }];
 
-
-
-
     this.chart = new Chart(ctx, {
       type: 'line',
       options: {
@@ -87,22 +85,31 @@ export class CategoryGraphPreviewComponent implements AfterViewInit {
             type: 'time',
             ticks: {
               display: false
-            }
+            },
+            gridLines: { tickMarkLength: 0 }
           }],
           yAxes: [{
             ticks: {
               display: false
-            }
+            },
+            gridLines: { tickMarkLength: 0 }
           }],
           responsive: true,
         },
-      }
-      ,
+        plugins: {
+          chartAreaBorder: {
+            borderColor: this.category.graphColor,
+            borderWidth: 2,
+            borderDash: [5, 5],
+            borderDashOffset: 2
+          }
+        }
+      },
       data: {
         labels: dateChartList,
         datasets: datasets
-      }
+      },
+      plugins: [Plugins.chartAreaBorderPlugin()]
     });
-
   }
 }

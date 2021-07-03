@@ -22,49 +22,50 @@
   <div class="categories-container">
     <div class="categories-grid" id="categories">
       <div *ngFor="let category of filteredCategoryList">
-        <mat-card class="example-card">
+        <mat-card class="category-card example-card">
           <div class="graph-image">
             <app-category-graph-preview [categoryId]="category.id"></app-category-graph-preview>
           </div>
 
-          <mat-card-header>
-            <mat-card-title>{{category.title}}</mat-card-title>
-            <mat-card-subtitle>
-              <div>
-                <p class="subtitle">Unit of measure: {{category.unitOfMeasure}}</p>
-                <p class="subtitle">
-                  Limits: {{category.lowerLimit != null ? '[' + category.lowerLimit : '(-&infin;'}} :
-                          {{category.upperLimit != null ? category.upperLimit + ']' : '&infin;)'}}
-                </p>
-              </div>
-            </mat-card-subtitle>
+          <div class="category-card-main">
+            <mat-card-header>
+              <mat-card-title>{{category.title}}</mat-card-title>
+              <mat-card-subtitle>
+                <div>
+                  <p class="subtitle">Unit of measure: {{category.unitOfMeasure}}</p>
+                  <p class="subtitle">
+                    Limits: {{category.lowerLimit != null ? '[' + category.lowerLimit : '(-&infin;'}} :
+                            {{category.upperLimit != null ? category.upperLimit + ']' : '&infin;)'}}
+                  </p>
+                </div>
+              </mat-card-subtitle>
 
-          </mat-card-header>
+            </mat-card-header>
 
-          <mat-card-content>
-            <p>{{category.description}}</p>
-          </mat-card-content>
+            <mat-card-content>
+              <p>{{category.description}}</p>
+            </mat-card-content>
 
-          <mat-card-actions>
+            <mat-card-actions>
 
-            <button mat-button (click)="router.navigate(['/categories/' + category.id])">
-              <mat-icon>visibility</mat-icon>
-            </button>
-
-              <button mat-button (click)="onAddRecord(category)">
-                <mat-icon>add</mat-icon>
+              <button mat-button (click)="router.navigate(['/categories/' + category.id])">
+                <mat-icon>visibility</mat-icon>
               </button>
 
-            <button mat-button (click)="onDeleteCategory(category)">
-              <mat-icon>delete</mat-icon>
-            </button>
+                <button mat-button (click)="onAddRecord(category)">
+                  <mat-icon>add</mat-icon>
+                </button>
 
-            <button mat-button (click)="onEdit(category)">
-              <mat-icon>edit</mat-icon>
-            </button>
+              <button mat-button (click)="onDeleteCategory(category)">
+                <mat-icon>delete</mat-icon>
+              </button>
 
-          </mat-card-actions>
+              <button mat-button (click)="onEdit(category)">
+                <mat-icon>edit</mat-icon>
+              </button>
 
+            </mat-card-actions>
+          </div>
         </mat-card>
       </div>
     </div>
