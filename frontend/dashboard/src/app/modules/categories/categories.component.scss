@@ -1,8 +1,9 @@
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+:host {
+  width: 90%;
+}
+
+.categories-main {
+  padding: 0px;
 }
 
 .example-card {
@@ -20,17 +21,14 @@ select {
 
 .add-button {
   height: 50px;
-  margin: 19px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
-  left: 100px;
   background: #fded56;
   outline: none;
   color: black;
 }
 
 .categories-grid {
-  margin-top: 30px;
   display: grid;
   width: 100%;
   grid-gap: 30px;
@@ -38,8 +36,8 @@ select {
 }
 
 .box {
-  max-width: 700px;
-  width: 100%;
+  min-width: 250px;
+  width: 50%;
   display: flex;
 }
 
@@ -85,9 +83,18 @@ select {
   color: black;
 }
 
+.add-btn {
+  display: flex;
+  align-items: center;
+}
+
 .search-and-add-btn {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: -24px; // cancel out mat-drawer-content padding-top
+  height: 137px; // align with category-details page's chart-container
 }
 
 #check:checked ~ .search-box .search-icon {
@@ -105,10 +112,6 @@ select {
 
 #check {
   display: none;
-}
-
-.categories-container {
-  width: 1000px;
 }
 
 .graph-image {
@@ -142,87 +145,8 @@ mat-card-actions {
 }
 
 mat-card {
-  width: 85%;
-}
-
-
-@media only screen and (max-width: 600px) {
-
-
-  .container {
-    width: 50%;
-    justify-content: center;
-  }
-
-  .categories-container {
-    width: 50%;
-    position: relative;
-  }
-
-  .add-button {
-    height: 50px;
-    margin: 19px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 25px;
-    left: 100px;
-    background: #fded56;
-    outline: none;
-    color: black;
-  }
-
-  .search-and-add-btn {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .search-box input{
-    height: 100%;
-    width: 150%;
-    border-radius: 25px;
-    background: #fff;
-    outline: none;
-    border: none;
-    padding-left: 20px;
-    font-size: 18px;
-    cursor: pointer;
-    justify-content: center;
-  }
-
-  .add-button{
-    justify-content: center;
-  }
-  .search-box .search-icon{
-    position: absolute;
-    right: -106px;
-    top: 0;
-    height: 100%;
-    text-align: center;
-    line-height: 50px;
-    background: #fded56;
-    color: #fff;
-    border-radius: 0 25px 25px 0;
-    font-size: 20px;
-    color: black;
-    width: 26%;
-  }
-
-}
-
-/* Screen larger than 600px? 2 column */
-@media (min-width: 600px) {
-  .cards {
-
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Screen larger than 900px? 3 columns */
-@media (min-width: 900px) {
-  .cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  width: 100%;
+  height: 100%;
 }
 
 .category-card {

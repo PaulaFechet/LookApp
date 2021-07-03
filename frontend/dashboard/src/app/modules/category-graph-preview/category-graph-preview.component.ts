@@ -20,6 +20,7 @@ export class CategoryGraphPreviewComponent implements AfterViewInit, OnDestroy {
 
   @Input() categoryId: number;
 
+  @ViewChild('backgroundGrid') backgroundGrid: ElementRef;
   @ViewChild('chartCanvas') canvas: ElementRef;
 
   public category: CategoryModel = new CategoryModel();
@@ -48,11 +49,50 @@ export class CategoryGraphPreviewComponent implements AfterViewInit, OnDestroy {
               });
           });
       });
+
+    this.createBackgroundGrid();
   };
 
   ngOnDestroy(): void {
     this.componentDestroyed$.next(true);
     this.componentDestroyed$.complete();
+  }
+
+  private createBackgroundGrid(): void {
+
+    let ctx = this.backgroundGrid.nativeElement;
+
+    this.backgroundGrid = new Chart(ctx, {
+      type: 'line',
+      options: {
+        layout: {
+          padding: 5
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            ticks: {
+              display: false
+            },
+            gridLines: {
+              tickMarkLength: 0
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              display: false
+            },
+            gridLines: {
+              tickMarkLength: 0
+            }
+          }],
+          responsive: true,
+        }
+      }
+    });
   }
 
   private updateChart(): void {
@@ -101,13 +141,19 @@ export class CategoryGraphPreviewComponent implements AfterViewInit, OnDestroy {
             ticks: {
               display: false
             },
-            gridLines: { tickMarkLength: 0 }
+            gridLines: {
+              display: false,
+              tickMarkLength: 0
+            }
           }],
           yAxes: [{
             ticks: {
               display: false
             },
-            gridLines: { tickMarkLength: 0 }
+            gridLines: {
+              display: false,
+              tickMarkLength: 0
+            }
           }],
           responsive: true,
         },
